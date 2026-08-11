@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { BidConfig, BidUnit, CalcResult } from '../types';
+import { BidConfig, BidUnit, CalcResult, ValidRule } from '../types';
 import { createDefaultConfig, PRESET_TEMPLATES } from '../utils/templates';
 import { calculateResult } from '../utils/algorithms';
 
@@ -11,12 +11,16 @@ interface ConfigStore {
   setCurrentStep: (step: number) => void;
   setConfig: (config: Partial<BidConfig>) => void;
   setAlgorithm: (algorithm: BidConfig['algorithm']) => void;
-  addBidUnit: (unit: BidUnit) => void;
+  addBidUnit: (name: string, price: number) => void;
   removeBidUnit: (id: string) => void;
   updateBidUnit: (id: string, updates: Partial<BidUnit>) => void;
+  clearBidUnits: () => void;
+  randomFill: (count: number, centerPrice: number, fluctuationPercent: number) => void;
+  parsePrices: (text: string) => void;
   loadTemplate: (templateId: string) => void;
   calculate: () => void;
   reset: () => void;
+  setDeduction: (deduction: Partial<BidConfig['deduction']>) => void;
   setTheme: (theme: 'light' | 'dark') => void;
   setApiKey: (apiKey: string) => void;
   setApiEndpoint: (apiEndpoint: string) => void;
@@ -41,11 +45,14 @@ export const useConfigStore = create<ConfigStore>()(
           config: { ...state.config, algorithm },
         })),
 
-      addBidUnit: (unit) =>
+      addBidUnit: (name, price) =>
         set((state) => ({
           config: {
             ...state.config,
-            bidUnits: [...state.config.bidUnits, unit],
+            bidUnits: [
+              ...state.config.bidUnits,
+              { id: crypto.randomUUID(), name, price, isValid: true },
+            ],
           },
         })),
 
@@ -63,6 +70,76 @@ export const useConfigStore = create<ConfigStore>()(
             ...state.config,
             bidUnits: state.config.bidUnits.map((u) =>
               u.id === id ? { ...u, ...updates } : u,
+            ),
+          },
+        })),
+
+      clearBidUnits: () =>
+        set((state) => ({
+          config: {
+            ...state.config,
+            bidUnits: [],
+          },
+        })),
+
+      randomFill: (count, centerPrice, fluctuationPercent) => {
+        const units: BidUnit[] = [];
+        for (let i = 0; i < count; i++) {
+          const fluctuation = (Math.random() - 0.5) * 2 * fluctuationPercent;
+          const price = parseFloat((centerPrice * (1 + fluctuation / 100)).toFixed(2));
+          units.push({ id: crypto.randomUUID(), name: `单位${String.fromCharCode(65 + i)}`, price, isValid: true });
+        }
+        set((state) => ({
+          config: {
+            ...state.config,
+            bidUnits: units,
+          },
+        }));
+      },
+
+      parsePrices: (text) => {
+        const prices = text
+          .replace(/，/g, ',')
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => /^\d+(\.\d+)?$/.test(s))
+          .map((s) => parseFloat(s));
+        const units: BidUnit[] = prices.map((price, i) => ({
+          id: crypto.randomUUID(),
+          name: `单位${String.fromCharCode(65 + i)}`,
+          price,
+          isValid: true,
+        }));
+        set((state) => ({
+          config: {
+            ...state.config,
+            bidUnits: units,
+          },
+        }));
+      },
+
+      addValidRule: (rule) =>
+        set((state) => ({
+          config: {
+            ...state.config,
+            validRules: [...state.config.validRules, rule],
+          },
+        })),
+
+      removeValidRule: (id) =>
+        set((state) => ({
+          config: {
+            ...state.config,
+            validRules: state.config.validRules.filter((r) => r.id !== id),
+          },
+        })),
+
+      updateValidRule: (id, updates) =>
+        set((state) => ({
+          config: {
+            ...state.config,
+            validRules: state.config.validRules.map((r) =>
+              r.id === id ? { ...r, ...updates } : r,
             ),
           },
         })),
@@ -91,6 +168,14 @@ export const useConfigStore = create<ConfigStore>()(
           calculationResult: null,
         }),
 
+      setDeduction: (deduction) =>
+        set((state) => ({
+          config: {
+            ...state.config,
+            deduction: { ...state.config.deduction, ...deduction },
+          },
+        })),
+
       setTheme: (theme) =>
         set((state) => ({
           config: { ...state.config, theme },
@@ -114,6 +199,7 @@ export const useConfigStore = create<ConfigStore>()(
           ...state.config,
           bidUnits: [],
           currentStep: state.currentStep,
+          validRules: state.config.validRules,
         },
       }),
     },
