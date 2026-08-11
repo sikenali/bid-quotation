@@ -20,6 +20,7 @@ describe('calculateResult', () => {
 
   it('最低价法: 基准价 = 最低报价', () => {
     const config = createDefaultConfig('lowest_price');
+    config.validRules = []; // lowest_price uses all units directly
     config.bidUnits = [
       { id: '1', name: 'A', price: 150, isValid: true },
       { id: '2', name: 'B', price: 200, isValid: true },
@@ -67,6 +68,7 @@ describe('calculateResult', () => {
 
   it('得分计算: 高于基准价扣分', () => {
     const config = createDefaultConfig('arithmetic_mean');
+    config.validRules = []; // no rule filtering for this test
     config.bidUnits = [
       { id: '1', name: 'A', price: 100, isValid: true },
       { id: '2', name: 'B', price: 110, isValid: true },
