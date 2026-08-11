@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useConfigStore } from '../stores/configStore';
+import { parseRuleText } from '../utils/aiParse';
 
 export function AlgorithmParams() {
   const { config, setConfig } = useConfigStore();
+  const [isParsing, setIsParsing] = useState(false);
+  const [parseError, setParseError] = useState('');
+
   const {
     algorithm,
     kEnabled,
@@ -19,6 +23,52 @@ export function AlgorithmParams() {
   } = config;
 
   const update = (partial: Partial<typeof config>) => setConfig(partial);
+
+  const handleParse = async () => {
+    const textarea = document.querySelector('textarea') as HTMLTextAreaElement | null;
+    const text = textarea?.value || '';
+    if (!text) return;
+
+    const { apiKey, apiEndpoint } = useConfigStore.getState();
+    if (!apiKey) {
+      setParseError('请先在设置中配置 API Key');
+      return;
+    }
+    if (!apiEndpoint) {
+      setParseError('请先在设置中配置 API 端点');
+      return;
+    }
+
+    setIsParsing(true);
+    setParseError('');
+
+    try {
+      const result = await parseRuleText(text, apiKey, apiEndpoint);
+      if (result) {
+        setConfig({
+          algorithm: result.algorithm,
+          kEnabled: result.kEnabled,
+          kValue: result.kValue,
+          trimHighPercent: result.trimHighPercent,
+          trimLowPercent: result.trimLowPercent,
+          removeHighestN: result.removeHighestN,
+          nthLowest: result.nthLowest,
+          q1Weight: result.q1Weight,
+          k1: result.k1,
+          k2: result.k2,
+          maxPrice: result.maxPrice,
+          deduction: result.deduction,
+          validRules: result.validRules,
+        });
+      } else {
+        setParseError('解析失败，请检查 API 配置或原文格式');
+      }
+    } catch (err) {
+      setParseError(`解析出错: ${err instanceof Error ? err.message : '未知错误'}`);
+    } finally {
+      setIsParsing(false);
+    }
+  };
 
   return (
     <div className="bg-card border border-border rounded-xl p-5 space-y-4">
@@ -195,21 +245,43 @@ export function AlgorithmParams() {
         <div>
           <label className="block text-text-secondary text-xs mb-1">上传招标文件或粘贴文本</label>
           <textarea
+            ref={(el) => {
+              if (el) {
+                const ta = el;
+                Object.assign(ta, { _autosize: true });
+              }
+            }}
             rows={4}
             placeholder="请粘贴招标文件中的报价计算方法描述，AI 将自动解析并配置参数..."
             className="input-field w-full text-sm resize-none"
           />
           <button
-            onClick={() => console.log('handleParse placeholder')}
-            className="mt-2 flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-hover transition-colors"
+            onClick={handleParse}
+            disabled={isParsing}
+            className="mt-2 flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 2L2 7l10 5 10-5-10-5z" />
-              <path d="M2 17l10 5 10-5" />
-              <path d="M2 12l10 5 10-5" />
-            </svg>
-            AI 智能解析
+            {isParsing ? (
+              <>
+                <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                解析中...
+              </>
+            ) : (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                  <path d="M2 17l10 5 10-5" />
+                  <path d="M2 12l10 5 10-5" />
+                </svg>
+                AI 智能解析
+              </>
+            )}
           </button>
+          {parseError && (
+            <p className="mt-2 text-sm text-red-500">{parseError}</p>
+          )}
         </div>
       )}
     </div>
