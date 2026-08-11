@@ -17,6 +17,9 @@ interface ConfigStore {
   clearBidUnits: () => void;
   randomFill: (count: number, centerPrice: number, fluctuationPercent: number) => void;
   parsePrices: (text: string) => void;
+  addValidRule: (rule: ValidRule) => void;
+  removeValidRule: (id: string) => void;
+  updateValidRule: (id: string, updates: Partial<ValidRule>) => void;
   loadTemplate: (templateId: string) => void;
   calculate: () => void;
   reset: () => void;
