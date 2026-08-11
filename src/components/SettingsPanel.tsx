@@ -77,7 +77,7 @@ export default function SettingsPanel({ onClose }: Props) {
                       : 'text-textSecondary hover:bg-white hover:text-text'
                   }`}
                 >
-                  <span className="text-lg">{tab.icon}</span>
+                  <i className={`text-lg ${tab.icon}`}></i>
                   <span className="font-medium">{tab.label}</span>
                   {activeTab === tab.id && (
                     <div className="ml-auto w-2.5 h-2.5 rounded-full bg-white" />
