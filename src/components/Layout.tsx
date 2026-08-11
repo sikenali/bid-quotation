@@ -24,7 +24,7 @@ export default function Layout({ children }: Props) {
             {/* 左侧品牌 */}
             <div className="flex items-center gap-3">
               <div className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-white text-lg font-bold">投</span>
+                <i className="ri-file-text-line text-white text-xl"></i>
               </div>
               <div>
                 <h1 className="text-text font-semibold text-lg leading-tight">投标报价测算</h1>

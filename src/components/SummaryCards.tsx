@@ -6,10 +6,10 @@ interface Props {
 }
 
 const cards = [
-  { label: '基准价', key: 'basePrice' as const, color: 'text-primary', icon: 'ri-target-line' },
-  { label: 'A 值', key: 'aValue' as const, color: 'text-success', icon: 'ri-ruler-2-line' },
-  { label: '有效家数', key: 'effectiveCount' as const, color: 'text-yellow-600', icon: 'ri-user-star-line' },
-  { label: '算法', key: 'algorithmName' as const, color: 'text-blue-600', icon: 'ri-bar-chart-grouped-line' },
+  { label: '基准价', key: 'basePrice' as const, color: 'text-primary', icon: 'ri-target-line', bg: 'bg-rose-50' },
+  { label: 'A 值', key: 'aValue' as const, color: 'text-success', icon: 'ri-ruler-2-line', bg: 'bg-green-50' },
+  { label: '有效家数', key: 'effectiveCount' as const, color: 'text-yellow-600', icon: 'ri-user-star-line', bg: 'bg-amber-50' },
+  { label: '算法', key: 'algorithmName' as const, color: 'text-blue-600', icon: 'ri-bar-chart-grouped-line', bg: 'bg-sky-50' },
 ];
 
 export default function SummaryCards({ result }: Props) {
@@ -17,7 +17,7 @@ export default function SummaryCards({ result }: Props) {
     <div className="grid grid-cols-4 gap-4">
       {cards.map((card) => (
         <div key={card.key} className="bg-card border border-border rounded-xl p-5 flex items-center gap-4">
-          <div className="w-12 h-12 rounded-lg bg-white flex items-center justify-center text-2xl">
+          <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${card.bg}`}>
             <i className={`text-2xl ${card.icon}`}></i>
           </div>
           <div>
