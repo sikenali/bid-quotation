@@ -4,7 +4,7 @@ import { createDefaultConfig } from '../utils/templates';
 
 describe('calculateResult', () => {
   it('算术平均法: 基准价 = 平均价 × K', () => {
-    const config = createDefaultConfig('arithmetic_mean');
+    const config = { ...createDefaultConfig('arithmetic_mean'), bidUnits: [], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
     config.bidUnits = [
       { id: '1', name: 'A', price: 100, isValid: true },
       { id: '2', name: 'B', price: 200, isValid: true },
@@ -19,7 +19,7 @@ describe('calculateResult', () => {
   });
 
   it('最低价法: 基准价 = 最低报价', () => {
-    const config = createDefaultConfig('lowest_price');
+    const config = { ...createDefaultConfig('lowest_price'), bidUnits: [], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
     config.validRules = []; // lowest_price uses all units directly
     config.bidUnits = [
       { id: '1', name: 'A', price: 150, isValid: true },
@@ -33,7 +33,7 @@ describe('calculateResult', () => {
   });
 
   it('次低报价法: 基准价 = 第2低报价', () => {
-    const config = createDefaultConfig('second_lowest');
+    const config = { ...createDefaultConfig('second_lowest'), bidUnits: [], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
     config.bidUnits = [
       { id: '1', name: 'A', price: 150, isValid: true },
       { id: '2', name: 'B', price: 200, isValid: true },
@@ -47,7 +47,7 @@ describe('calculateResult', () => {
   });
 
   it('有效投标判定: 根据规则过滤', () => {
-    const config = createDefaultConfig('arithmetic_mean');
+    const config = { ...createDefaultConfig('arithmetic_mean'), bidUnits: [], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
     config.bidUnits = [
       { id: '1', name: 'A', price: 100, isValid: true },
       { id: '2', name: 'B', price: 200, isValid: true },
@@ -67,7 +67,7 @@ describe('calculateResult', () => {
   });
 
   it('得分计算: 高于基准价扣分', () => {
-    const config = createDefaultConfig('arithmetic_mean');
+    const config = { ...createDefaultConfig('arithmetic_mean'), bidUnits: [], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
     config.validRules = []; // no rule filtering for this test
     config.bidUnits = [
       { id: '1', name: 'A', price: 100, isValid: true },
@@ -83,7 +83,7 @@ describe('calculateResult', () => {
   });
 
   it('无有效报价时返回 null', () => {
-    const config = createDefaultConfig('arithmetic_mean');
+    const config = { ...createDefaultConfig('arithmetic_mean'), bidUnits: [], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
     config.bidUnits = [];
 
     const result = calculateResult(config);
