@@ -37,7 +37,7 @@ export default function Step5Results() {
         <button onClick={handlePrev} className="btn-secondary">上一步</button>
         <div className="flex items-center gap-3">
           <button onClick={handleExport} className="btn-secondary">
-            <span>📥</span>
+            <span><i className="ri-download-line"></i></span>
             <span>导出 CSV</span>
           </button>
           <button onClick={() => { setCurrentStep(1); navigate('/step-1'); }} className="btn-secondary">

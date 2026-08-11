@@ -13,7 +13,7 @@ export default function ThemeSelector() {
         onClick={() => setTheme('light')}
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-white border border-border flex items-center justify-center text-xl">☀️</div>
+          <div className="w-10 h-10 rounded-lg bg-white border border-border flex items-center justify-center"><i className="ri-sun-line text-xl text-yellow-500"></i></div>
           <div>
             <div className="font-semibold text-text">浅色主题</div>
             <div className="text-textSecondary text-sm">暖米色背景，护眼舒适</div>
@@ -33,7 +33,7 @@ export default function ThemeSelector() {
         onClick={() => setTheme('dark')}
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gray-800 border border-gray-600 flex items-center justify-center text-xl">🌙</div>
+          <div className="w-10 h-10 rounded-lg bg-gray-800 border border-gray-600 flex items-center justify-center"><i className="ri-moon-clear-line text-xl text-indigo-300"></i></div>
           <div>
             <div className="font-semibold text-text dark:text-white">深色主题</div>
             <div className="text-textSecondary text-sm">暗色配色，夜间使用</div>

@@ -92,7 +92,7 @@ export default function SettingsPanel({ onClose }: Props) {
               {activeTab === 'theme' && (
                 <>
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">🎨</div>
+                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white"><i className="ri-palette-line text-xl"></i></div>
                     <div>
                       <h2 className="font-semibold text-text text-lg">主题管理</h2>
                       <p className="text-textSecondary text-sm">选择界面显示主题</p>
@@ -105,7 +105,7 @@ export default function SettingsPanel({ onClose }: Props) {
               {activeTab === 'export' && (
                 <>
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">📦</div>
+                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white"><i className="ri-download-2-line text-xl"></i></div>
                     <div>
                       <h2 className="font-semibold text-text text-lg">导出管理</h2>
                       <p className="text-textSecondary text-sm">导入导出配置文件</p>
@@ -113,7 +113,7 @@ export default function SettingsPanel({ onClose }: Props) {
                   </div>
                   <div className="space-y-4">
                     <button onClick={handleExport} className="btn-primary w-full justify-center">
-                      <span>📥</span>
+                      <span><i className="ri-download-2-line"></i></span>
                       <span>导出配置（JSON）</span>
                     </button>
                     <div className="bg-white rounded-xl p-4 border border-border">
@@ -143,7 +143,7 @@ export default function SettingsPanel({ onClose }: Props) {
               {activeTab === 'api' && (
                 <>
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">🔑</div>
+                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white"><i className="ri-key-line text-xl"></i></div>
                     <div>
                       <h2 className="font-semibold text-text text-lg">API 管理</h2>
                       <p className="text-textSecondary text-sm">配置 AI 解析所需的 API Key</p>
