@@ -22,8 +22,8 @@ export function AlgorithmCard({ option, isSelected, onSelect }: Props) {
           <i className="ri-check-line text-white text-sm"></i>
         </div>
       )}
-      <div className="w-10 h-10 rounded-lg bg-border-light flex items-center justify-center text-text font-bold text-sm mb-3">
-        {option.icon}
+      <div className="w-10 h-10 rounded-lg bg-border-light flex items-center justify-center mb-3">
+        <i className={`${option.icon} text-xl text-text`}></i>
       </div>
       <div className="font-semibold text-text text-sm mb-1">{option.name}</div>
       <div className="text-text-secondary text-xs leading-relaxed">{option.description}</div>
