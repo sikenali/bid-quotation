@@ -1,0 +1,92 @@
+export type Algorithm =
+  | 'arithmetic_mean'
+  | 'trimmed_mean'
+  | 'remove_highest'
+  | 'second_lowest'
+  | 'double_average'
+  | 'weighted_limit'
+  | 'lowest_price'
+  | 'custom'
+  | 'ai_parse';
+
+export type TrimAction =
+  | 'trim_percent'
+  | 'remove_highest_n'
+  | 'remove_lowest_n'
+  | 'nth_lowest'
+  | 'direct';
+
+export interface ValidRule {
+  id: string;
+  minCount: number;
+  maxCount: number; // -1 表示无穷
+  action: TrimAction;
+  params: {
+    trimPercent?: number;
+    removeN?: number;
+    nth?: number;
+  };
+}
+
+export interface DeductionParams {
+  fullScore: number;
+  deductPerHighPercent: number;
+  deductPerLowPercent: number;
+  minScore: number;
+}
+
+export interface BidUnit {
+  id: string;
+  name: string;
+  price: number;
+  isValid: boolean;
+}
+
+export interface BidConfig {
+  algorithm: Algorithm;
+  kEnabled: boolean;
+  kValue: number;
+  trimHighPercent: number;
+  trimLowPercent: number;
+  removeHighestN: number;
+  nthLowest: number;
+  q1Weight: number;
+  k1: number;
+  k2: number;
+  maxPrice: number;
+  customBasePrice: number;
+  validRules: ValidRule[];
+  deduction: DeductionParams;
+  bidUnits: BidUnit[];
+  theme: 'light' | 'dark';
+  apiKey?: string;
+  apiEndpoint?: string;
+}
+
+export interface AlgorithmOption {
+  id: Algorithm;
+  name: string;
+  description: string;
+  icon: string;
+}
+
+export interface CalcResult {
+  basePrice: number;
+  aValue: number;
+  effectiveCount: number;
+  algorithmName: string;
+  trimmedNames?: string[];
+  rankings: Array<{
+    rank: number;
+    unit: BidUnit;
+    deviationPercent: number;
+    score: number;
+    priceDiff: number;
+  }>;
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  config: Omit<BidConfig, 'bidUnits' | 'theme' | 'apiKey' | 'apiEndpoint'>;
+}
