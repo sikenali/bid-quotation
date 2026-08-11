@@ -7,6 +7,8 @@ import { calculateResult } from '../utils/algorithms';
 interface ConfigStore {
   config: BidConfig;
   calculationResult: CalcResult | null;
+  currentStep: number;
+  setCurrentStep: (step: number) => void;
   setConfig: (config: Partial<BidConfig>) => void;
   setAlgorithm: (algorithm: BidConfig['algorithm']) => void;
   addBidUnit: (unit: BidUnit) => void;
@@ -25,6 +27,9 @@ export const useConfigStore = create<ConfigStore>()(
     (set, get) => ({
       config: createDefaultConfig('arithmetic_mean'),
       calculationResult: null,
+      currentStep: 1,
+
+      setCurrentStep: (step) => set({ currentStep: step }),
 
       setConfig: (partial) =>
         set((state) => ({
@@ -108,6 +113,7 @@ export const useConfigStore = create<ConfigStore>()(
         config: {
           ...state.config,
           bidUnits: [],
+          currentStep: state.currentStep,
         },
       }),
     },
