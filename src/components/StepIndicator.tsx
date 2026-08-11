@@ -18,20 +18,28 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
         return (
           <React.Fragment key={stepNum}>
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all duration-200 ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
                 isActive
-                  ? 'bg-primary text-white'
+                  ? 'bg-[#C43A31]'
                   : isDone
-                  ? 'bg-success text-white'
-                  : 'bg-step-inactive text-text-secondary'
+                  ? 'bg-[#5B8C5A]'
+                  : 'bg-[#F0E8D5]'
               }`}
             >
-              {isDone ? <i className="ri-check-line text-sm"></i> : stepNum}
+              {isDone ? (
+                <i className="ri-check-line text-white text-[16px]"></i>
+              ) : (
+                <span className={`text-sm font-medium ${
+                  isActive ? 'text-white' : 'text-text-secondary'
+                }`}>
+                  {stepNum}
+                </span>
+              )}
             </div>
             {index < totalSteps - 1 && (
               <div
-                className={`w-6 h-0.5 ${
-                  stepNum < currentStep ? 'bg-success' : 'bg-border'
+                className={`w-6 h-0.5 rounded-full ${
+                  stepNum < currentStep ? 'bg-[#5B8C5A]' : 'bg-[#D4C4A8]'
                 }`}
               />
             )}

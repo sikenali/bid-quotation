@@ -4,13 +4,14 @@
   --color-primary: #C43A31;
   --color-primary-hover: #A83028;
   --color-bg: #FDF5E6;
-  --color-card: #F5EFE0;
-  --color-border: #D4C4A8;
-  --color-border-light: #E8E0CC;
+  --color-card: #FBF7EF;
+  --color-border: #E8DCC8;
+  --color-border-light: #F0E8D5;
   --color-success: #5B8C5A;
   --color-success-light: #E8F0E7;
-  --color-text: #5C4033;
+  --color-text: #3D2B1F;
   --color-text-secondary: #8B7355;
+  --color-text-secondary-dim: #B8A890;
   --color-step-inactive: #F0E8D5;
   --color-dark-bg: #1A1A1A;
   --color-dark-card: #2A2A2A;
@@ -31,14 +32,14 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-white px-6 py-2.5 rounded-lg font-medium
+    @apply bg-primary text-white px-8 py-3 rounded-xl font-medium
            hover:bg-primary-hover transition-colors duration-200
-           flex items-center gap-2;
+           flex items-center gap-2 text-sm;
   }
   .btn-secondary {
-    @apply bg-card text-text px-6 py-2.5 rounded-lg font-medium
+    @apply bg-card text-text px-6 py-2.5 rounded-xl font-medium
            hover:bg-border-light transition-colors duration-200
-           border border-border;
+           border border-border text-sm;
   }
   .dark .btn-secondary {
     @apply bg-dark-card text-dark-text hover:bg-dark-border border-dark-border;
@@ -47,6 +48,8 @@
     @apply bg-white border border-border rounded-lg px-4 py-2
            focus:outline-none focus:ring-2 focus:ring-primary/30
            focus:border-primary transition-all text-text;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
   .dark .input-field {
     @apply bg-dark-card border-dark-border text-dark-text focus:ring-primary/50;

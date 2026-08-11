@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { calculateResult } from '../utils/algorithms';
-import { createDefaultConfig } from '../utils/templates';
 
 describe('calculateResult', () => {
   it('算术平均法: 基准价 = 平均价 × K', () => {

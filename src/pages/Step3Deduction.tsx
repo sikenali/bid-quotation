@@ -19,17 +19,18 @@ export default function Step3Deduction() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-text">设置扣分规则</h2>
-        <p className="text-text-secondary text-sm">
-          根据招标文件，配置基准价偏离后的得分扣减参数
-        </p>
+      <div className="space-y-1">
+        <h2 className="text-[28px] font-semibold text-text">扣分规则</h2>
+        <p className="text-text-secondary text-[14px]">配置报价偏离基准价的扣分标准</p>
       </div>
 
       <DeductionForm />
 
       <div className="flex items-center justify-between pt-4">
-        <button onClick={handlePrev} className="btn-secondary">上一步</button>
+        <button onClick={handlePrev} className="btn-secondary">
+          <i className="ri-arrow-left-line"></i>
+          <span>上一步</span>
+        </button>
         <button onClick={handleNext} className="btn-primary">下一步：报价录入</button>
       </div>
     </div>

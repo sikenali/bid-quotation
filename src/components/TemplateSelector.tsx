@@ -6,7 +6,7 @@ export function TemplateSelector() {
   const { loadTemplate, algorithm } = useConfigStore();
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5">
+    <div className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-2xl p-5">
       <h3 className="font-semibold text-text text-sm mb-3">快速模板</h3>
       <div className="flex flex-wrap gap-2">
         {PRESET_TEMPLATES.map((template) => (
@@ -15,8 +15,8 @@ export function TemplateSelector() {
             onClick={() => loadTemplate(template.id)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               algorithm === template.config.algorithm
-                ? 'bg-primary text-white'
-                : 'bg-border-light text-text-secondary hover:bg-border hover:text-text'
+                ? 'bg-[#C43A31] text-white'
+                : 'bg-[#F0E8D5] text-text-secondary hover:bg-white hover:text-text'
             }`}
           >
             {template.name}

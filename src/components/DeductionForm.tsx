@@ -9,63 +9,86 @@ interface DeductionFormProps {
 export default function DeductionForm({ bidDocumentText = '' }: DeductionFormProps) {
   const { deduction, setDeduction } = useConfigStore();
   const [docText, setDocText] = useState(bidDocumentText);
-  const [showDocSection, setShowDocSection] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
 
   const update = (partial: Partial<DeductionParams>) =>
     setDeduction({ ...deduction, ...partial });
 
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      setUploadedFile(file.name);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const text = ev.target?.result as string;
+        setDocText(text);
+      };
+      reader.readAsText(file);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      {/* 扣分参数卡片 */}
-      <div className="bg-card border border-border rounded-xl p-6 space-y-5">
-        <h3 className="font-semibold text-text text-sm">得分扣减规则</h3>
+      {/* 扣分参数区 */}
+      <div className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-2xl p-6 space-y-5">
+        <div className="flex items-center gap-5">
+          <div className="w-1.5 h-4.5 bg-[#D4C4A8] rounded-[3px] flex-shrink-0" />
+          <h3 className="font-semibold text-text text-[15px]">得分扣减规则</h3>
+        </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-text-secondary text-xs mb-1">满分 (分)</label>
+        <div className="flex items-stretch gap-0 bg-white rounded-xl overflow-hidden border border-[#E8DCC8]">
+          {/* 满分 */}
+          <div className="flex-1 p-4 flex flex-col gap-1.5">
+            <label className="text-text-secondary text-xs">满分 (分)</label>
             <input
               type="number"
               step="1"
               min="0"
               value={deduction.fullScore}
               onChange={(e) => update({ fullScore: parseFloat(e.target.value) || 0 })}
-              className="input-field w-full text-sm"
+              className="input-field w-full text-sm text-center"
             />
           </div>
-          <div>
-            <label className="block text-text-secondary text-xs mb-1">最低得分 (分)</label>
-            <input
-              type="number"
-              step="1"
-              min="0"
-              value={deduction.minScore}
-              onChange={(e) => update({ minScore: parseFloat(e.target.value) || 0 })}
-              className="input-field w-full text-sm"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-text-secondary text-xs mb-1">每高 1% 扣 (分)</label>
+          <div className="w-px bg-[#D4C4A8] flex-shrink-0" />
+          {/* 每高 1% 扣 */}
+          <div className="flex-1 p-4 flex flex-col gap-1.5">
+            <label className="text-text-secondary text-xs">每高 1% 扣 (分)</label>
             <input
               type="number"
               step="0.1"
               min="0"
               value={deduction.deductPerHighPercent}
               onChange={(e) => update({ deductPerHighPercent: parseFloat(e.target.value) || 0 })}
-              className="input-field w-full text-sm"
+              className="input-field w-full text-sm text-center"
             />
           </div>
-          <div>
-            <label className="block text-text-secondary text-xs mb-1">每低 1% 扣 (分)</label>
+          <div className="w-px bg-[#D4C4A8] flex-shrink-0" />
+          {/* 每低 1% 扣 */}
+          <div className="flex-1 p-4 flex flex-col gap-1.5">
+            <label className="text-text-secondary text-xs">每低 1% 扣 (分)</label>
             <input
               type="number"
               step="0.1"
               min="0"
               value={deduction.deductPerLowPercent}
               onChange={(e) => update({ deductPerLowPercent: parseFloat(e.target.value) || 0 })}
-              className="input-field w-full text-sm"
+              className="input-field w-full text-sm text-center"
+            />
+          </div>
+          <div className="w-px bg-[#D4C4A8] flex-shrink-0" />
+          {/* 最低得分 */}
+          <div className="flex-1 p-4 flex flex-col gap-1.5">
+            <label className="text-text-secondary text-xs">最低得分 (分)</label>
+            <input
+              type="number"
+              step="1"
+              min="0"
+              value={deduction.minScore}
+              onChange={(e) => update({ minScore: parseFloat(e.target.value) || 0 })}
+              className="input-field w-full text-sm text-center"
             />
           </div>
         </div>
@@ -86,30 +109,75 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
         </div>
       </div>
 
-      {/* 招标文件规则原文对照（可折叠） */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <button
-          onClick={() => setShowDocSection(!showDocSection)}
-          className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-border-light/30 transition-colors"
-        >
-          <span className="font-semibold text-text text-sm">招标文件规则原文对照</span>
-          <i className={`ri-arrow-down-s-line text-text-secondary transition-transform ${showDocSection ? 'rotate-180' : ''}`}></i>
-        </button>
+      {/* 招标文件规则原文对照 */}
+      <div className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-2xl p-6 space-y-4">
+        <div className="flex items-center gap-5">
+          <div className="w-1.5 h-4.5 bg-[#C8A45C] rounded-[3px] flex-shrink-0" />
+          <h3 className="font-semibold text-text text-[15px]">招标文件规则原文对照</h3>
+        </div>
 
-        {showDocSection && (
-          <div className="px-6 pb-5 border-t border-border/50 pt-4">
-            <textarea
-              value={docText}
-              onChange={(e) => setDocText(e.target.value)}
-              rows={6}
-              placeholder="粘贴招标文件中关于扣分规则的原文描述..."
-              className="input-field w-full text-sm resize-none"
-            />
-            <p className="text-text-secondary text-xs mt-2">
-              将招标文件原文粘贴到上方，便于与配置的扣分参数进行对照校验。
-            </p>
-          </div>
-        )}
+        <div
+          onDrop={handleDrop}
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
+          className={`bg-white rounded-xl p-5 border-2 transition-colors ${
+            isDragging
+              ? 'border-[#C43A31] bg-[#FFF0ED]'
+              : 'border-[#D4C4A8]'
+          }`}
+        >
+          {uploadedFile ? (
+            <div className="flex items-center gap-3">
+              <i className="ri-file-text-line text-[#C43A31] text-xl"></i>
+              <span className="text-text text-sm">{uploadedFile}</span>
+              <button
+                onClick={() => { setUploadedFile(null); setDocText(''); }}
+                className="ml-auto text-text-secondary hover:text-red-500 transition-colors"
+              >
+                <i className="ri-close-line text-lg"></i>
+              </button>
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <i className="ri-upload-cloud-2-line text-[#D4C4A8] text-3xl mb-2"></i>
+              <p className="text-text-secondary text-sm">拖拽文件到此处，或点击下方按钮上传</p>
+              <p className="text-text-secondary/60 text-xs mt-1">支持 .txt .pdf .doc 格式</p>
+            </div>
+          )}
+          {!uploadedFile && (
+            <div className="mt-3 flex justify-center">
+              <label className="px-4 py-2 bg-[#C43A31] text-white rounded-lg text-sm font-medium hover:bg-[#A83028] transition-colors cursor-pointer flex items-center gap-2">
+                <i className="ri-upload-line"></i>
+                选择文件
+                <input
+                  type="file"
+                  accept=".txt,.pdf,.doc,.docx"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setUploadedFile(file.name);
+                      const reader = new FileReader();
+                      reader.onload = (ev) => setDocText(ev.target?.result as string);
+                      reader.readAsText(file);
+                    }
+                  }}
+                />
+              </label>
+            </div>
+          )}
+        </div>
+
+        <textarea
+          value={docText}
+          onChange={(e) => setDocText(e.target.value)}
+          rows={4}
+          placeholder="粘贴招标文件中关于扣分规则的原文描述..."
+          className="input-field w-full text-sm resize-none"
+        />
+        <p className="text-text-secondary text-xs">
+          将招标文件原文粘贴到上方，便于与配置的扣分参数进行对照校验。
+        </p>
       </div>
     </div>
   );

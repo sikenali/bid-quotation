@@ -62,21 +62,35 @@ export function AlgorithmParams() {
   };
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5 space-y-4">
-      <h3 className="font-semibold text-text text-sm">算法参数</h3>
+    <div className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-2xl p-6 space-y-5">
+      {/* 装饰条 */}
+      <div className="flex items-center gap-5">
+        <div className="w-1.5 h-4.5 bg-[#D4C4A8] rounded-[3px] flex-shrink-0" />
+        <h3 className="font-semibold text-text text-[15px]">
+          {algorithm === 'trimmed_mean' && '去极值平均法 · 参数配置'}
+          {algorithm === 'remove_highest' && '去最高平均法 · 参数配置'}
+          {algorithm === 'second_lowest' && '次低报价法 · 参数配置'}
+          {algorithm === 'weighted_limit' && '随机权重法 · 参数配置'}
+          {algorithm === 'arithmetic_mean' && '算术平均法 · 参数配置'}
+          {algorithm === 'custom' && '手动指定 · 参数配置'}
+          {algorithm === 'ai_parse' && 'AI 智能解析'}
+          {algorithm === 'lowest_price' && '最低价法 · 参数配置'}
+          {algorithm === 'double_average' && '二次平均法 · 参数配置'}
+        </h3>
+      </div>
 
       {/* K值设置 */}
-      <div className="flex items-center justify-between">
-        <span className="text-text-secondary text-sm">启用 K 值调整</span>
+      <div className="flex items-center gap-4">
+        <span className="text-text-secondary text-[13px]">启用 K 值调整</span>
         <button
           onClick={() => setKEnabled(!kEnabled)}
-          className={`relative w-11 h-6 rounded-full transition-colors ${
+          className={`relative w-[18px] h-[18px] rounded-[4px] transition-colors flex-shrink-0 ${
             kEnabled ? 'bg-primary' : 'bg-border-light'
           }`}
         >
           <span
-            className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${
-              kEnabled ? 'translate-x-5' : ''
+            className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+              kEnabled ? 'translate-x-[14px]' : ''
             }`}
           />
         </button>
@@ -99,34 +113,32 @@ export function AlgorithmParams() {
 
       {/* 去极值平均法参数 */}
       {algorithm === 'trimmed_mean' && (
-        <>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-text-secondary text-xs mb-1">去掉最高 (%)</label>
-              <input
-                type="number"
-                step="1"
-                min="0"
-                max="50"
-                value={trimHighPercent}
-                onChange={(e) => setTrimHighPercent(parseFloat(e.target.value) || 0)}
-                className="input-field w-full text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-text-secondary text-xs mb-1">去掉最低 (%)</label>
-              <input
-                type="number"
-                step="1"
-                min="0"
-                max="50"
-                value={trimLowPercent}
-                onChange={(e) => setTrimLowPercent(parseFloat(e.target.value) || 0)}
-                className="input-field w-full text-sm"
-              />
-            </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-text-secondary text-xs mb-1">去掉最高 (%)</label>
+            <input
+              type="number"
+              step="1"
+              min="0"
+              max="50"
+              value={trimHighPercent}
+              onChange={(e) => setTrimHighPercent(parseFloat(e.target.value) || 0)}
+              className="input-field w-full text-sm"
+            />
           </div>
-        </>
+          <div>
+            <label className="block text-text-secondary text-xs mb-1">去掉最低 (%)</label>
+            <input
+              type="number"
+              step="1"
+              min="0"
+              max="50"
+              value={trimLowPercent}
+              onChange={(e) => setTrimLowPercent(parseFloat(e.target.value) || 0)}
+              className="input-field w-full text-sm"
+            />
+          </div>
+        </div>
       )}
 
       {/* 去最高平均法参数 */}
@@ -236,12 +248,6 @@ export function AlgorithmParams() {
         <div>
           <label className="block text-text-secondary text-xs mb-1">上传招标文件或粘贴文本</label>
           <textarea
-            ref={(el) => {
-              if (el) {
-                const ta = el;
-                Object.assign(ta, { _autosize: true });
-              }
-            }}
             rows={4}
             placeholder="请粘贴招标文件中的报价计算方法描述，AI 将自动解析并配置参数..."
             className="input-field w-full text-sm resize-none"
@@ -249,7 +255,7 @@ export function AlgorithmParams() {
           <button
             onClick={handleParse}
             disabled={isParsing}
-            className="mt-2 flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-2 flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-sm font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isParsing ? (
               <>

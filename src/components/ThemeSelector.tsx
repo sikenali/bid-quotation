@@ -7,19 +7,19 @@ export default function ThemeSelector() {
   return (
     <div className="space-y-4">
       <div
-        className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
-          theme === 'light' ? 'border-primary bg-white' : 'border-border bg-card'
+        className={`p-8 rounded-xl border-2 cursor-pointer transition-all ${
+          theme === 'light' ? 'border-[#C43A31] bg-white' : 'border-[#E8DCC8] bg-[#FBF7EF]'
         }`}
         onClick={() => setTheme('light')}
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-white border border-border flex items-center justify-center"><i className="ri-sun-line text-xl text-yellow-500"></i></div>
+          <div className="w-10 h-10 rounded-lg bg-white border border-[#E8DCC8] flex items-center justify-center"><i className="ri-sun-line text-xl text-[#D97706]"></i></div>
           <div>
             <div className="font-semibold text-text">浅色主题</div>
             <div className="text-textSecondary text-sm">暖米色背景，护眼舒适</div>
           </div>
           {theme === 'light' && (
-            <div className="ml-auto w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+            <div className="ml-auto w-5 h-5 rounded-full bg-[#C43A31] flex items-center justify-center">
               <i className="ri-check-line text-white text-sm"></i>
             </div>
           )}
@@ -27,8 +27,8 @@ export default function ThemeSelector() {
       </div>
 
       <div
-        className={`p-6 rounded-xl border-2 cursor-pointer transition-all ${
-          theme === 'dark' ? 'border-primary bg-gray-900' : 'border-border bg-card'
+        className={`p-8 rounded-xl border-2 cursor-pointer transition-all ${
+          theme === 'dark' ? 'border-[#C43A31] bg-gray-900' : 'border-[#E8DCC8] bg-[#FBF7EF]'
         }`}
         onClick={() => setTheme('dark')}
       >
@@ -39,7 +39,7 @@ export default function ThemeSelector() {
             <div className="text-textSecondary text-sm">暗色配色，夜间使用</div>
           </div>
           {theme === 'dark' && (
-            <div className="ml-auto w-5 h-5 rounded-full bg-primary flex items-center justify-center">
+            <div className="ml-auto w-5 h-5 rounded-full bg-[#C43A31] flex items-center justify-center">
               <i className="ri-check-line text-white text-sm"></i>
             </div>
           )}

@@ -18,14 +18,12 @@ export default function Step1Algorithm() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-semibold text-text">选择报价计算方法</h2>
-        <p className="text-text-secondary text-sm mt-1">
-          根据招标文件中的评分规则，选择适配的基准价计算方法
+      <div className="space-y-1">
+        <h2 className="text-[28px] font-semibold text-text">报价方法</h2>
+        <p className="text-text-secondary text-[14px]">
+          选择基准价计算方法，配置对应参数
         </p>
       </div>
-
-      <TemplateSelector />
 
       <AlgorithmGrid
         options={ALGORITHM_OPTIONS}
@@ -35,12 +33,17 @@ export default function Step1Algorithm() {
 
       <AlgorithmParams />
 
-      <div className="flex justify-end pt-2">
+      <TemplateSelector />
+
+      <div className="flex items-center justify-between pt-2">
+        <div className="flex items-center gap-3">
+          <span className="text-text-secondary text-[13px]">快速加载模板</span>
+        </div>
         <button
           onClick={handleNext}
           className="btn-primary"
         >
-          下一步：判定规则
+          <span>下一步</span>
           <i className="ri-arrow-right-s-line text-lg"></i>
         </button>
       </div>

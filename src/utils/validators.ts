@@ -1,4 +1,4 @@
-import { BidUnit, ValidRule, Algorithm, TrimAction } from '../types';
+import { BidUnit, ValidRule, Algorithm } from '../types';
 
 export function getAlgorithmName(algorithm: Algorithm): string {
   const names: Record<Algorithm, string> = {

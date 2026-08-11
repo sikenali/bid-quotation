@@ -17,42 +17,54 @@ export default function BidInput() {
     updateBidUnit(id, { [field]: value });
   };
 
+  const activeUnit = bidUnits[0]?.id || null;
+
   return (
     <div className="space-y-6">
-      <div className="bg-card rounded-xl p-6 border border-border">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-1 h-5 bg-border rounded-full" />
-            <h3 className="font-semibold text-text">投标单位列表</h3>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowRandomModal(true)}
-              className="px-3 py-1.5 text-sm bg-white border border-border rounded-lg text-text-secondary hover:text-primary hover:border-primary transition-colors"
-            >
-              随机填充
-            </button>
-            <button
-              onClick={() => setShowParseModal(true)}
-              className="px-3 py-1.5 text-sm bg-white border border-border rounded-lg text-text-secondary hover:text-primary hover:border-primary transition-colors"
-            >
-              报价解析
-            </button>
-            <button
-              onClick={clearBidUnits}
-              className="px-3 py-1.5 text-sm bg-white border border-border rounded-lg text-text-secondary hover:text-red-500 hover:border-red-300 transition-colors"
-            >
-              清空
-            </button>
-          </div>
+      {/* 投标单位标签横排 */}
+      <div className="flex flex-wrap gap-3">
+        {bidUnits.map((unit) => (
+          <button
+            key={unit.id}
+            onClick={() => { /* select unit */ }}
+            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl min-w-[140px] transition-all ${
+              unit.id === activeUnit
+                ? 'bg-[#C43A31] text-white'
+                : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text'
+            }`}
+          >
+            <span className={`text-[14px] font-medium ${unit.id === activeUnit ? 'text-white' : 'text-text'}`}>
+              {unit.name || '未命名'}
+            </span>
+            <span className={`text-[11px] ${unit.id === activeUnit ? 'text-white/70' : 'text-text-secondary'}`}>
+              ¥ {unit.price.toLocaleString()}
+            </span>
+          </button>
+        ))}
+        <button
+          onClick={handleAdd}
+          className="w-[120px] h-[60px] bg-[#FBF7EF] border-2 border-dashed border-[#D4C4A8] rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer hover:border-[#C43A31] hover:text-[#C43A31] transition-colors"
+        >
+          <i className="ri-add-line text-[#8B7355] text-xl hover:text-[#C43A31]"></i>
+          <span className="text-text-secondary text-[13px]">添加单位</span>
+        </button>
+      </div>
+
+      {/* 单位编辑区 */}
+      <div className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-2xl p-6">
+        <div className="flex items-center gap-5 mb-4">
+          <div className="w-1.5 h-4.5 bg-[#D4C4A8] rounded-[3px] flex-shrink-0" />
+          <h3 className="font-semibold text-text text-[15px]">
+            {activeUnit ? `${bidUnits.find(u => u.id === activeUnit)?.name || '单位'} · 编辑` : '投标单位列表'}
+          </h3>
         </div>
 
         {bidUnits.length === 0 ? (
-          <p className="text-text-secondary text-center py-8">暂无投标单位，点击下方按钮添加</p>
+          <p className="text-text-secondary text-center py-8">暂无投标单位，点击上方的「添加单位」按钮开始录入</p>
         ) : (
           <div className="space-y-3">
             {bidUnits.map((unit) => (
-              <div key={unit.id} className="flex items-center gap-3 p-3 bg-white rounded-lg border border-border/50">
+              <div key={unit.id} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#E8DCC8]/50">
                 <input
                   type="text"
                   value={unit.name}
@@ -65,26 +77,44 @@ export default function BidInput() {
                   value={unit.price}
                   onChange={(e) => handleChange(unit.id, 'price', parseFloat(e.target.value) || 0)}
                   placeholder="报价金额"
-                  className="input-field w-32 text-center"
+                  className="input-field w-[240px] text-center"
                 />
                 <button
                   onClick={() => removeBidUnit(unit.id)}
-                  className="p-2 text-text-secondary hover:text-red-500 transition-colors"
+                  className="px-4 py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm font-medium hover:bg-[#FFE0DC] transition-colors flex items-center gap-1"
                   aria-label="删除"
                 >
-                  <i className="ri-close-line text-lg"></i>
+                  <i className="ri-delete-bin-line"></i>
+                  <span>删除</span>
                 </button>
               </div>
             ))}
           </div>
         )}
+      </div>
 
+      {/* 快捷操作区 */}
+      <div className="flex items-center gap-3">
         <button
-          onClick={handleAdd}
-          className="mt-4 w-full py-3 border-2 border-dashed border-border rounded-xl text-text-secondary hover:text-primary hover:border-primary transition-colors flex items-center justify-center gap-2"
+          onClick={() => setShowRandomModal(true)}
+          className="px-5 py-2 bg-[#F5EFE0] border border-[#E0D5C0] rounded-lg text-text-secondary text-sm hover:text-[#C43A31] hover:border-[#C43A31] transition-colors flex items-center gap-2"
         >
-          <i className="ri-add-line text-lg"></i>
-          添加投标单位
+          <i className="ri-dice-line text-[#5C4033]"></i>
+          随机填充
+        </button>
+        <button
+          onClick={() => setShowParseModal(true)}
+          className="px-5 py-2 bg-[#F5EFE0] border border-[#E0D5C0] rounded-lg text-text-secondary text-sm hover:text-[#C43A31] hover:border-[#C43A31] transition-colors flex items-center gap-2"
+        >
+          <i className="ri-file-search-line text-[#5C4033]"></i>
+          报价解析
+        </button>
+        <button
+          onClick={clearBidUnits}
+          className="px-5 py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm hover:bg-[#FFE0DC] transition-colors flex items-center gap-2"
+        >
+          <i className="ri-delete-bin-line"></i>
+          清空所有
         </button>
       </div>
 

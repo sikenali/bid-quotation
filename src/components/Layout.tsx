@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import { StepIndicator } from './StepIndicator';
 import SettingsPanel from './SettingsPanel';
+import { exportCSV } from '../utils/export';
 
 interface Props {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const navigate = useNavigate();
-  const { currentStep, setCurrentStep, theme, setTheme } = useConfigStore();
+  const { currentStep, theme } = useConfigStore();
   const [showSettings, setShowSettings] = useState(false);
 
   const isResultPage = currentStep === 5;
@@ -27,8 +28,8 @@ export default function Layout({ children }: Props) {
                 <i className="ri-file-text-line text-white text-xl"></i>
               </div>
               <div>
-                <h1 className="text-text font-semibold text-lg leading-tight">投标报价测算</h1>
-                <p className="text-text-secondary text-xs">评分辅助工具</p>
+                <h1 className="text-text font-semibold text-[20px] leading-tight">文价猩</h1>
+                <p className="text-text-secondary text-[11px]">BidPrice AI</p>
               </div>
             </div>
 
@@ -37,12 +38,25 @@ export default function Layout({ children }: Props) {
               {!isResultPage && <StepIndicator currentStep={currentStep} />}
 
               {isResultPage && (
-                <button
-                  onClick={() => navigate('/step-4')}
-                  className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg text-text hover:bg-border-light transition-colors"
-                >
-                  <span>返回编辑</span>
-                </button>
+                <>
+                  <button
+                    onClick={() => navigate('/step-4')}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#F5EFE0] border border-[#E0D5C0] rounded-lg text-[#5C4033] hover:bg-[#E8DCC8] transition-colors text-sm"
+                  >
+                    <i className="ri-arrow-left-line text-[16px]"></i>
+                    <span>返回编辑</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      const { calculationResult } = useConfigStore.getState();
+                      if (calculationResult) exportCSV(calculationResult);
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#5B8C5A] rounded-lg text-white hover:bg-[#4A7A49] transition-colors text-sm"
+                  >
+                    <i className="ri-download-line text-[16px]"></i>
+                    <span>导出CSV</span>
+                  </button>
+                </>
               )}
 
               <button

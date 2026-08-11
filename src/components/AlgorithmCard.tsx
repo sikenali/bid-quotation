@@ -11,22 +11,32 @@ export function AlgorithmCard({ option, isSelected, onSelect }: Props) {
   return (
     <button
       onClick={onSelect}
-      className={`relative p-4 rounded-xl border-2 text-left transition-all duration-200 hover:shadow-md ${
+      className={`relative p-5 rounded-xl border-2 text-left transition-all duration-200 ${
         isSelected
-          ? 'border-primary bg-primary/5 shadow-sm'
-          : 'border-border bg-card hover:border-primary/40'
+          ? 'border-[#C43A31] bg-white shadow-sm'
+          : 'border-[#E8DCC8] bg-[#FBF7EF] hover:border-[#C43A31]/40'
       }`}
     >
       {isSelected && (
-        <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+        <div className="absolute top-3 right-3 w-5 h-5 bg-[#C43A31] rounded-full flex items-center justify-center">
           <i className="ri-check-line text-white text-sm"></i>
         </div>
       )}
-      <div className="w-10 h-10 rounded-lg bg-border-light flex items-center justify-center mb-3">
-        <i className={`${option.icon} text-xl text-text`}></i>
+      <div className="flex items-center gap-3 mb-2">
+        <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+          isSelected ? 'bg-[#FFF0ED]' : 'bg-[#F0E8D5]'
+        }`}>
+          <i className={`${option.icon} text-[20px] ${isSelected ? 'text-[#C43A31]' : 'text-[#5C4033]'}`}></i>
+        </div>
+        <div className="flex flex-col">
+          <div className={`font-semibold text-[15px] ${isSelected ? 'text-[#C43A31]' : 'text-text'}`}>
+            {option.name}
+          </div>
+          <div className="text-text-secondary text-[11px] leading-tight mt-0.5">
+            {option.shortDesc || option.description}
+          </div>
+        </div>
       </div>
-      <div className="font-semibold text-text text-sm mb-1">{option.name}</div>
-      <div className="text-text-secondary text-xs leading-relaxed">{option.description}</div>
     </button>
   );
 }

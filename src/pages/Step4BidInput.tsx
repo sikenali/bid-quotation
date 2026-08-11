@@ -5,7 +5,7 @@ import BidInput from '../components/BidInput';
 
 export default function Step4BidInput() {
   const navigate = useNavigate();
-  const { currentStep, setCurrentStep, calculate } = useConfigStore();
+  const { setCurrentStep, calculate } = useConfigStore();
 
   const handlePrev = () => { setCurrentStep(3); navigate('/step-3'); };
   const handleNext = () => {
@@ -16,19 +16,34 @@ export default function Step4BidInput() {
 
   return (
     <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <h2 className="text-2xl font-bold text-text">录入投标报价</h2>
-        <p className="text-text-secondary">添加投标单位名称和报价金额，支持批量解析</p>
+      <div className="space-y-1">
+        <h2 className="text-[28px] font-semibold text-text">投标报价</h2>
+        <p className="text-text-secondary text-[14px]">录入各投标单位名称与报价金额</p>
       </div>
 
       <BidInput />
 
       <div className="flex items-center justify-between pt-4">
-        <button onClick={handlePrev} className="btn-secondary">上一步</button>
-        <button onClick={handleNext} className="btn-primary">
-          <span>测算结果</span>
-          <i className="ri-arrow-right-s-line text-lg"></i>
+        <button onClick={handlePrev} className="btn-secondary">
+          <i className="ri-arrow-left-line"></i>
+          <span>上一步</span>
         </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleNext}
+            className="px-6 py-2.5 bg-[#F5EFE0] border border-[#E0D5C0] rounded-xl text-text-secondary hover:text-text transition-colors text-sm flex items-center gap-2"
+          >
+            <i className="ri-download-line"></i>
+            <span>导出报价</span>
+          </button>
+          <button
+            onClick={handleNext}
+            className="btn-primary"
+          >
+            <i className="ri-bar-chart-grouped-line"></i>
+            <span>报价测算</span>
+          </button>
+        </div>
       </div>
     </div>
   );

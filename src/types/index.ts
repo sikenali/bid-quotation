@@ -67,6 +67,7 @@ export interface AlgorithmOption {
   id: Algorithm;
   name: string;
   description: string;
+  shortDesc?: string;
   icon: string;
 }
 

@@ -1,4 +1,4 @@
-import type { Algorithm, BidConfig, DeductionParams, ValidRule } from '../types';
+import type { Algorithm, BidConfig } from '../types';
 
 export interface Template {
   id: string;
