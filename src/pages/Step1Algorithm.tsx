@@ -1,3 +1,4 @@
+import type { Algorithm } from '../types';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
@@ -8,7 +9,7 @@ import { TemplateSelector } from '../components/TemplateSelector';
 
 export default function Step1Algorithm() {
   const navigate = useNavigate();
-  const { config, setAlgorithm, setCurrentStep } = useConfigStore();
+  const { algorithm, setAlgorithm, setCurrentStep } = useConfigStore();
 
   const handleNext = () => {
     setCurrentStep(2);
@@ -28,8 +29,8 @@ export default function Step1Algorithm() {
 
       <AlgorithmGrid
         options={ALGORITHM_OPTIONS}
-        selectedId={config.algorithm}
-        onSelect={(id) => setAlgorithm(id as typeof config.algorithm)}
+        selectedId={algorithm}
+        onSelect={(id) => setAlgorithm(id as Algorithm)}
       />
 
       <AlgorithmParams />

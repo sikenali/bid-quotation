@@ -9,8 +9,7 @@ import Step5Results from './pages/Step5Results';
 import { useConfigStore } from './stores/configStore';
 
 export default function App() {
-  const { config } = useConfigStore();
-  const theme = config.theme;
+  const { theme } = useConfigStore();
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');

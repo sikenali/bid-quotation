@@ -3,26 +3,19 @@ import { useConfigStore } from '../stores/configStore';
 import { parseRuleText } from '../utils/aiParse';
 
 export function AlgorithmParams() {
-  const { config, setConfig } = useConfigStore();
+  const {
+    algorithm, kEnabled, kValue,
+    trimHighPercent, trimLowPercent,
+    removeHighestN, nthLowest,
+    q1Weight, k1, k2, maxPrice, customBasePrice,
+    setAlgorithm, setKEnabled, setKValue,
+    setTrimHighPercent, setTrimLowPercent,
+    setRemoveHighestN, setNthLowest,
+    setQ1Weight, setK1, setK2, setMaxPrice, setCustomBasePrice,
+    setDeduction, setValidRules,
+  } = useConfigStore();
   const [isParsing, setIsParsing] = useState(false);
   const [parseError, setParseError] = useState('');
-
-  const {
-    algorithm,
-    kEnabled,
-    kValue,
-    trimHighPercent,
-    trimLowPercent,
-    removeHighestN,
-    nthLowest,
-    q1Weight,
-    k1,
-    k2,
-    maxPrice,
-    customBasePrice,
-  } = config;
-
-  const update = (partial: Partial<typeof config>) => setConfig(partial);
 
   const handleParse = async () => {
     const textarea = document.querySelector('textarea') as HTMLTextAreaElement | null;
@@ -45,21 +38,19 @@ export function AlgorithmParams() {
     try {
       const result = await parseRuleText(text, apiKey, apiEndpoint);
       if (result) {
-        setConfig({
-          algorithm: result.algorithm,
-          kEnabled: result.kEnabled,
-          kValue: result.kValue,
-          trimHighPercent: result.trimHighPercent,
-          trimLowPercent: result.trimLowPercent,
-          removeHighestN: result.removeHighestN,
-          nthLowest: result.nthLowest,
-          q1Weight: result.q1Weight,
-          k1: result.k1,
-          k2: result.k2,
-          maxPrice: result.maxPrice,
-          deduction: result.deduction,
-          validRules: result.validRules,
-        });
+        setAlgorithm(result.algorithm);
+        setKEnabled(result.kEnabled);
+        setKValue(result.kValue);
+        setTrimHighPercent(result.trimHighPercent);
+        setTrimLowPercent(result.trimLowPercent);
+        setRemoveHighestN(result.removeHighestN);
+        setNthLowest(result.nthLowest);
+        setQ1Weight(result.q1Weight);
+        setK1(result.k1);
+        setK2(result.k2);
+        setMaxPrice(result.maxPrice);
+        setDeduction(result.deduction);
+        setValidRules(result.validRules);
       } else {
         setParseError('解析失败，请检查 API 配置或原文格式');
       }
@@ -78,7 +69,7 @@ export function AlgorithmParams() {
       <div className="flex items-center justify-between">
         <span className="text-text-secondary text-sm">启用 K 值调整</span>
         <button
-          onClick={() => update({ kEnabled: !kEnabled })}
+          onClick={() => setKEnabled(!kEnabled)}
           className={`relative w-11 h-6 rounded-full transition-colors ${
             kEnabled ? 'bg-primary' : 'bg-border-light'
           }`}
@@ -100,7 +91,7 @@ export function AlgorithmParams() {
             min="0"
             max="2"
             value={kValue}
-            onChange={(e) => update({ kValue: parseFloat(e.target.value) || 0 })}
+            onChange={(e) => setKValue(parseFloat(e.target.value) || 0)}
             className="input-field w-full text-sm"
           />
         </div>
@@ -118,7 +109,7 @@ export function AlgorithmParams() {
                 min="0"
                 max="50"
                 value={trimHighPercent}
-                onChange={(e) => update({ trimHighPercent: parseFloat(e.target.value) || 0 })}
+                onChange={(e) => setTrimHighPercent(parseFloat(e.target.value) || 0)}
                 className="input-field w-full text-sm"
               />
             </div>
@@ -130,7 +121,7 @@ export function AlgorithmParams() {
                 min="0"
                 max="50"
                 value={trimLowPercent}
-                onChange={(e) => update({ trimLowPercent: parseFloat(e.target.value) || 0 })}
+                onChange={(e) => setTrimLowPercent(parseFloat(e.target.value) || 0)}
                 className="input-field w-full text-sm"
               />
             </div>
@@ -148,7 +139,7 @@ export function AlgorithmParams() {
             min="1"
             max="10"
             value={removeHighestN}
-            onChange={(e) => update({ removeHighestN: parseFloat(e.target.value) || 1 })}
+            onChange={(e) => setRemoveHighestN(parseFloat(e.target.value) || 1)}
             className="input-field w-full text-sm"
           />
         </div>
@@ -164,7 +155,7 @@ export function AlgorithmParams() {
             min="2"
             max="10"
             value={nthLowest}
-            onChange={(e) => update({ nthLowest: parseFloat(e.target.value) || 2 })}
+            onChange={(e) => setNthLowest(parseFloat(e.target.value) || 2)}
             className="input-field w-full text-sm"
           />
         </div>
@@ -181,7 +172,7 @@ export function AlgorithmParams() {
               min="0"
               max="100"
               value={q1Weight}
-              onChange={(e) => update({ q1Weight: parseFloat(e.target.value) || 0 })}
+              onChange={(e) => setQ1Weight(parseFloat(e.target.value) || 0)}
               className="input-field w-full text-sm"
             />
           </div>
@@ -194,7 +185,7 @@ export function AlgorithmParams() {
                 min="0"
                 max="2"
                 value={k1}
-                onChange={(e) => update({ k1: parseFloat(e.target.value) || 0 })}
+                onChange={(e) => setK1(parseFloat(e.target.value) || 0)}
                 className="input-field w-full text-sm"
               />
             </div>
@@ -206,7 +197,7 @@ export function AlgorithmParams() {
                 min="0"
                 max="2"
                 value={k2}
-                onChange={(e) => update({ k2: parseFloat(e.target.value) || 0 })}
+                onChange={(e) => setK2(parseFloat(e.target.value) || 0)}
                 className="input-field w-full text-sm"
               />
             </div>
@@ -218,7 +209,7 @@ export function AlgorithmParams() {
               step="1"
               min="0"
               value={maxPrice}
-              onChange={(e) => update({ maxPrice: parseFloat(e.target.value) || 0 })}
+              onChange={(e) => setMaxPrice(parseFloat(e.target.value) || 0)}
               className="input-field w-full text-sm"
             />
           </div>
@@ -234,7 +225,7 @@ export function AlgorithmParams() {
             step="1"
             min="0"
             value={customBasePrice}
-            onChange={(e) => update({ customBasePrice: parseFloat(e.target.value) || 0 })}
+            onChange={(e) => setCustomBasePrice(parseFloat(e.target.value) || 0)}
             className="input-field w-full text-sm"
           />
         </div>

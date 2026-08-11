@@ -3,7 +3,7 @@ import { useConfigStore } from '../stores/configStore';
 import { PRESET_TEMPLATES } from '../utils/templates';
 
 export function TemplateSelector() {
-  const { loadTemplate, config } = useConfigStore();
+  const { loadTemplate, algorithm } = useConfigStore();
 
   return (
     <div className="bg-card border border-border rounded-xl p-5">
@@ -14,7 +14,7 @@ export function TemplateSelector() {
             key={template.id}
             onClick={() => loadTemplate(template.id)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-              config.algorithm === template.config.algorithm
+              algorithm === template.config.algorithm
                 ? 'bg-primary text-white'
                 : 'bg-border-light text-text-secondary hover:bg-border hover:text-text'
             }`}

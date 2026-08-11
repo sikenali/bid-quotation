@@ -12,7 +12,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
   const [showDocSection, setShowDocSection] = useState(false);
 
   const update = (partial: Partial<DeductionParams>) =>
-    setDeduction(partial);
+    setDeduction({ ...deduction, ...partial });
 
   return (
     <div className="space-y-6">

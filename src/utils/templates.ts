@@ -1,4 +1,10 @@
-import { Algorithm, BidConfig, DeductionParams, ValidRule } from '../types';
+import type { Algorithm, BidConfig, DeductionParams, ValidRule } from '../types';
+
+export interface Template {
+  id: string;
+  name: string;
+  config: Omit<BidConfig, 'bidUnits' | 'theme' | 'apiKey' | 'apiEndpoint'>;
+}
 
 export function createDefaultConfig(algorithm: Algorithm = 'arithmetic_mean'): Omit<BidConfig, 'bidUnits' | 'theme' | 'apiKey' | 'apiEndpoint'> {
   return {

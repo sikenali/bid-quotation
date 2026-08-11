@@ -10,7 +10,7 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const navigate = useNavigate();
-  const { currentStep, setCurrentStep, theme, setTheme, config } = useConfigStore();
+  const { currentStep, setCurrentStep, theme, setTheme } = useConfigStore();
   const [showSettings, setShowSettings] = useState(false);
 
   const isResultPage = currentStep === 5;
