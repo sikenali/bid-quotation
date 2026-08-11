@@ -93,17 +93,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
           className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-border-light/30 transition-colors"
         >
           <span className="font-semibold text-text text-sm">招标文件规则原文对照</span>
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            className={`text-text-secondary transition-transform ${showDocSection ? 'rotate-180' : ''}`}
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
+          <i className={`ri-arrow-down-s-line text-text-secondary transition-transform ${showDocSection ? 'rotate-180' : ''}`}></i>
         </button>
 
         {showDocSection && (

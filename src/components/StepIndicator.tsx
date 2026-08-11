@@ -26,7 +26,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
                   : 'bg-step-inactive text-text-secondary'
               }`}
             >
-              {isDone ? '✓' : stepNum}
+              {isDone ? <i className="ri-check-line text-sm"></i> : stepNum}
             </div>
             {index < totalSteps - 1 && (
               <div

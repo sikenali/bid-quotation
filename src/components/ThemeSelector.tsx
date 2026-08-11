@@ -20,9 +20,7 @@ export default function ThemeSelector() {
           </div>
           {theme === 'light' && (
             <div className="ml-auto w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+              <i className="ri-check-line text-white text-sm"></i>
             </div>
           )}
         </div>
@@ -42,9 +40,7 @@ export default function ThemeSelector() {
           </div>
           {theme === 'dark' && (
             <div className="ml-auto w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+              <i className="ri-check-line text-white text-sm"></i>
             </div>
           )}
         </div>

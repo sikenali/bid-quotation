@@ -72,9 +72,7 @@ export default function BidInput() {
                   className="p-2 text-text-secondary hover:text-red-500 transition-colors"
                   aria-label="删除"
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
+                  <i className="ri-close-line text-lg"></i>
                 </button>
               </div>
             ))}
@@ -85,9 +83,7 @@ export default function BidInput() {
           onClick={handleAdd}
           className="mt-4 w-full py-3 border-2 border-dashed border-border rounded-xl text-text-secondary hover:text-primary hover:border-primary transition-colors flex items-center justify-center gap-2"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
+          <i className="ri-add-line text-lg"></i>
           添加投标单位
         </button>
       </div>

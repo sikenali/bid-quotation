@@ -22,9 +22,9 @@ export default function SettingsPanel({ onClose }: Props) {
   }, [onClose]);
 
   const tabs: Array<{ id: Tab; label: string; icon: string }> = [
-    { id: 'theme', label: '主题管理', icon: '🎨' },
-    { id: 'export', label: '导出管理', icon: '📦' },
-    { id: 'api', label: 'API 管理', icon: '🔑' },
+    { id: 'theme', label: '主题管理', icon: 'ri-palette-line' },
+    { id: 'export', label: '导出管理', icon: 'ri-archive-line' },
+    { id: 'api', label: 'API 管理', icon: 'ri-key-line' },
   ];
 
   const handleExport = () => {
@@ -55,17 +55,12 @@ export default function SettingsPanel({ onClose }: Props) {
         <div className="flex items-center justify-between px-8 py-5 bg-card border-b border-border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-              </svg>
+              <i className="ri-settings-3-line text-xl text-white"></i>
             </div>
             <span className="font-semibold text-text text-lg">设置</span>
           </div>
           <button onClick={onClose} className="text-textSecondary hover:text-text transition-colors">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+              <i className="ri-close-line text-xl"></i>
           </button>
         </div>
 

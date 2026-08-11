@@ -19,9 +19,7 @@ export function AlgorithmCard({ option, isSelected, onSelect }: Props) {
     >
       {isSelected && (
         <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
+          <i className="ri-check-line text-white text-sm"></i>
         </div>
       )}
       <div className="w-10 h-10 rounded-lg bg-border-light flex items-center justify-center text-text font-bold text-sm mb-3">
