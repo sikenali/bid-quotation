@@ -1,0 +1,24 @@
+import React from 'react';
+import { AlgorithmOption } from '../types';
+import { AlgorithmCard } from './AlgorithmCard';
+
+interface Props {
+  options: AlgorithmOption[];
+  selectedId: string;
+  onSelect: (id: string) => void;
+}
+
+export function AlgorithmGrid({ options, selectedId, onSelect }: Props) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+      {options.map((option) => (
+        <AlgorithmCard
+          key={option.id}
+          option={option}
+          isSelected={option.id === selectedId}
+          onSelect={() => onSelect(option.id)}
+        />
+      ))}
+    </div>
+  );
+}
