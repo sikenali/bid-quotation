@@ -83,7 +83,7 @@ function RuleRow({
           value={rule.maxCount === -1 ? '' : rule.maxCount}
           onChange={(e) => onUpdate({ maxCount: e.target.value ? parseInt(e.target.value) : -1 })}
           className="input-field w-16 text-center"
-          placeholder="∞"
+                placeholder="无限"
         />
         <span className="text-textSecondary text-sm">家时</span>
       </div>
