@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import { StepIndicator } from './StepIndicator';
-// TODO: Create SettingsPanel component
-// import SettingsPanel from './SettingsPanel';
+import SettingsPanel from './SettingsPanel';
 
 interface Props {
   children: React.ReactNode;
@@ -70,20 +69,7 @@ export default function Layout({ children }: Props) {
         </main>
 
         {/* 设置面板 */}
-        {showSettings && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="bg-card border border-border rounded-xl p-6 w-full max-w-md mx-4">
-              <h2 className="text-lg font-semibold text-text mb-4">设置</h2>
-              <p className="text-text-secondary text-sm mb-6">设置面板即将实现</p>
-              <button
-                onClick={() => setShowSettings(false)}
-                className="w-full py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity"
-              >
-                关闭
-              </button>
-            </div>
-          </div>
-        )}
+        {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
       </div>
     </div>
   );

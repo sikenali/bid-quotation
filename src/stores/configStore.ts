@@ -27,6 +27,8 @@ interface ConfigStore {
   setTheme: (theme: 'light' | 'dark') => void;
   setApiKey: (apiKey: string) => void;
   setApiEndpoint: (apiEndpoint: string) => void;
+  exportConfig: () => string;
+  importConfig: (json: string) => void;
 }
 
 export const useConfigStore = create<ConfigStore>()(
@@ -193,6 +195,30 @@ export const useConfigStore = create<ConfigStore>()(
         set((state) => ({
           config: { ...state.config, apiEndpoint },
         })),
+
+      exportConfig: () => {
+        const state = get();
+        return JSON.stringify(
+          {
+            config: state.config,
+            currentStep: state.currentStep,
+          },
+          null,
+          2,
+        );
+      },
+
+      importConfig: (json) => {
+        const parsed = JSON.parse(json);
+        if (parsed.config) {
+          set((state) => ({
+            config: { ...state.config, ...parsed.config },
+          }));
+        }
+        if (parsed.currentStep) {
+          set({ currentStep: parsed.currentStep });
+        }
+      },
     }),
     {
       name: 'bid-quotation-config',
