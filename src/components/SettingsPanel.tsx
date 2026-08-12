@@ -169,13 +169,13 @@ export default function SettingsPanel({ onClose }: Props) {
                                 ? 'border-[#C43A31] bg-[#2D2D2D]'
                                 : 'border-[#C43A31] bg-white'
                               : isDark
-                                ? 'border-[#E8DCC8] bg-[#FBF7EF]'
+                                ? 'border-[#3D3D3D] bg-[#252525]'
                                 : 'border-[#E8DCC8] bg-[#FBF7EF]'
                           }`}
                           onClick={() => setExportFormat(opt.id)}
                         >
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-lg bg-white border border-[#E8DCC8] flex items-center justify-center">
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${isDark ? 'bg-[#3D3D3D]' : 'bg-white border border-[#E8DCC8]'}`}>
                               <i className={`${opt.icon} text-xl ${opt.iconColor}`}></i>
                             </div>
                             <div>

@@ -23,7 +23,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
           <React.Fragment key={stepNum}>
             <div className="group relative">
               <div
-                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
+                className={`w-[25px] h-[25px] sm:w-8 sm:h-8 rounded-full flex items-center justify-center transition-all duration-200 ${
                   isActive
                     ? 'bg-[#C43A31]'
                     : isDone
@@ -34,16 +34,16 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
                 }`}
               >
                 {isDone ? (
-                  <i className="ri-check-line text-white text-[14px] sm:text-[16px]"></i>
+                  <i className="ri-check-line text-white text-[12px] sm:text-[16px]"></i>
                 ) : (
-                  <span className={`text-[11px] sm:text-sm font-medium ${
+                  <span className={`text-[10px] sm:text-sm font-medium ${
                     isActive ? 'text-white' : isDark ? 'text-[#C0B098]' : 'text-text-secondary'
                   }`}>
                     {stepNum}
                   </span>
                 )}
               </div>
-              <span className={`absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap ${
+              <span className={`absolute -bottom-[18px] sm:-bottom-5 left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap ${
                 isActive
                   ? 'text-[#C43A31] font-medium'
                   : isDark ? 'text-[#C0B098]' : 'text-text-secondary'
