@@ -263,7 +263,8 @@ export const useConfigStore = create<ConfigState>()(
           (state as any).validRules = [...defaultValidRules];
           (state as any).activeRuleId = 'r2';
         } else if (!state.activeRuleId || !state.validRules.some((r) => r.id === state.activeRuleId)) {
-          (state as any).activeRuleId = state.validRules[0]?.id || 'r2';
+          // activeRuleId 缺失或无效时，默认选中第 2 条规则（r2），保持与初始值一致
+          (state as any).activeRuleId = 'r2';
         }
         if (state.calculationResult && state.bidUnits.length > 0) {
           const needRecalc = !state.calculationResult.rankings ||
