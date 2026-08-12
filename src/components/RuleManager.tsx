@@ -1,6 +1,7 @@
 import React from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { ValidRule, TrimAction } from '../types';
+import CustomSelect from './CustomSelect';
 
 const ACTION_LABELS: Record<TrimAction, string> = {
   trim_percent: '去极值',
@@ -116,15 +117,13 @@ function RuleRow({
 
       <div className="flex items-center gap-2 flex-wrap">
         <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>执行</span>
-        <select
+        <CustomSelect
+          options={Object.entries(ACTION_LABELS).map(([k, v]) => ({ value: k, label: v }))}
           value={rule.action}
-          onChange={(e) => onUpdate({ action: e.target.value as TrimAction })}
-          className="styled-select select-default"
-        >
-          {Object.entries(ACTION_LABELS).map(([k, v]) => (
-            <option key={k} value={k}>{v}</option>
-          ))}
-        </select>
+          onChange={(v) => onUpdate({ action: v as TrimAction })}
+          isDark={isDark}
+          className="flex-shrink-0 w-[160px]"
+        />
       </div>
 
       {rule.action === 'trim_percent' && (

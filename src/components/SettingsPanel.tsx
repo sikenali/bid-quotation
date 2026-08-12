@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import ThemeSelector from './ThemeSelector';
+import CustomSelect from './CustomSelect';
 
 interface Props {
   onClose: () => void;
@@ -196,14 +197,16 @@ export default function SettingsPanel({ onClose }: Props) {
                   <div className="space-y-4">
                     <div>
                       <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>API 端点</label>
-                      <select
+                      <CustomSelect
+                        options={[
+                          { value: 'https://api.deepseek.com/v1', label: 'DeepSeek (api.deepseek.com)' },
+                          { value: 'https://api.ccswitch.com/v1', label: 'CCswitch (api.ccswitch.com)' },
+                        ]}
                         value={apiEndpoint}
-                        onChange={(e) => setApiEndpoint(e.target.value)}
-                        className="styled-select select-default w-full"
-                      >
-                        <option value="https://api.deepseek.com/v1">DeepSeek (api.deepseek.com)</option>
-                        <option value="https://api.ccswitch.com/v1">CCswitch (api.ccswitch.com)</option>
-                      </select>
+                        onChange={(v) => setApiEndpoint(v)}
+                        isDark={isDark}
+                        className="w-full"
+                      />
                     </div>
                     <div>
                       <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>API Key</label>
