@@ -144,9 +144,9 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
           <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>得分扣减规则</h3>
         </div>
 
-        <div className={`grid grid-cols-2 md:grid-cols-4 gap-0 rounded-xl overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
+        <div className={`flex flex-col md:flex-row md:items-stretch gap-0 rounded-xl overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
           {/* 满分 */}
-          <div className={`p-4 flex flex-col gap-1.5 border-r border-b md:border-b-0 ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
+          <div className={`flex-1 p-4 flex flex-col gap-1.5 border-b md:border-b-0 md:border-r ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
             <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>满分 (分)</label>
             <input
               type="number"
@@ -159,7 +159,7 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
           </div>
           <div className={`w-px flex-shrink-0 hidden md:block ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
           {/* 每高 1% 扣 */}
-          <div className={`p-4 flex flex-col gap-1.5 border-b md:border-b-0 md:border-r ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
+          <div className={`flex-1 p-4 flex flex-col gap-1.5 border-b md:border-b-0 md:border-r ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
             <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>每高 1% 扣 (分)</label>
             <input
               type="number"
@@ -172,7 +172,7 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
           </div>
           <div className={`w-px flex-shrink-0 hidden md:block ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
           {/* 每低 1% 扣 */}
-          <div className={`p-4 flex flex-col gap-1.5 border-r ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
+          <div className={`flex-1 p-4 flex flex-col gap-1.5 border-b md:border-b-0 md:border-r ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
             <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>每低 1% 扣 (分)</label>
             <input
               type="number"
@@ -185,7 +185,7 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
           </div>
           <div className={`w-px flex-shrink-0 hidden md:block ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
           {/* 最低得分 */}
-          <div className="p-4 flex flex-col gap-1.5">
+          <div className="flex-1 p-4 flex flex-col gap-1.5">
             <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>最低得分 (分)</label>
             <input
               type="number"
