@@ -30,17 +30,15 @@ export default function RuleManager() {
   const isCappedRange = lastRule ? lastRule.maxCount === -1 && lastRule.minCount >= 7 : false;
   const isFixedRange = lastRule ? lastRule.minCount >= 7 && lastRule.maxCount === 10 : false;
 
+  // 计算下一个规则的起始家数，用于判断是否显示"添加规则"
+  let nextMin = 5;
+  for (const r of validRules) {
+    if (r.maxCount === -1) { nextMin = Math.max(nextMin, r.minCount + 1); continue; }
+    if (r.maxCount >= nextMin) continue;
+    if (r.minCount >= nextMin) nextMin = r.minCount + 1;
+  }
+
   const addNewRule = () => {
-    const { validRules } = useConfigStore.getState();
-    let nextMin = 5;
-    for (const r of validRules) {
-      if (r.maxCount === -1) {
-        nextMin = Math.max(nextMin, r.minCount + 1);
-        continue;
-      }
-      if (r.maxCount >= nextMin) continue;
-      if (r.minCount >= nextMin) nextMin = r.minCount + 1;
-    }
     const newRule: ValidRule = {
       id: crypto.randomUUID(),
       minCount: nextMin,
