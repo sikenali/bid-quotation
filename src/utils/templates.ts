@@ -23,8 +23,8 @@ export function createDefaultConfig(algorithm: Algorithm = 'arithmetic_mean'): O
     validRules: [
       { id: 'r1', minCount: 2, maxCount: 2, action: 'direct', params: {} },
       { id: 'r2', minCount: 3, maxCount: 3, action: 'nth_lowest', params: { nth: 2 } },
-      { id: 'r3', minCount: 4, maxCount: 4, action: 'remove_highest_n', params: { removeN: 1 } },
-      { id: 'r4', minCount: 5, maxCount: -1, action: 'trim_percent', params: { trimPercent: 20 } },
+      { id: 'r3', minCount: 4, maxCount: 6, action: 'remove_highest_n', params: { removeN: 1 } },
+      { id: 'r4', minCount: 7, maxCount: 10, action: 'trim_percent', params: { trimPercent: 20 } },
     ],
     deduction: { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 },
   };
