@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import { StepIndicator } from './StepIndicator';
 import SettingsPanel from './SettingsPanel';
-import { exportCSV, exportMarkdown } from '../utils/export';
 
 interface Props {
   children: React.ReactNode;
@@ -11,7 +10,7 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const navigate = useNavigate();
-  const { currentStep, theme, exportFormat } = useConfigStore();
+  const { currentStep, theme } = useConfigStore();
   const [showSettings, setShowSettings] = useState(false);
   const isDark = theme === 'dark';
 
@@ -37,29 +36,6 @@ export default function Layout({ children }: Props) {
             {/* 右侧操作区 */}
             <div className="flex items-center gap-4">
               {!isResultPage && <StepIndicator currentStep={currentStep} />}
-
-              {isResultPage && (
-                <>
-                  <button
-                    onClick={() => navigate('/step-4')}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#F5EFE0] border border-[#E0D5C0] rounded-lg text-[#5C4033] hover:bg-[#E8DCC8] transition-colors text-sm dark:bg-[#2A2A2A] dark:border-[#3A3A3A] dark:text-[#E8E0D0] dark:hover:bg-[#3A3A3A]"
-                  >
-                    <i className="ri-arrow-left-line text-[16px]"></i>
-                    <span>返回编辑</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      const { calculationResult } = useConfigStore.getState();
-                      if (!calculationResult) return;
-                      exportFormat === 'md' ? exportMarkdown(calculationResult) : exportCSV(calculationResult);
-                    }}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#5B8C5A] rounded-lg text-white hover:bg-[#4A7A49] transition-colors text-sm"
-                  >
-                    <i className="ri-download-line text-[16px]"></i>
-                    <span>导出{exportFormat === 'md' ? 'Markdown' : 'CSV'}</span>
-                  </button>
-                </>
-              )}
 
               <button
                 onClick={() => setShowSettings(true)}

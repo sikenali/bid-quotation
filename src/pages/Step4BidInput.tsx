@@ -28,22 +28,10 @@ export default function Step4BidInput() {
           <i className="ri-arrow-left-line"></i>
           <span>上一步</span>
         </button>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={handleNext}
-            className="px-6 py-2.5 bg-[#F5EFE0] border border-[#E0D5C0] rounded-xl text-text-secondary hover:text-text transition-colors text-sm flex items-center gap-2"
-          >
-            <i className="ri-download-line"></i>
-            <span>导出报价</span>
-          </button>
-          <button
-            onClick={handleNext}
-            className="btn-primary"
-          >
-            <i className="ri-bar-chart-grouped-line"></i>
-            <span>报价测算</span>
-          </button>
-        </div>
+        <button onClick={handleNext} className="btn-primary">
+          <i className="ri-bar-chart-grouped-line"></i>
+          <span>报价测算</span>
+        </button>
       </div>
     </div>
   );
