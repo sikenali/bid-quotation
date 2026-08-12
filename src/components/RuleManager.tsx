@@ -29,18 +29,27 @@ export default function RuleManager() {
     <div className="space-y-6">
       <div className="flex flex-wrap gap-3">
         {validRules.map((rule, index) => (
-          <div
+          <button
             key={rule.id}
-            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl gap-1 min-w-[100px] transition-all cursor-pointer ${
-              rule.id === activeRuleId ? 'bg-[#C43A31]' : 'bg-[#C43A31]/60'
+            onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
+            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl min-w-[100px] transition-all border-2 ${
+              rule.id === activeRuleId
+                ? 'bg-[#C43A31] text-white border-[#C43A31] shadow-sm'
+                : isDark
+                  ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0] hover:border-[#C43A31]/50'
+                  : 'bg-[#F5EFE0] border-[#E0D5C0] text-text hover:border-[#C43A31]/40'
             }`}
-            onClick={() => setActiveRuleId(rule.id)}
           >
-            <span className="text-white text-[14px] font-medium">规则{index + 1}</span>
-            <span className="text-white/70 text-[11px]">
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${
+                rule.id === activeRuleId ? 'border-white bg-white' : isDark ? 'border-[#A89880] bg-transparent' : 'border-[#8B7355] bg-transparent'
+              }`} />
+              <span className="text-[14px] font-medium">规则{index + 1}</span>
+            </div>
+            <span className={`text-[11px] ${rule.id === activeRuleId ? 'text-white/70' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
               {rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
             </span>
-          </div>
+          </button>
         ))}
         <button
           onClick={addNewRule}
