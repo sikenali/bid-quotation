@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import ThemeSelector from './ThemeSelector';
-import CustomSelect from './CustomSelect';
+
 import { exportCSV, exportMarkdown } from '../utils/export';
 
 interface Props {
@@ -203,16 +203,26 @@ export default function SettingsPanel({ onClose }: Props) {
                   <div className="space-y-4">
                     <div>
                       <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>API 端点</label>
-                      <CustomSelect
-                        options={[
-                          { value: 'https://api.deepseek.com/v1', label: 'DeepSeek (api.deepseek.com)' },
-                          { value: 'https://api.ccswitch.com/v1', label: 'CCswitch (api.ccswitch.com)' },
-                        ]}
-                        value={apiEndpoint || 'https://api.deepseek.com/v1'}
-                        onChange={(v) => setApiEndpoint(v)}
-                        isDark={isDark}
-                        className="w-full"
-                      />
+                      <div className="flex gap-2">
+                        {[
+                          { value: 'https://api.deepseek.com/v1', label: 'DeepSeek' },
+                          { value: 'https://api.ccswitch.com/v1', label: 'CCswitch' },
+                        ].map((opt) => (
+                          <button
+                            key={opt.value}
+                            onClick={() => setApiEndpoint(opt.value)}
+                            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all border-2 ${
+                              apiEndpoint === opt.value
+                                ? 'border-[#C43A31] bg-[#FFF0ED] text-[#C43A31]'
+                                : isDark
+                                  ? 'border-[#3A3A3A] bg-[#2A2A2A] text-[#A89880] hover:border-[#C43A31]/50'
+                                  : 'border-[#E8DCC8] bg-white text-text-secondary hover:border-[#C43A31]/40'
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <div>
                       <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>API Key</label>
