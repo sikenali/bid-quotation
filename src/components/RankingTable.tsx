@@ -1,5 +1,5 @@
 import React from 'react';
-import { CalcResult, UnitScore } from '../types';
+import { CalcResult } from '../types';
 import { useConfigStore } from '../stores/configStore';
 
 interface Props {

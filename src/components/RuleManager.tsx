@@ -59,7 +59,7 @@ export default function RuleManager() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-3">
-        {validRules.map((rule, index) => {
+        {validRules.map((rule, _index) => {
           const isActive = rule.id === activeRuleId;
           const isCappedRule = rule.maxCount === -1 && rule.minCount >= 7;
           const isFixedRange = rule.minCount >= 7 && rule.maxCount === 10;

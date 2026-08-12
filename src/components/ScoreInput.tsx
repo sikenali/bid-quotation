@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useConfigStore } from '../stores/configStore';
-import { BidUnit, UnitScore } from '../types';
+import { UnitScore } from '../types';
 
 interface ScoreInputProps {
   onClose: () => void;
@@ -8,8 +8,8 @@ interface ScoreInputProps {
 
 export default function ScoreInput({ onClose }: ScoreInputProps) {
   const {
-    bidUnits, calculationResult, unitScores,
-    updateUnitScore, setUnitScores, theme, calculate,
+    bidUnits, unitScores,
+    setUnitScores, theme, calculate,
   } = useConfigStore();
   const isDark = theme === 'dark';
 
@@ -67,7 +67,6 @@ export default function ScoreInput({ onClose }: ScoreInputProps) {
     onClose();
   };
 
-  const totalScore = Object.values(editableScores).reduce((sum, s) => sum + s.businessScore + s.technicalScore, 0);
 
   return (
     <div className="fixed inset-0 z-50 flex" onClick={onClose}>

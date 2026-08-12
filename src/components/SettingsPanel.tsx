@@ -27,7 +27,7 @@ const HEADER_ICONS: Record<Tab, { icon: string; title: string; subtitle: string 
 };
 
 export default function SettingsPanel({ onClose }: Props) {
-  const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, exportConfig, importConfig, theme, calculationResult, exportFormat, setExportFormat } = useConfigStore();
+  const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, theme, exportFormat, setExportFormat } = useConfigStore();
   const [activeTab, setActiveTab] = useState<Tab>('theme');
 
   useEffect(() => {
@@ -37,27 +37,6 @@ export default function SettingsPanel({ onClose }: Props) {
     document.addEventListener('keydown', handleEsc);
     return () => document.removeEventListener('keydown', handleEsc);
   }, [onClose]);
-
-  const handleExport = () => {
-    const blob = new Blob([exportConfig()], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `投标报价配置_${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const text = ev.target?.result as string;
-      if (text) importConfig(text);
-    };
-    reader.readAsText(file);
-  };
 
   const isDark = theme === 'dark';
 

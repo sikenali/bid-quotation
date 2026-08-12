@@ -1,9 +1,9 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { BidUnit, UnitScore } from '../types';
 
 export default function BidInput() {
-  const { bidUnits, addBidUnit, updateBidUnit, removeBidUnit, clearBidUnits, randomFill, parsePrices, theme, calculate, unitScores, setUnitScores } = useConfigStore();
+  const { bidUnits, addBidUnit, updateBidUnit, removeBidUnit, clearBidUnits, randomFill, theme, calculate, unitScores, setUnitScores } = useConfigStore();
   const [showRandomModal, setShowRandomModal] = useState(false);
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [randomCount, setRandomCount] = useState(5);

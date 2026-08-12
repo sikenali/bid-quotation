@@ -1,4 +1,4 @@
-import { BidConfig, CalcResult, BidUnit } from '../types';
+import { BidConfig, CalcResult } from '../types';
 import { getAlgorithmName, getTrimmedUnits, getEffectiveRules } from './validators';
 
 export function calculateResult(config: BidConfig): CalcResult | null {

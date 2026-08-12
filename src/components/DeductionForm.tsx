@@ -45,7 +45,7 @@ interface DeductionFormProps {
   bidDocumentText?: string;
 }
 
-export default function DeductionForm({ bidDocumentText = '' }: DeductionFormProps) {
+export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }: DeductionFormProps) {
   const { deduction, setDeduction, algorithm, theme, bidUnits } = useConfigStore();
   const [isDragging, setIsDragging] = useState(false);
   const isDark = theme === 'dark';
