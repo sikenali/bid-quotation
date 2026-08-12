@@ -7,8 +7,8 @@ export default function Step2Rules() {
   const navigate = useNavigate();
   const { setCurrentStep } = useConfigStore();
 
-  const handlePrev = () => { setCurrentStep(1); navigate('/step-1'); };
-  const handleNext = () => { setCurrentStep(3); navigate('/step-3'); };
+  const handlePrev = () => { setCurrentStep(1); navigate('/algorithm'); };
+  const handleNext = () => { setCurrentStep(3); navigate('/deduction'); };
 
   return (
     <div className="space-y-6">

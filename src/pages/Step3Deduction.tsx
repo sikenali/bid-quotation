@@ -9,12 +9,12 @@ export default function Step3Deduction() {
 
   const handlePrev = () => {
     setCurrentStep(2);
-    navigate('/step-2');
+    navigate('/rules');
   };
 
   const handleNext = () => {
     setCurrentStep(4);
-    navigate('/step-4');
+    navigate('/bids');
   };
 
   return (

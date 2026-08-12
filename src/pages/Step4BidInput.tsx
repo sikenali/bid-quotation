@@ -8,16 +8,15 @@ export default function Step4BidInput() {
   const navigate = useNavigate();
   const { setCurrentStep, calculate, unitScores } = useConfigStore();
 
-  const handlePrev = () => { setCurrentStep(3); navigate('/step-3'); };
+  const handlePrev = () => { setCurrentStep(3); navigate('/deduction'); };
   const handlePriceCalc = () => {
     calculate();
     setCurrentStep(5);
-    navigate('/step-5');
+    navigate('/results');
   };
   const handleTotalCalc = () => {
     calculate();
-    // Navigate with total scores flag
-    const url = '/step-5?total=1';
+    const url = '/results?total=1';
     setCurrentStep(5);
     navigate(url);
   };

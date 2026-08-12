@@ -12,7 +12,7 @@ export default function Step1Algorithm() {
 
   const handleNext = () => {
     setCurrentStep(2);
-    navigate('/step-2');
+    navigate('/rules');
   };
 
   return (

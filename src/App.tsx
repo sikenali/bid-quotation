@@ -21,12 +21,11 @@ export default function App() {
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<Navigate to="/step-1" replace />} />
-          <Route path="/step-1" element={<Step1Algorithm />} />
-          <Route path="/step-2" element={<Step2Rules />} />
-          <Route path="/step-3" element={<Step3Deduction />} />
-          <Route path="/step-4" element={<Step4BidInput />} />
-          <Route path="/step-5" element={<Step5Results />} />
+          <Route path="/" element={<Navigate to="/algorithm" replace />} />
+          <Route path="/algorithm" element={<Step1Algorithm />} />
+          <Route path="/rules" element={<Step2Rules />} />
+          <Route path="/deduction" element={<Step3Deduction />} />
+          <Route path="/bids" element={<Step4BidInput />} />
         </Routes>
       </Layout>
     </BrowserRouter>
