@@ -12,17 +12,19 @@ const DEFAULT_NAMES = [
 ];
 
 export default function Step4BidInput() {
+  // === 所有 Hooks 必须在组件最顶层声明（所有条件/return 之前）===
   const navigate = useNavigate();
   const { setCurrentStep, calculate, unitScores, calculationResult, addBidUnit, bidUnits } = useConfigStore();
   const [isCalculating, setIsCalculating] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
+  // 1. hydrated 延迟
   useEffect(() => {
     const t = setTimeout(() => setHydrated(true), 0);
     return () => clearTimeout(t);
   }, []);
 
-  // URL 参数模式下，刷新后若已有 bidUnits 但无 calculationResult，自动重算
+  // 2. URL 参数模式下，刷新后若已有 bidUnits 但无 calculationResult，自动重算
   useEffect(() => {
     if (!hydrated) return;
     const params = new URLSearchParams(window.location.search);
@@ -30,14 +32,29 @@ export default function Step4BidInput() {
     const showCalc = params.get('calc') === '1';
     if ((showTotal || showCalc) && !calculationResult && bidUnits.length > 0 && bidUnits.some((b) => b.price > 0)) {
       setIsCalculating(true);
-      setTimeout(() => {
+      const id = setTimeout(() => {
         calculate();
         setIsCalculating(false);
         setCurrentStep(5);
       }, 100);
+      return () => clearTimeout(id);
     }
   }, [hydrated, calculationResult, bidUnits, calculate, setCurrentStep]);
 
+  // 3. URL 参数模式下，完全没数据时跳转
+  useEffect(() => {
+    if (!hydrated) return;
+    const params = new URLSearchParams(window.location.search);
+    const showTotal = params.get('total') === '1';
+    const showCalc = params.get('calc') === '1';
+    if ((showTotal || showCalc) && !calculationResult && !isCalculating) {
+      if (bidUnits.length === 0 || !bidUnits.some((b) => b.price > 0)) {
+        navigate('/bids', { replace: true });
+      }
+    }
+  }, [hydrated, calculationResult, isCalculating, bidUnits, navigate]);
+
+  // === 以下为非 Hook 逻辑与渲染 ===
   const handleAddUnit = () => {
     const units = useConfigStore.getState().bidUnits;
     const count = units.length;
@@ -50,22 +67,26 @@ export default function Step4BidInput() {
   const handlePrev = () => { setCurrentStep(3); navigate('/deduction'); };
   const handlePriceCalc = () => {
     setIsCalculating(true);
-    setTimeout(() => {
+    const id = setTimeout(() => {
       calculate();
       setIsCalculating(false);
       setCurrentStep(5);
       navigate('/bids?calc=1');
     }, 100);
+    // 清理定时器避免组件卸载后继续执行
+    return () => clearTimeout(id);
   };
   const handleTotalCalc = () => {
     setIsCalculating(true);
-    setTimeout(() => {
+    const id = setTimeout(() => {
       calculate();
       setIsCalculating(false);
       navigate('/bids?total=1');
     }, 100);
+    return () => clearTimeout(id);
   };
 
+  // hydrated=false 时显示骨架（注意：此 return 在所有 Hook 之后，符合规则）
   if (!hydrated) {
     return <div className="py-20" />;
   }
@@ -73,19 +94,6 @@ export default function Step4BidInput() {
   const searchParams = new URLSearchParams(window.location.search);
   const showTotal = searchParams.get('total') === '1';
   const showCalc = searchParams.get('calc') === '1';
-
-  // 没有结果且不在计算中（没有 bidUnits 数据）→ 跳转回输入页
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams(window.location.search);
-    const showTotal = params.get('total') === '1';
-    const showCalc = params.get('calc') === '1';
-    if ((showTotal || showCalc) && !calculationResult && !isCalculating) {
-      if (bidUnits.length === 0 || !bidUnits.some((b) => b.price > 0)) {
-        navigate('/bids', { replace: true });
-      }
-    }
-  }, [hydrated, calculationResult, isCalculating, bidUnits, navigate]);
 
   if ((showTotal || showCalc) && calculationResult) {
     return <Step5Results includeTotalScores={showTotal} />;
