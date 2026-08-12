@@ -95,10 +95,14 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
                   <td className={`px-6 py-4 font-medium flex items-center gap-2 ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                     {item.unit.name || '未命名'}
                      {item.rank === 1 && (
-                       <span className="ml-3 relative inline-flex flex-col items-center justify-center w-14 h-14 rounded-full border-2 border-[#C43A31] text-[#C43A31] text-[10px] font-bold leading-none text-center select-none opacity-80 shadow-sm" style={{ transform: 'rotate(-12deg)' }}>
-                         <i className="ri-target-line text-base" style={{ marginTop: '4px' }}></i>
-                         <span className="leading-tight">中<br/>回<br/>旋<br/>标</span>
-                       </span>
+                       <div className="ml-3 flex flex-col items-center">
+                         <div className="w-10 h-10 rounded-full border-2 border-[#C43A31] flex items-center justify-center opacity-80" style={{ transform: 'rotate(-12deg)' }}>
+                           <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#C43A31]">
+                             <path d="M17.66 11.2C17.43 10.9 17.15 10.64 16.89 10.38C16.22 9.78 15.46 9.35 14.82 8.72C13.33 7.26 13.45 4.87 14.19 2.65C14.27 2.41 14.15 2.15 13.89 2.11C13.6 2.07 13.32 2.16 13.08 2.38L7.65 7.35C7.22 7.74 6.9 8.25 6.72 8.81C6.54 9.37 6.53 9.97 6.71 10.53C6.89 11.09 7.24 11.59 7.65 11.97L7.66 11.98C8.19 12.47 8.85 12.79 9.57 12.83C10.29 12.87 11.02 12.63 11.61 12.15L17.66 11.2ZM14.5 4.15C14.2 5.47 14.32 6.9 14.96 8.13L12.5 9.77C12.28 9.62 12.04 9.5 11.78 9.43C11.52 9.36 11.25 9.34 10.98 9.37L12.5 7.15L14.5 4.15ZM9.5 11.5C9.22 11.5 8.96 11.42 8.73 11.29C8.5 11.16 8.32 10.96 8.21 10.72L9.77 9.16L9.5 11.5ZM16.24 12.24C15.81 12.57 15.3 12.76 14.76 12.8C14.22 12.84 13.7 12.71 13.26 12.43L15.5 10.76L16.24 12.24Z"/>
+                           </svg>
+                         </div>
+                         <span className="mt-1 text-[10px] font-bold text-[#C43A31] opacity-80 whitespace-nowrap">中回旋标</span>
+                       </div>
                      )}
                   </td>
                   <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
