@@ -26,10 +26,24 @@ export default function BidInput() {
     setShowScoreModal(true);
   };
 
+  const DEFAULT_NAMES = [
+    '武汉锂钠氪锶科技有限公司',
+    '武汉懒猫微服科技有限公司',
+    '武汉铀锂氪锶科技合伙企业（有限合伙）',
+    '广西锂钠氪锶软件科技有限公司',
+  ];
+
   const handleAdd = () => {
-    addBidUnit('', 0);
     const units = useConfigStore.getState().bidUnits;
-    setActiveUnitId(units[units.length - 1]?.id || null);
+    const count = units.length;
+    let name = '';
+    if (count < DEFAULT_NAMES.length) {
+      name = DEFAULT_NAMES[count];
+    } else {
+      name = `武汉锶氪钠锂科技有限公司${count - DEFAULT_NAMES.length + 1}`;
+    }
+    addBidUnit(name, 0);
+    setActiveUnitId(useConfigStore.getState().bidUnits[useConfigStore.getState().bidUnits.length - 1]?.id || null);
   };
 
   const handleChange = (id: string, field: keyof BidUnit, value: string | number | boolean) => {
