@@ -10,7 +10,7 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const navigate = useNavigate();
-  const { currentStep, theme } = useConfigStore();
+  const { currentStep, setCurrentStep, theme } = useConfigStore();
   const [showSettings, setShowSettings] = useState(false);
   const isDark = theme === 'dark';
 
