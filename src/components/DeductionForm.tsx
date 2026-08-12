@@ -8,28 +8,11 @@ interface DeductionFormProps {
 
 export default function DeductionForm({ bidDocumentText = '' }: DeductionFormProps) {
   const { deduction, setDeduction, theme } = useConfigStore();
-  const [docText, setDocText] = useState(bidDocumentText);
   const [isDragging, setIsDragging] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState<string | null>(null);
   const isDark = theme === 'dark';
 
   const update = (partial: Partial<DeductionParams>) =>
     setDeduction({ ...deduction, ...partial });
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      setUploadedFile(file.name);
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const text = ev.target?.result as string;
-        setDocText(text);
-      };
-      reader.readAsText(file);
-    }
-  };
 
   return (
     <div className="space-y-6">
@@ -118,9 +101,12 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
         </div>
 
         <div
-          onDrop={handleDrop}
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragging(false);
+          }}
           className={`rounded-xl p-5 border-2 transition-colors ${
             isDragging
               ? 'border-[#C43A31] bg-[#FFF0ED]'
@@ -129,58 +115,23 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
                 : 'border-[#D4C4A8] bg-white'
           }`}
         >
-          {uploadedFile ? (
-            <div className="flex items-center gap-3">
-              <i className="ri-file-text-line text-[#C43A31] text-xl"></i>
-              <span className={`text-sm ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{uploadedFile}</span>
-              <button
-                onClick={() => { setUploadedFile(null); setDocText(''); }}
-                className={`ml-auto transition-colors ${isDark ? 'text-[#A89880] hover:text-red-500' : 'text-text-secondary hover:text-red-500'}`}
-              >
-                <i className="ri-close-line text-lg"></i>
-              </button>
-            </div>
-          ) : (
-            <div className="text-center py-4">
-              <i className={`ri-upload-cloud-2-line text-3xl mb-2 ${isDark ? 'text-[#A89880]' : 'text-[#D4C4A8]'}`}></i>
-              <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>拖拽文件到此处，或点击下方按钮上传</p>
-              <p className={`text-xs mt-1 ${isDark ? 'text-[#A89880]/60' : 'text-text-secondary/60'}`}>支持 .txt .pdf .doc 格式</p>
-            </div>
-          )}
-          {!uploadedFile && (
-            <div className="mt-3 flex justify-center">
-              <label className="px-4 py-2 bg-[#C43A31] text-white rounded-lg text-sm font-medium hover:bg-[#A83028] transition-colors cursor-pointer flex items-center gap-2">
-                <i className="ri-upload-line"></i>
-                选择文件
-                <input
-                  type="file"
-                  accept=".txt,.pdf,.doc,.docx"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setUploadedFile(file.name);
-                      const reader = new FileReader();
-                      reader.onload = (ev) => setDocText(ev.target?.result as string);
-                      reader.readAsText(file);
-                    }
-                  }}
-                />
-              </label>
-            </div>
-          )}
+          <div className="text-center py-4">
+            <i className={`ri-upload-cloud-2-line text-3xl mb-2 ${isDark ? 'text-[#A89880]' : 'text-[#D4C4A8]'}`}></i>
+            <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>拖拽文件到此处，或点击下方按钮上传</p>
+            <p className={`text-xs mt-1 ${isDark ? 'text-[#A89880]/60' : 'text-text-secondary/60'}`}>支持 .txt .pdf .doc 格式</p>
+          </div>
+          <div className="mt-3 flex justify-center">
+            <label className="px-4 py-2 bg-[#C43A31] text-white rounded-lg text-sm font-medium hover:bg-[#A83028] transition-colors cursor-pointer flex items-center gap-2">
+              <i className="ri-upload-line"></i>
+              选择文件
+              <input
+                type="file"
+                accept=".txt,.pdf,.doc,.docx"
+                className="hidden"
+              />
+            </label>
+          </div>
         </div>
-
-        <textarea
-          value={docText}
-          onChange={(e) => setDocText(e.target.value)}
-          rows={4}
-          placeholder="粘贴招标文件中关于扣分规则的原文描述..."
-          className={`input-field w-full text-sm resize-none ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
-        />
-        <p className={`text-xs ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-          将招标文件原文粘贴到上方，便于与配置的扣分参数进行对照校验。
-        </p>
       </div>
     </div>
   );

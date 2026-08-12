@@ -5,7 +5,6 @@ import { useConfigStore } from '../stores/configStore';
 import { ALGORITHM_OPTIONS } from './step1Data';
 import { AlgorithmGrid } from '../components/AlgorithmGrid';
 import { AlgorithmParams } from '../components/AlgorithmParams';
-import { TemplateSelector } from '../components/TemplateSelector';
 
 export default function Step1Algorithm() {
   const navigate = useNavigate();
@@ -33,12 +32,7 @@ export default function Step1Algorithm() {
 
       <AlgorithmParams />
 
-      <TemplateSelector />
-
-      <div className="flex items-center justify-between pt-4">
-        <div className="flex items-center gap-3">
-          <span className="text-text-secondary text-[13px]">快速加载模板</span>
-        </div>
+      <div className="flex justify-end pt-4">
         <button
           onClick={handleNext}
           className="btn-primary"

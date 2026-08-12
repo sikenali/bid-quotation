@@ -6,7 +6,7 @@ export const ALGORITHM_OPTIONS: AlgorithmOption[] = [
     name: '算术平均法',
     shortDesc: '所有有效报价算术平均',
     description: '所有有效报价的算术平均值作为基准价',
-    icon: 'ri-functions-line',
+    icon: 'ri-function-line',
   },
   {
     id: 'trimmed_mean',
@@ -41,7 +41,7 @@ export const ALGORITHM_OPTIONS: AlgorithmOption[] = [
     name: '随机权重法',
     shortDesc: 'A×K1×Q1+B×K2×Q2',
     description: '结合平均价与最高限价加权计算基准价',
-    icon: 'ri-balance-line',
+    icon: 'ri-scales-line',
   },
   {
     id: 'lowest_price',

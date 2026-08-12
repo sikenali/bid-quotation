@@ -31,7 +31,7 @@ export default function Step3Deduction() {
           <i className="ri-arrow-left-line"></i>
           <span>上一步</span>
         </button>
-        <button onClick={handleNext} className="btn-primary">下一步：报价录入</button>
+        <button onClick={handleNext} className="btn-primary">下一步</button>
       </div>
     </div>
   );
