@@ -1,0 +1,16 @@
+{
+  "name": "bid-quotation",
+  "short_name": "文价猩",
+  "description": "标书智能报价平台",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDF5E6",
+  "theme_color": "#C43A31",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

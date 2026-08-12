@@ -7,6 +7,9 @@ export interface ParseResult {
 }
 
 export async function parseRuleText(text: string, apiKey: string, endpoint: string): Promise<ParseResult | null> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30000);
+
   const systemPrompt = `你是一个招投标评分专家。请从用户提供的招标文件评分办法原文中，提取以下信息并以JSON格式返回：
 - algorithm: 算法类型（low_price_priority/average_price/gradient_method/conventional_method）
 - deduction: 价格评分参数 {fullScore, deductPerHighPercent, deductPerLowPercent, minScore}
@@ -20,37 +23,47 @@ export async function parseRuleText(text: string, apiKey: string, endpoint: stri
 
 只返回JSON，不要有其他内容。`;
 
-  const response = await fetch(`${endpoint}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content: text },
-      ],
-      temperature: 0.1,
-    }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`API请求失败: ${response.status}`);
-  }
-
-  const data = await response.json();
-  const content = data.choices?.[0]?.message?.content || '';
-
   try {
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      return JSON.parse(jsonMatch[0]) as ParseResult;
-    }
-  } catch {
-    // 解析失败
-  }
+    const response = await fetch(`${endpoint}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: text },
+        ],
+        temperature: 0.1,
+      }),
+      signal: controller.signal,
+    });
 
-  return null;
+    if (!response.ok) {
+      throw new Error(`API请求失败: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const content = data.choices?.[0]?.message?.content || '';
+
+    try {
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]) as ParseResult;
+      }
+    } catch {
+      // 解析失败
+    }
+
+    return null;
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      throw new Error('API 请求超时，请检查网络连接');
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
 }

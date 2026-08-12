@@ -86,7 +86,7 @@ export const useConfigStore = create<ConfigState>()(
       showAlgorithmDesc: false,
       unitScores: [],
       apiKey: undefined,
-      apiEndpoint: 'https://api.deepseek.com/v1',
+      apiEndpoint: import.meta.env.VITE_API_ENDPOINT || 'https://api.deepseek.com/v1',
 
       setCurrentStep: (step) => set({ currentStep: step }),
       setAlgorithm: (algorithm) => set({ algorithm, showAlgorithmDesc: false, ...getAlgorithmDeduction(algorithm) }),

@@ -232,6 +232,9 @@ export default function SettingsPanel({ onClose }: Props) {
                         <p className={`text-xs mt-2 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
                           API Key 仅保存在浏览器 localStorage，不会上传到任何服务器
                         </p>
+                        <p className="text-xs mt-1 text-[#C43A31]">
+                          建议使用独立的 API Key，避免泄露风险
+                        </p>
                       </div>
                     </div>
                   </div>
