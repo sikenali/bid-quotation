@@ -35,7 +35,7 @@ export default function Step1Algorithm() {
       <div className="flex justify-center sm:justify-end pt-4">
         <button
           onClick={handleNext}
-          className="btn-primary"
+          className="btn-primary w-full sm:w-auto"
         >
           下一步
         </button>
