@@ -88,7 +88,7 @@ export const useConfigStore = create<ConfigState>()(
       exportFormat: 'csv' as const,
       currentStep: 1,
       calculationResult: null,
-      activeRuleId: null,
+           activeRuleId: 'r2',
       apiKey: undefined,
       apiEndpoint: 'https://api.deepseek.com/v1',
 
@@ -258,7 +258,7 @@ export const useConfigStore = create<ConfigState>()(
              { id: 'default-3', name: '武汉铀锂氪锶科技合伙企业（有限合伙）', price: 0, isValid: true },
              { id: 'default-4', name: '广西锂钠氪锶软件科技有限公司', price: 0, isValid: true },
            ],
-           activeRuleId: null,
+      activeRuleId: 'r2',
            currentStep: 1,
           calculationResult: null,
         });
