@@ -8,11 +8,35 @@ interface Props {
 
 type Tab = 'theme' | 'export' | 'api';
 
-const tabs: Array<{ id: Tab; label: string; subLabel: string; icon: string }> = [
-  { id: 'theme', label: '主题管理', subLabel: 'Theme', icon: 'ri-palette-line' },
-  { id: 'export', label: '导出管理', subLabel: 'Export', icon: 'ri-archive-line' },
-  { id: 'api', label: 'API 管理', subLabel: 'API Keys', icon: 'ri-key-line' },
+const SVG_ICONS: Record<string, React.ReactNode> = {
+  palette: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.38 0 2.5-1.12 2.5-2.5 0-.61-.23-1.17-.6-1.63-.37-.46-.6-.1-.6-.67 0-.44.36-.8.8-.8.44 0 .8.36.8.8 0 1.38-1.12 2.5-2.5 2.5-4.48 0-8.5-3.52-8.5-8s4.02-8 8.5-8 8.5 3.52 8.5 8c0 1.38-.36 2.67-.97 3.77-.18.33-.51.53-.88.53-.37 0-.7-.2-.88-.53-.61-1.1-.97-2.39-.97-3.77 0-3.86-3.14-7-7-7s-7 3.14-7 7 3.14 7 7 7 7-3.14 7-7z"/>
+    </svg>
+  ),
+  archive: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+      <path d="M5 20c-1.1 0-2-.9-2-2V8h2v10h14V8h2v10c0 1.1-.9 2-2 2H5zm14-12l-4-4H13v4h6V8z"/>
+    </svg>
+  ),
+  key: (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+      <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+    </svg>
+  ),
+};
+
+const tabs: Array<{ id: Tab; label: string; subLabel: string; iconKey: string }> = [
+  { id: 'theme', label: '主题管理', subLabel: 'Theme', iconKey: 'palette' },
+  { id: 'export', label: '导出管理', subLabel: 'Export', iconKey: 'archive' },
+  { id: 'api', label: 'API 管理', subLabel: 'API Keys', iconKey: 'key' },
 ];
+
+const HEADER_ICONS: Record<Tab, { icon: string; title: string; subtitle: string }> = {
+  theme: { icon: 'ri-palette-line', title: '主题管理', subtitle: '选择界面配色方案' },
+  export: { icon: 'ri-download-2-line', title: '导出管理', subtitle: '导入导出配置文件' },
+  api: { icon: 'ri-key-line', title: 'API 管理', subtitle: '配置 AI 解析所需的 API Key' },
+};
 
 export default function SettingsPanel({ onClose }: Props) {
   const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, exportConfig, importConfig, theme } = useConfigStore();
@@ -47,15 +71,6 @@ export default function SettingsPanel({ onClose }: Props) {
     reader.readAsText(file);
   };
 
-  const getContentHeader = (tab: Tab) => {
-    const configs: Record<Tab, { icon: string; title: string; subtitle: string }> = {
-      theme: { icon: 'ri-palette-line', title: '主题管理', subtitle: '选择界面配色方案' },
-      export: { icon: 'ri-download-2-line', title: '导出管理', subtitle: '导入导出配置文件' },
-      api: { icon: 'ri-key-line', title: 'API 管理', subtitle: '配置 AI 解析所需的 API Key' },
-    };
-    return configs[tab];
-  };
-
   const isDark = theme === 'dark';
 
   return (
@@ -65,13 +80,17 @@ export default function SettingsPanel({ onClose }: Props) {
         {/* 顶部导航栏 */}
         <div className={`flex items-center justify-between px-8 py-5 border-b ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#FBF7EF] border-[#E8DCC8]'}`}>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-[#C43A31] flex items-center justify-center text-white">
-              <i className="ri-settings-3-line text-xl text-white"></i>
+            <div className="w-10 h-10 rounded-lg bg-[#C43A31] flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-white">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41L9.25 5.35c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+              </svg>
             </div>
             <span className={`font-semibold text-lg ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>设置</span>
           </div>
           <button onClick={onClose} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-            <i className="ri-close-line text-xl"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
           </button>
         </div>
 
@@ -95,9 +114,9 @@ export default function SettingsPanel({ onClose }: Props) {
                         : 'bg-[#F5EFE0] text-text-secondary hover:bg-white hover:text-text'
                   }`}
                 >
-                  <i className={`text-lg ${activeTab === tab.id ? 'text-white' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                    {tab.icon}
-                  </i>
+                  <div className={`flex-shrink-0 ${activeTab === tab.id ? 'text-white' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                    {SVG_ICONS[tab.iconKey]}
+                  </div>
                   <div className="flex-1">
                     <div className={`font-medium text-sm ${activeTab === tab.id ? 'text-white' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
                       {tab.label}
@@ -121,11 +140,15 @@ export default function SettingsPanel({ onClose }: Props) {
               <div className={`rounded-xl px-8 py-5 mb-6 ${isDark ? 'bg-[#2A2A2A] border border-[#3A3A3A]' : 'bg-[#FDF5E6]'}`}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[#C43A31] flex items-center justify-center text-white">
-                    <i className={`text-xl ${getContentHeader(activeTab).icon}`}></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-white">
+                      {activeTab === 'theme' && <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>}
+                      {activeTab === 'export' && <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>}
+                      {activeTab === 'api' && <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>}
+                    </svg>
                   </div>
                   <div>
-                    <h2 className={`font-semibold text-[18px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{getContentHeader(activeTab).title}</h2>
-                    <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{getContentHeader(activeTab).subtitle}</p>
+                    <h2 className={`font-semibold text-[18px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{HEADER_ICONS[activeTab].title}</h2>
+                    <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{HEADER_ICONS[activeTab].subtitle}</p>
                   </div>
                 </div>
               </div>
@@ -141,7 +164,9 @@ export default function SettingsPanel({ onClose }: Props) {
                 {activeTab === 'export' && (
                   <div className="space-y-4">
                     <button onClick={handleExport} className="btn-primary w-full justify-center">
-                      <span><i className="ri-download-2-line"></i></span>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                      </svg>
                       <span>导出配置（JSON）</span>
                     </button>
                     <div className={`rounded-xl p-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]'}`}>
@@ -203,7 +228,9 @@ export default function SettingsPanel({ onClose }: Props) {
                   取消
                 </button>
                 <button onClick={onClose} className="btn-primary">
-                  <i className="ri-check-line"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                  </svg>
                   <span>应用设置</span>
                 </button>
               </div>
