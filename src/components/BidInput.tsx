@@ -188,7 +188,7 @@ export default function BidInput() {
       {/* 随机厂商弹窗 */}
       {showRandomModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowRandomModal(false)}>
-          <div className={`rounded-xl p-6 w-96 ${isDark ? 'bg-[#2A2A2A]' : 'bg-white'}`}>
+          <div className={`rounded-xl p-6 w-96 ${isDark ? 'bg-[#2A2A2A]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <h3 className={`font-semibold mb-4 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>随机厂商</h3>
             <div className="space-y-3">
               <div>
@@ -324,26 +324,8 @@ export default function BidInput() {
                         </tr>
                       );
                     })}
-                  </tbody>
-                  <tfoot>
-                    <tr className={`border-t font-semibold ${isDark ? 'border-[#3A3A3A] bg-[#1A1A1A]' : 'border-[#E8DCC8] bg-white'}`}>
-                      <td className="px-6 py-3" colSpan={3}></td>
-                      <td className={`px-6 py-3 text-right ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>-</td>
-                      <td className={`px-6 py-3 text-right ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                        {bidUnits.reduce((s, u) => s + (u.businessScore ?? 0), 0).toFixed(2)}
-                      </td>
-                      <td className={`px-6 py-3 text-right ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                        {bidUnits.reduce((s, u) => s + (u.technicalScore ?? 0), 0).toFixed(2)}
-                      </td>
-                      <td className={`px-6 py-3 text-right ${isDark ? 'text-[#C43A31]' : 'text-[#C43A31]'}`}>
-                        {bidUnits.reduce((s, u) => {
-                          const ps = priceScores[u.id] ?? 0;
-                          return s + ps + (u.businessScore ?? 0) + (u.technicalScore ?? 0);
-                        }, 0).toFixed(2)}
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
+                   </tbody>
+                 </table>
               </div>
             </div>
 
