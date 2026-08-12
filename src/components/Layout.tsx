@@ -41,7 +41,7 @@ export default function Layout({ children }: Props) {
             {/* 右侧操作区 */}
             <div className="flex items-center gap-2">
               {!isResultPage && (
-                <div className="flex justify-center sm:justify-start">
+                <div className="flex justify-center">
                   <StepIndicator currentStep={currentStep} />
                 </div>
               )}
