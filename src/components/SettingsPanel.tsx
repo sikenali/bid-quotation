@@ -202,7 +202,7 @@ export default function SettingsPanel({ onClose }: Props) {
                           { value: 'https://api.deepseek.com/v1', label: 'DeepSeek (api.deepseek.com)' },
                           { value: 'https://api.ccswitch.com/v1', label: 'CCswitch (api.ccswitch.com)' },
                         ]}
-                        value={apiEndpoint}
+                        value={apiEndpoint || 'https://api.deepseek.com/v1'}
                         onChange={(v) => setApiEndpoint(v)}
                         isDark={isDark}
                         className="w-full"
