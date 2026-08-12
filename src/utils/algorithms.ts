@@ -2,7 +2,7 @@ import { BidConfig, CalcResult } from '../types';
 import { getAlgorithmName, getTrimmedUnits, getEffectiveRules } from './validators';
 
 export function calculateResult(config: BidConfig): CalcResult | null {
-  const { bidUnits, algorithm, validRules, deduction, kEnabled, kValue } = config;
+  const { bidUnits, algorithm, validRules, deduction } = config;
 
   if (bidUnits.length === 0) return null;
 
@@ -12,92 +12,99 @@ export function calculateResult(config: BidConfig): CalcResult | null {
 
   if (effectiveUnits.length === 0) return null;
 
-  let aValue = 0;
+  const fullScore = deduction.fullScore;
+  let basePrice = 0;
+  let aPrice = 0;
   let algorithmName = getAlgorithmName(algorithm);
 
+  // 计算基准价（aValue / basePrice）
   switch (algorithm) {
-    case 'arithmetic_mean':
-      aValue = effectiveUnits.reduce((s, u) => s + u.price, 0) / effectiveUnits.length;
-      if (kEnabled) aValue *= kValue;
+    case 'low_price_priority':
+      basePrice = effectiveUnits[0].price;
+      aPrice = basePrice;
       break;
 
-    case 'trimmed_mean': {
-      const trimHigh = Math.floor(effectiveUnits.length * (config.trimHighPercent / 100));
-      const trimLow = Math.floor(effectiveUnits.length * (config.trimLowPercent / 100));
-      const trimmed = effectiveUnits.slice(trimLow, effectiveUnits.length - trimHigh);
-      aValue = trimmed.length > 0
-        ? trimmed.reduce((s, u) => s + u.price, 0) / trimmed.length
-        : effectiveUnits.reduce((s, u) => s + u.price, 0) / effectiveUnits.length;
-      if (kEnabled) aValue *= kValue;
-      break;
-    }
-
-    case 'remove_highest': {
-      const toRemove = Math.min(config.removeHighestN, effectiveUnits.length - 1);
-      const remaining = effectiveUnits.slice(0, effectiveUnits.length - toRemove);
-      aValue = remaining.reduce((s, u) => s + u.price, 0) / remaining.length;
-      if (kEnabled) aValue *= kValue;
-      break;
-    }
-
-    case 'second_lowest':
-      aValue = effectiveUnits.length >= 2 ? effectiveUnits[1].price : effectiveUnits[0].price;
-      if (kEnabled) aValue *= kValue;
-      break;
-
-    case 'double_average': {
-      const firstAvg = effectiveUnits.reduce((s, u) => s + u.price, 0) / effectiveUnits.length;
-      const secondGroup = effectiveUnits.filter(u => u.price <= firstAvg);
-      aValue = secondGroup.length > 0
-        ? secondGroup.reduce((s, u) => s + u.price, 0) / secondGroup.length
-        : firstAvg;
-      if (kEnabled) aValue *= kValue;
-      break;
-    }
-
-    case 'weighted_limit': {
+    case 'average_price': {
       const avg = effectiveUnits.reduce((s, u) => s + u.price, 0) / effectiveUnits.length;
-      const q1 = config.q1Weight / 100;
-      aValue = config.k1 * q1 * avg + config.k2 * (1 - q1) * config.maxPrice;
+      basePrice = avg;
+      aPrice = avg;
       break;
     }
 
-    case 'lowest_price':
-      aValue = effectiveUnits[0].price;
+    case 'gradient_method': {
+      // 技术评审前两名报价的算术平均值
+      const top2 = effectiveUnits.slice(0, 2);
+      basePrice = top2.length >= 2
+        ? (top2[0].price + top2[1].price) / 2
+        : top2[0].price;
+      aPrice = basePrice;
       break;
+    }
 
-    case 'custom':
-      aValue = config.customBasePrice;
+    case 'conventional_method': {
+      const avg = effectiveUnits.reduce((s, u) => s + u.price, 0) / effectiveUnits.length;
+      basePrice = avg;
+      aPrice = avg;
       break;
+    }
 
     default:
-      aValue = effectiveUnits.reduce((s, u) => s + u.price, 0) / effectiveUnits.length;
+      basePrice = effectiveUnits.reduce((s, u) => s + u.price, 0) / effectiveUnits.length;
+      aPrice = basePrice;
   }
 
+  // 计算得分
   const rankings = sortedUnits.map((unit, index) => {
-    const deviationPercent = ((unit.price - aValue) / aValue) * 100;
-    let deductionScore = 0;
+    let score = 0;
 
-    if (unit.price > aValue) {
-      deductionScore = deviationPercent * deduction.deductPerHighPercent;
-    } else if (unit.price < aValue) {
-      deductionScore = Math.abs(deviationPercent) * deduction.deductPerLowPercent;
+    switch (algorithm) {
+      case 'low_price_priority':
+        // 低价优先法：得分=(基准价／报价)×满分
+        score = (basePrice / unit.price) * fullScore;
+        break;
+
+      case 'average_price':
+        // 平均价计法：得分=((基准价-|基准价-报价|)/基准价)×满分
+        const devAve = Math.abs(basePrice - unit.price) / basePrice;
+        score = Math.max((1 - devAve) * fullScore, deduction.minScore);
+        break;
+
+      case 'gradient_method':
+        // 基准价梯度法
+        // ≤基准价：得分=(1-|报价-基准价|/基准价)×标准分
+        // >基准价：得分=(1-|报价-基准价|/基准价)×标准分×0.95
+        if (unit.price <= basePrice) {
+          const d = Math.abs(basePrice - unit.price) / basePrice;
+          score = (1 - d) * fullScore;
+        } else {
+          const d = Math.abs(basePrice - unit.price) / basePrice;
+          score = (1 - d) * fullScore * 0.95;
+        }
+        break;
+
+      case 'conventional_method':
+        // 基准价常规法：价格评分=(基准价/评标价)×满分
+        score = (basePrice / unit.price) * fullScore;
+        break;
+
+      default:
+        score = (basePrice / unit.price) * fullScore;
     }
 
-    const score = Math.max(deduction.fullScore - deductionScore, deduction.minScore);
+    const deviationPercent = ((unit.price - aPrice) / aPrice) * 100;
 
     return {
       rank: index + 1,
       unit,
       deviationPercent: parseFloat(deviationPercent.toFixed(2)),
-      score: parseFloat(score.toFixed(2)),
-      priceDiff: parseFloat((unit.price - aValue).toFixed(2)),
+      score: parseFloat(Math.max(score, deduction.minScore).toFixed(2)),
+      priceDiff: parseFloat((unit.price - aPrice).toFixed(2)),
     };
   });
 
   return {
-    basePrice: parseFloat(aValue.toFixed(2)),
-    aValue: parseFloat(aValue.toFixed(2)),
+    basePrice: parseFloat(basePrice.toFixed(2)),
+    aValue: parseFloat(aPrice.toFixed(2)),
     effectiveCount: effectiveUnits.length,
     algorithmName,
     trimmedNames,

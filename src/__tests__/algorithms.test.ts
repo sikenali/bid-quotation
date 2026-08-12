@@ -2,89 +2,82 @@ import { describe, it, expect } from 'vitest';
 import { calculateResult } from '../utils/algorithms';
 
 describe('calculateResult', () => {
-  it('算术平均法: 基准价 = 平均价 × K', () => {
-    const config = { algorithm: 'arithmetic_mean' as const, kEnabled: false, kValue: 0.96, trimHighPercent: 20, trimLowPercent: 20, removeHighestN: 1, nthLowest: 2, q1Weight: 50, k1: 1, k2: 1, maxPrice: 0, customBasePrice: 0, validRules: [], deduction: { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 }, bidUnits: [] as any[], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
-    config.bidUnits = [
-      { id: '1', name: 'A', price: 100, isValid: true },
-      { id: '2', name: 'B', price: 200, isValid: true },
-      { id: '3', name: 'C', price: 300, isValid: true },
-    ];
-    config.kEnabled = true;
-    config.kValue = 0.95;
-
+  it('低价优先法: 最低价=基准价，最高分满分', () => {
+    const config = {
+      algorithm: 'low_price_priority' as const,
+      validRules: [],
+      deduction: { fullScore: 20, deductPerHighPercent: 1.0, deductPerLowPercent: 0.5, minScore: 0 },
+      bidUnits: [
+        { id: '1', name: 'A', price: 100, isValid: true },
+        { id: '2', name: 'B', price: 140, isValid: true },
+      ] as any[],
+      theme: 'light' as const,
+    };
     const result = calculateResult(config);
     expect(result).not.toBeNull();
-    expect(result!.basePrice).toBeCloseTo(190, 2);
+    expect(result!.basePrice).toBe(100);
+    expect(result!.rankings[0].score).toBe(20);
+    expect(result!.rankings[1].score).toBeCloseTo(14.29, 1);
   });
 
-  it('最低价法: 基准价 = 最低报价', () => {
-    const config = { algorithm: 'lowest_price' as const, kEnabled: false, kValue: 0.96, trimHighPercent: 20, trimLowPercent: 20, removeHighestN: 1, nthLowest: 2, q1Weight: 50, k1: 1, k2: 1, maxPrice: 0, customBasePrice: 0, validRules: [], deduction: { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 }, bidUnits: [] as any[], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
-    config.validRules = []; // lowest_price uses all units directly
-    config.bidUnits = [
-      { id: '1', name: 'A', price: 150, isValid: true },
-      { id: '2', name: 'B', price: 200, isValid: true },
-      { id: '3', name: 'C', price: 100, isValid: true },
-    ];
-
+  it('平均价计法: 基准价=平均值', () => {
+    const config = {
+      algorithm: 'average_price' as const,
+      validRules: [],
+      deduction: { fullScore: 20, deductPerHighPercent: 1.0, deductPerLowPercent: 0.5, minScore: 0 },
+      bidUnits: [
+        { id: '1', name: 'A', price: 100, isValid: true },
+        { id: '2', name: 'B', price: 140, isValid: true },
+      ] as any[],
+      theme: 'light' as const,
+    };
     const result = calculateResult(config);
     expect(result).not.toBeNull();
-    expect(result!.basePrice).toBeCloseTo(100, 2);
+    expect(result!.basePrice).toBe(120);
   });
 
-  it('次低报价法: 基准价 = 第2低报价', () => {
-    const config = { algorithm: 'second_lowest' as const, kEnabled: false, kValue: 0.96, trimHighPercent: 20, trimLowPercent: 20, removeHighestN: 1, nthLowest: 2, q1Weight: 50, k1: 1, k2: 1, maxPrice: 0, customBasePrice: 0, validRules: [], deduction: { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 }, bidUnits: [] as any[], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
-    config.bidUnits = [
-      { id: '1', name: 'A', price: 150, isValid: true },
-      { id: '2', name: 'B', price: 200, isValid: true },
-      { id: '3', name: 'C', price: 100, isValid: true },
-      { id: '4', name: 'D', price: 180, isValid: true },
-    ];
-
+  it('基准价梯度法: 技术前两名均值', () => {
+    const config = {
+      algorithm: 'gradient_method' as const,
+      validRules: [],
+      deduction: { fullScore: 20, deductPerHighPercent: 1.0, deductPerLowPercent: 0.5, minScore: 0 },
+      bidUnits: [
+        { id: '1', name: 'A', price: 100, isValid: true },
+        { id: '2', name: 'B', price: 110, isValid: true },
+        { id: '3', name: 'C', price: 140, isValid: true },
+      ] as any[],
+      theme: 'light' as const,
+    };
     const result = calculateResult(config);
     expect(result).not.toBeNull();
-    expect(result!.basePrice).toBeCloseTo(150, 2);
+    expect(result!.basePrice).toBe(105);
   });
 
-  it('有效投标判定: 根据规则过滤', () => {
-    const config = { algorithm: 'arithmetic_mean' as const, kEnabled: false, kValue: 0.96, trimHighPercent: 20, trimLowPercent: 20, removeHighestN: 1, nthLowest: 2, q1Weight: 50, k1: 1, k2: 1, maxPrice: 0, customBasePrice: 0, validRules: [], deduction: { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 }, bidUnits: [] as any[], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
-    config.bidUnits = [
-      { id: '1', name: 'A', price: 100, isValid: true },
-      { id: '2', name: 'B', price: 200, isValid: true },
-      { id: '3', name: 'C', price: 300, isValid: true },
-      { id: '4', name: 'D', price: 400, isValid: true },
-      { id: '5', name: 'E', price: 500, isValid: true },
-      { id: '6', name: 'F', price: 600, isValid: true },
-      { id: '7', name: 'G', price: 700, isValid: true },
-    ];
-    (config as any).validRules = [
-      { id: 'r1', minCount: 7, maxCount: -1, action: 'trim_percent', params: { trimPercent: 20 } },
-    ];
-
+  it('基准价常规法: 价格评分=(基准价/评标价)×满分', () => {
+    const config = {
+      algorithm: 'conventional_method' as const,
+      validRules: [],
+      deduction: { fullScore: 20, deductPerHighPercent: 1.0, deductPerLowPercent: 0.5, minScore: 0 },
+      bidUnits: [
+        { id: '1', name: 'A', price: 100, isValid: true },
+        { id: '2', name: 'B', price: 140, isValid: true },
+      ] as any[],
+      theme: 'light' as const,
+    };
     const result = calculateResult(config);
     expect(result).not.toBeNull();
-    expect(result!.effectiveCount).toBe(5);
+    expect(result!.rankings[0].score).toBe(20);
+    expect(result!.rankings[1].score).toBeCloseTo(14.29, 1);
   });
 
-  it('得分计算: 高于基准价扣分', () => {
-    const config = { algorithm: 'arithmetic_mean' as const, kEnabled: false, kValue: 0.96, trimHighPercent: 20, trimLowPercent: 20, removeHighestN: 1, nthLowest: 2, q1Weight: 50, k1: 1, k2: 1, maxPrice: 0, customBasePrice: 0, validRules: [], deduction: { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 }, bidUnits: [] as any[], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
-    config.validRules = []; // no rule filtering for this test
-    config.bidUnits = [
-      { id: '1', name: 'A', price: 100, isValid: true },
-      { id: '2', name: 'B', price: 110, isValid: true },
-    ];
-    config.deduction = { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 };
-
-    const result = calculateResult(config);
-    expect(result).not.toBeNull();
-    const bRanking = result!.rankings.find(r => r.unit.id === '2');
-    expect(bRanking).toBeDefined();
-    expect(bRanking!.score).toBeCloseTo(57.14, 1);
-  });
-
-  it('无有效报价时返回 null', () => {
-    const config = { algorithm: 'arithmetic_mean' as const, kEnabled: false, kValue: 0.96, trimHighPercent: 20, trimLowPercent: 20, removeHighestN: 1, nthLowest: 2, q1Weight: 50, k1: 1, k2: 1, maxPrice: 0, customBasePrice: 0, validRules: [], deduction: { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 }, bidUnits: [] as any[], theme: 'light' as const, apiKey: undefined, apiEndpoint: undefined };
-    config.bidUnits = [];
-
+  it('无报价时返回 null', () => {
+    const config = {
+      algorithm: 'low_price_priority' as const,
+      validRules: [],
+      deduction: { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 },
+      bidUnits: [] as any[],
+      theme: 'light' as const,
+    };
     const result = calculateResult(config);
     expect(result).toBeNull();
   });

@@ -1,12 +1,8 @@
 export type Algorithm =
-  | 'arithmetic_mean'
-  | 'trimmed_mean'
-  | 'remove_highest'
-  | 'second_lowest'
-  | 'double_average'
-  | 'weighted_limit'
-  | 'lowest_price'
-  | 'custom'
+  | 'low_price_priority'
+  | 'average_price'
+  | 'gradient_method'
+  | 'conventional_method'
   | 'ai_parse';
 
 export type TrimAction =
@@ -44,17 +40,6 @@ export interface BidUnit {
 
 export interface BidConfig {
   algorithm: Algorithm;
-  kEnabled: boolean;
-  kValue: number;
-  trimHighPercent: number;
-  trimLowPercent: number;
-  removeHighestN: number;
-  nthLowest: number;
-  q1Weight: number;
-  k1: number;
-  k2: number;
-  maxPrice: number;
-  customBasePrice: number;
   validRules: ValidRule[];
   deduction: DeductionParams;
   bidUnits: BidUnit[];

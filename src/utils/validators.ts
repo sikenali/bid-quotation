@@ -2,14 +2,10 @@ import { BidUnit, ValidRule, Algorithm } from '../types';
 
 export function getAlgorithmName(algorithm: Algorithm): string {
   const names: Record<Algorithm, string> = {
-    arithmetic_mean: '算术平均法',
-    trimmed_mean: '去极值平均法',
-    remove_highest: '去最高平均法',
-    second_lowest: '次低报价法',
-    double_average: '二次平均法',
-    weighted_limit: '随机权重法',
-    lowest_price: '最低价法',
-    custom: '手动指定',
+    low_price_priority: '低价优先法',
+    average_price: '平均价计法',
+    gradient_method: '基准价梯度法',
+    conventional_method: '基准价常规法',
     ai_parse: 'AI 智能解析',
   };
   return names[algorithm];

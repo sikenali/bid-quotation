@@ -1,61 +1,33 @@
-import type { AlgorithmOption } from '../types';
+import type { Algorithm } from '../types';
 
-export const ALGORITHM_OPTIONS: AlgorithmOption[] = [
+export const ALGORITHM_OPTIONS: Array<{ id: Algorithm; name: string; shortDesc: string; description: string; icon: string }> = [
   {
-    id: 'arithmetic_mean',
-    name: '算术平均法',
-    shortDesc: '所有有效报价算术平均',
-    description: '所有有效报价的算术平均值作为基准价',
-    icon: 'ri-function-line',
-  },
-  {
-    id: 'trimmed_mean',
-    name: '去极值平均法',
-    shortDesc: '去掉最高/最低N%后取均值',
-    description: '去掉最高和最低报价后取平均，排除异常报价干扰',
-    icon: 'ri-filter-line',
-  },
-  {
-    id: 'remove_highest',
-    name: '去最高平均法',
-    shortDesc: '去掉最高报价后取均值',
-    description: '去掉最高报价后取平均，避免高价干扰基准',
-    icon: 'ri-arrow-up-circle-line',
-  },
-  {
-    id: 'second_lowest',
-    name: '次低报价法',
-    shortDesc: '取次低报价作为基准价',
-    description: '取最低报价的次低值作为基准价',
-    icon: 'ri-order-play-line',
-  },
-  {
-    id: 'double_average',
-    name: '二次平均法',
-    shortDesc: '先全均→再≤均值二次均值',
-    description: '取低于首次平均值的报价再做平均，鼓励理性报价',
-    icon: 'ri-refresh-line',
-  },
-  {
-    id: 'weighted_limit',
-    name: '随机权重法',
-    shortDesc: 'A×K1×Q1+B×K2×Q2',
-    description: '结合平均价与最高限价加权计算基准价',
-    icon: 'ri-scales-line',
-  },
-  {
-    id: 'lowest_price',
-    name: '最低价法',
-    shortDesc: '以最低有效报价为基准价',
-    description: '最低报价直接作为基准价，价低者得',
+    id: 'low_price_priority',
+    name: '低价优先法',
+    shortDesc: '最低价=基准价，按报价比打分',
+    description: '满足要求且最后磋商报价最低的报价为基准价，其价格分为满分。其他供应商得分=(基准价／最后磋商报价)×价格分。',
     icon: 'ri-trophy-line',
   },
   {
-    id: 'custom',
-    name: '手动指定',
-    shortDesc: '手动输入自定义基准价',
-    description: '手动输入自定义基准价',
-    icon: 'ri-edit-line',
+    id: 'average_price',
+    name: '平均价计法',
+    shortDesc: '基准价=所有有效报价平均值',
+    description: '满足要求且最后磋商报价的平均值为基准价。供应商得分=((基准价-|基准价-报价|)/基准价)×价格分。',
+    icon: 'ri-function-line',
+  },
+  {
+    id: 'gradient_method',
+    name: '基准价梯度法',
+    shortDesc: '基准价=技术前两名均值，梯度扣分',
+    description: '评标基准价=技术评审得分前两名的投标单位报价的算数平均值。报价≤基准价：得分=(1-|报价-基准价|/基准价)×标准分；报价>基准价：得分×0.95。',
+    icon: 'ri-scales-line',
+  },
+  {
+    id: 'conventional_method',
+    name: '基准价常规法',
+    shortDesc: '价格评分=(基准价/评标价)×满分',
+    description: '评标基准价为满足磋商文件要求且最后磋商报价的平均值。价格评分＝（评标基准价格/评标价格）×满分，四舍五入保留两位小数。',
+    icon: 'ri-ruler-2-line',
   },
   {
     id: 'ai_parse',
