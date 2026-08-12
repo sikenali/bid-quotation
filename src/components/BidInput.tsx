@@ -64,7 +64,7 @@ export default function BidInput() {
           <button
             key={unit.id}
             onClick={() => setActiveUnitId(unit.id === activeUnitId ? null : unit.id)}
-            className={`flex flex-col items-center justify-center px-4 py-3 rounded-xl min-w-[120px] sm:min-w-[140px] transition-all border-2 flex-1 sm:flex-none ${
+            className={`flex flex-col items-center justify-center px-4 py-3 sm:px-5 sm:py-3 rounded-xl min-w-[120px] sm:min-w-[140px] transition-all border-2 flex-1 sm:flex-none ${
               unit.id === activeUnitId
                 ? 'bg-[#C43A31] text-white border-[#C43A31] shadow-sm'
                 : isDark
@@ -76,7 +76,7 @@ export default function BidInput() {
               <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${
                 unit.id === activeUnitId ? 'border-white bg-white' : isDark ? 'border-[#A89880] bg-transparent' : 'border-[#8B7355] bg-transparent'
               }`} />
-              <span className={`text-[14px] font-medium truncate max-w-[100px] ${unit.id === activeUnitId ? 'text-white' : isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
+              <span className={`text-[14px] font-medium truncate max-w-[100px] sm:max-w-none ${unit.id === activeUnitId ? 'text-white' : isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                 {unit.name || '未命名'}
               </span>
             </div>
