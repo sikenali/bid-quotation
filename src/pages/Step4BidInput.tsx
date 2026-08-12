@@ -12,20 +12,19 @@ export default function Step4BidInput() {
   const handlePriceCalc = () => {
     calculate();
     setCurrentStep(5);
-    navigate('/results');
+    navigate('/bids?calc=1');
   };
   const handleTotalCalc = () => {
     calculate();
-    const url = '/results?total=1';
-    setCurrentStep(5);
-    navigate(url);
+    navigate('/bids?total=1');
   };
 
   // Check if we should show total scores (from URL)
   const showTotal = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('total') === '1';
+  const showCalc = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('calc') === '1';
 
-  if (showTotal && unitScores.length > 0) {
-    return <Step5Results includeTotalScores={true} />;
+  if ((showTotal && unitScores.length > 0) || showCalc) {
+    return <Step5Results includeTotalScores={showTotal} />;
   }
 
   return (
