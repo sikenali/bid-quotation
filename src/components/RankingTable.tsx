@@ -7,25 +7,33 @@ interface Props {
   includeTotalScores?: boolean;
 }
 
-function getRankBadgeClass(rank: number): string {
+function getRankBadgeClass(rank: number, isDark: boolean): string {
   switch (rank) {
-    case 1: return 'bg-[#FFE8D6] text-[#D97706] border-[#FCD9A8]';
-    case 2: return 'bg-[#DBEAFE] text-[#2563EB] border-[#BFDBFE]';
-    case 3: return 'bg-[#D1FAE5] text-[#059669] border-[#A7F3D0]';
-    default: return 'bg-white text-gray-600 border-gray-200';
+    case 1: return isDark ? 'bg-[#C43A31]/20 text-[#C43A31] border-[#C43A31]/40' : 'bg-[#FFE8D6] text-[#D97706] border-[#FCD9A8]';
+    case 2: return isDark ? 'bg-[#2563EB]/20 text-[#60A5FA] border-[#2563EB]/40' : 'bg-[#DBEAFE] text-[#2563EB] border-[#BFDBFE]';
+    case 3: return isDark ? 'bg-[#059669]/20 text-[#34D399] border-[#059669]/40' : 'bg-[#D1FAE5] text-[#059669] border-[#A7F3D0]';
+    default: return isDark ? 'bg-[#3D3D3D] text-[#C0B098] border-[#3D3D3D]' : 'bg-white text-gray-600 border-gray-200';
   }
 }
 
-function getRankMedalClass(rank: number): string {
+function getRankMedalClass(rank: number, isDark: boolean): string {
   switch (rank) {
     case 1: return 'text-[#D97706]';
     case 2: return 'text-[#2563EB]';
     case 3: return 'text-[#059669]';
-    default: return 'text-gray-400';
+    default: return isDark ? 'text-[#C0B098]' : 'text-gray-400';
   }
 }
 
-function getRankRowBg(rank: number): string {
+function getRankRowBg(rank: number, isDark: boolean): string {
+  if (isDark) {
+    switch (rank) {
+      case 1: return 'bg-[#2D2D2D]';
+      case 2: return 'bg-[#2D2D2D]';
+      case 3: return 'bg-[#2D2D2D]';
+      default: return 'bg-[#252525]';
+    }
+  }
   switch (rank) {
     case 1: return 'bg-[#FFF8F5]';
     case 2: return 'bg-[#F8FAFE]';
@@ -81,13 +89,13 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
               const us = includeTotalScores ? getUnitScore(item.unit.id) : null;
               const totalScore = us ? us.priceScore + us.businessScore + us.technicalScore : item.score;
               return (
-                <tr key={item.unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3D3D3D]/50 hover:bg-[#252525]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'} ${getRankRowBg(item.rank)}`}>
+                <tr key={item.unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3D3D3D]/50 hover:bg-[#252525]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'} ${getRankRowBg(item.rank, isDark)}`}>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full border text-sm font-semibold ${getRankBadgeClass(item.rank)}`}>
+                      <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full border text-sm font-semibold ${getRankBadgeClass(item.rank, isDark)}`}>
                         {item.rank}
                       </span>
-                      <span className={`text-lg font-bold leading-none ${getRankMedalClass(item.rank)}`} style={{ fontSize: '16px', lineHeight: 1 }}>
+                      <span className={`text-lg font-bold leading-none ${getRankMedalClass(item.rank, isDark)}`} style={{ fontSize: '16px', lineHeight: 1 }}>
                         {item.rank === 1 ? '🏆' : item.rank === 2 ? '🥈' : item.rank === 3 ? '🥉' : ''}
                       </span>
                     </div>
