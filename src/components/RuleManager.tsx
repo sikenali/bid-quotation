@@ -89,7 +89,7 @@ export default function RuleManager() {
                 </div>
                 <div className="flex flex-col">
                   <span className={`font-semibold text-[15px] ${isActive ? 'text-[#C43A31]' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
-                    规则{index + 1}
+                    投标人{index + 1}
                   </span>
                   <span className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
                     {isCappedRule ? `≥${rule.minCount}家` : isFixedRange ? `${rule.minCount}~${rule.maxCount}家` : rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
@@ -118,7 +118,7 @@ export default function RuleManager() {
         <div className="flex items-center gap-5">
           <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
           <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
-            {validRules.length > 0 ? `规则${validRules.length} · 参数配置` : '规则参数配置'}
+            {validRules.length > 0 ? `投标人${validRules.length} · 参数配置` : '投标人参数配置'}
           </h3>
         </div>
 
@@ -180,7 +180,7 @@ function RuleRow({
           }`}
         />
         <div className="flex items-center gap-2">
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>当投标家数</span>
+          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>投标人数量</span>
           <input
             type="number"
             value={rule.minCount}
@@ -193,7 +193,7 @@ function RuleRow({
             type="number"
             value={isCapped ? 10 : (rule.maxCount === -1 ? '' : rule.maxCount)}
             onChange={(e) => onUpdate({ maxCount: e.target.value ? parseInt(e.target.value) : -1 })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
+            className={`input-field w-20 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
             placeholder={isCapped ? '10' : '无限'}
             disabled={isLocked}
           />
