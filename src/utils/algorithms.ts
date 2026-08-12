@@ -53,23 +53,58 @@ export function calculateResult(config: BidConfig): CalcResult | null {
       aPrice = basePrice;
   }
 
-  // 计算得分：统一线性扣分口径
-  // 得分 = 满分 - |偏离基准价的百分比| × 对应系数
-  // 报价 > 基准价 → 用 deductPerHighPercent；报价 < 基准价 → 用 deductPerLowPercent
-  // 结果封顶在 [minScore, fullScore]，避免 NaN 与超满分
+  // 计算得分：每种算法使用各自的评分公式
   const rankings = sortedUnits.map((unit, index) => {
+    let score = 0;
+
+    switch (algorithm) {
+      case 'low_price_priority':
+        // 低价优先法：得分=(基准价／报价)×满分
+        score = unit.price > 0 ? (basePrice / unit.price) * fullScore : 0;
+        break;
+
+      case 'average_price':
+        // 平均价计法：得分=((基准价-|基准价-报价|)/基准价)×满分
+        if (basePrice > 0) {
+          const devAve = Math.abs(basePrice - unit.price) / basePrice;
+          score = Math.max((1 - devAve) * fullScore, deduction.minScore);
+        } else {
+          score = 0;
+        }
+        break;
+
+      case 'gradient_method':
+        // 基准价梯度法
+        // ≤基准价：得分=(1-|报价-基准价|/基准价)×标准分
+        // >基准价：得分=(1-|报价-基准价|/基准价)×标准分×0.95
+        if (basePrice > 0) {
+          const d = Math.abs(basePrice - unit.price) / basePrice;
+          if (unit.price <= basePrice) {
+            score = (1 - d) * fullScore;
+          } else {
+            score = (1 - d) * fullScore * 0.95;
+          }
+        } else {
+          score = 0;
+        }
+        break;
+
+      case 'conventional_method':
+        // 基准价常规法：价格评分=(基准价/评标价)×满分
+        score = unit.price > 0 ? (basePrice / unit.price) * fullScore : 0;
+        break;
+
+      default:
+        score = unit.price > 0 ? (basePrice / unit.price) * fullScore : 0;
+    }
+
     const deviationPercent = aPrice > 0 ? ((unit.price - aPrice) / aPrice) * 100 : 0;
-    const coefficient = unit.price > aPrice
-      ? deduction.deductPerHighPercent
-      : deduction.deductPerLowPercent;
-    const rawScore = fullScore - Math.abs(deviationPercent) * coefficient;
-    const score = Math.max(Math.min(rawScore, fullScore), deduction.minScore);
 
     return {
       rank: index + 1,
       unit,
       deviationPercent: parseFloat(deviationPercent.toFixed(2)),
-      score: parseFloat(score.toFixed(2)),
+      score: parseFloat(Math.max(Math.min(score, fullScore), deduction.minScore).toFixed(2)),
       priceDiff: parseFloat((unit.price - aPrice).toFixed(2)),
     };
   });
