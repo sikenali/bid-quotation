@@ -55,7 +55,8 @@ export default function RuleManager() {
       <div className="flex flex-wrap gap-3">
         {validRules.map((rule, index) => {
           const isActive = rule.id === activeRuleId;
-          const displayCount = rule.maxCount === -1 ? 6 : Math.min(rule.minCount, 6);
+          const isCappedRange = rule.maxCount === -1 && rule.minCount >= 7;
+          const displayCount = isCappedRange ? 6 : (rule.maxCount === -1 ? 6 : Math.min(rule.minCount, 6));
           return (
             <button
               key={rule.id}
@@ -84,24 +85,26 @@ export default function RuleManager() {
                     规则{index + 1}
                   </span>
                   <span className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                    {rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
+                    {isCappedRange ? `大于${rule.minCount}-10` : rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
                   </span>
                 </div>
               </div>
             </button>
           );
         })}
-        <button
-          onClick={addNewRule}
-          className={`min-w-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
-            isDark
-              ? 'border-[#3A3A3A] text-[#A89880] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#1A1A1A]'
-              : 'bg-white border-[#D4C4A8] hover:border-[#C43A31]/60 hover:bg-[#FFF8F5] text-text-secondary'
-          }`}
-        >
-          <i className="ri-add-line text-xl"></i>
-          <span className="text-[13px]">添加规则</span>
-        </button>
+        {!isCappedRange && (
+          <button
+            onClick={addNewRule}
+            className={`min-w-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
+              isDark
+                ? 'border-[#3A3A3A] text-[#A89880] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#1A1A1A]'
+                : 'bg-white border-[#D4C4A8] hover:border-[#C43A31]/60 hover:bg-[#FFF8F5] text-text-secondary'
+            }`}
+          >
+            <i className="ri-add-line text-xl"></i>
+            <span className="text-[13px]">添加规则</span>
+          </button>
+        )}
       </div>
 
       <div className={`rounded-2xl p-6 space-y-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
