@@ -35,7 +35,7 @@ export default function Step1Algorithm() {
 
       <TemplateSelector />
 
-      <div className="flex items-center justify-between pt-2">
+      <div className="flex items-center justify-between pt-4">
         <div className="flex items-center gap-3">
           <span className="text-text-secondary text-[13px]">快速加载模板</span>
         </div>
@@ -43,8 +43,7 @@ export default function Step1Algorithm() {
           onClick={handleNext}
           className="btn-primary"
         >
-          <span>下一步</span>
-          <i className="ri-arrow-right-s-line text-lg"></i>
+          下一步
         </button>
       </div>
     </div>
