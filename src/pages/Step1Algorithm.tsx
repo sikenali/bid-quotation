@@ -18,7 +18,7 @@ export default function Step1Algorithm() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h2 className="text-[28px] font-semibold text-text">Algorithm Selection</h2>
+        <h2 className="text-[28px] font-semibold text-text">报价方法</h2>
         <p className="text-text-secondary text-[14px]">
           选择基准价计算方法，配置对应参数
         </p>
