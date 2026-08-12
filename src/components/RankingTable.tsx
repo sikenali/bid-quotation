@@ -16,16 +16,7 @@ function getRankBadgeClass(rank: number): string {
   }
 }
 
-function getRankMedalIcon(rank: number): string {
-  switch (rank) {
-    case 1: return 'ri-trophy-line';
-    case 2: return 'ri-medal-line';
-    case 3: return 'ri-medal-2-line';
-    default: return '';
-  }
-}
-
-function getRankMedalColor(rank: number): string {
+function getRankMedalClass(rank: number): string {
   switch (rank) {
     case 1: return 'text-[#D97706]';
     case 2: return 'text-[#2563EB]';
@@ -98,7 +89,9 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
                       <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full border text-sm font-semibold ${getRankBadgeClass(item.rank)}`}>
                         {item.rank}
                       </span>
-                      {medalIcon && <i className={`text-lg ${medalColor}`}>{medalIcon}</i>}
+                      <span className={`text-lg font-bold leading-none ${getRankMedalClass(item.rank)}`} style={{ fontSize: '16px', lineHeight: 1 }}>
+                        {item.rank === 1 ? '🏆' : item.rank === 2 ? '🥈' : item.rank === 3 ? '🥉' : ''}
+                      </span>
                     </div>
                   </td>
                   <td className={`px-6 py-4 font-medium flex items-center gap-2 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
