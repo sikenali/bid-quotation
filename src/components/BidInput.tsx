@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { BidUnit } from '../types';
 
 export default function BidInput() {
-  const { bidUnits, addBidUnit, updateBidUnit, removeBidUnit, clearBidUnits, randomFill, parsePrices, theme } = useConfigStore();
+  const { bidUnits, addBidUnit, updateBidUnit, removeBidUnit, clearBidUnits, randomFill, parsePrices, theme, activeRuleId, validRules } = useConfigStore();
   const [showRandomModal, setShowRandomModal] = useState(false);
   const [showParseModal, setShowParseModal] = useState(false);
   const [randomCount, setRandomCount] = useState(5);
@@ -13,6 +13,17 @@ export default function BidInput() {
   const [activeUnitId, setActiveUnitId] = useState<string | null>(null);
 
   const isDark = theme === 'dark';
+
+  // 根据激活规则决定显示哪些单位：规则覆盖3家时随机打乱取前3家
+  const displayUnits = useMemo(() => {
+    const activeRule = validRules.find(r => r.id === activeRuleId);
+    if (!activeRule) return bidUnits;
+    if (activeRule.minCount <= 3 && activeRule.maxCount >= 3 && bidUnits.length >= 3) {
+      const shuffled = [...bidUnits].sort(() => Math.random() - 0.5);
+      return shuffled.slice(0, 3);
+    }
+    return bidUnits;
+  }, [bidUnits, activeRuleId, validRules]);
 
   const handleAdd = () => {
     addBidUnit('', 0);
@@ -28,7 +39,7 @@ export default function BidInput() {
     <div className="space-y-6">
       {/* 投标单位标签横排 */}
       <div className="flex flex-wrap gap-3">
-        {bidUnits.map((unit) => (
+        {displayUnits.map((unit) => (
           <button
             key={unit.id}
             onClick={() => setActiveUnitId(unit.id === activeUnitId ? null : unit.id)}
@@ -71,17 +82,17 @@ export default function BidInput() {
         <div className="flex items-center gap-5 mb-4">
           <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
           <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
-            {bidUnits.length > 0
+            {displayUnits.length > 0
               ? `${activeUnitId ? (bidUnits.find(u => u.id === activeUnitId)?.name || '单位') : '全部'} · 编辑`
               : '投标单位列表'}
           </h3>
         </div>
 
-        {bidUnits.length === 0 ? (
+        {displayUnits.length === 0 ? (
           <p className={`text-center py-8 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>暂无投标单位，点击上方的「添加单位」按钮开始录入</p>
         ) : (
           <div className="space-y-3">
-            {bidUnits.map((unit) => (
+            {displayUnits.map((unit) => (
               <div
                 key={unit.id}
                 className={`flex items-center gap-3 p-4 rounded-xl border transition-colors ${

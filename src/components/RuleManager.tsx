@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { ValidRule } from '../types';
 
@@ -23,14 +23,8 @@ function DiceDots({ count }: { count: number }) {
 }
 
 export default function RuleManager() {
-  const { validRules, addValidRule, removeValidRule, updateValidRule, theme } = useConfigStore();
+  const { validRules, addValidRule, removeValidRule, updateValidRule, theme, activeRuleId, setActiveRuleId } = useConfigStore();
   const isDark = theme === 'dark';
-  const [activeRuleId, setActiveRuleId] = useState<string | null>(
-    () => {
-      const rules = useConfigStore.getState().validRules;
-      return rules.find(r => r.minCount === 4 && r.maxCount === 4)?.id || rules[0]?.id || null;
-    }
-  );
 
   const lastRule = validRules[validRules.length - 1];
   const isCappedRange = lastRule ? lastRule.maxCount === -1 && lastRule.minCount >= 7 : false;
@@ -121,11 +115,12 @@ export default function RuleManager() {
         {validRules.length === 0 ? (
           <p className={`text-center py-8 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>暂无规则，点击上方按钮添加</p>
         ) : (
-          validRules.map((rule) => (
+          validRules.map((rule, index) => (
             <RuleRow
               key={rule.id}
               rule={rule}
               isActive={rule.id === activeRuleId}
+              isLocked={index < 2}
               isDark={isDark}
               onSelect={() => setActiveRuleId(rule.id)}
               onUpdate={(updates) => updateValidRule(rule.id, updates)}
@@ -141,6 +136,7 @@ export default function RuleManager() {
 function RuleRow({
   rule,
   isActive,
+  isLocked,
   isDark,
   onSelect,
   onUpdate,
@@ -148,6 +144,7 @@ function RuleRow({
 }: {
   rule: ValidRule;
   isActive: boolean;
+  isLocked: boolean;
   isDark: boolean;
   onSelect: () => void;
   onUpdate: (updates: Partial<ValidRule>) => void;
@@ -172,18 +169,21 @@ function RuleRow({
           <input
             type="number"
             value={rule.minCount}
+            disabled={isLocked}
             onChange={(e) => onUpdate({ minCount: parseInt(e.target.value) || 0 })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
           />
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>~</span>
           <input
             type="number"
             value={isCapped ? 10 : (rule.maxCount === -1 ? '' : rule.maxCount)}
             onChange={(e) => onUpdate({ maxCount: e.target.value ? parseInt(e.target.value) : -1 })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
             placeholder={isCapped ? '10' : '无限'}
+            disabled={isLocked}
           />
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>家时</span>
+          {isLocked && <span className="text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
           {isCapped && <span className={`text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
         </div>
         <div className="ml-auto">

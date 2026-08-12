@@ -8,6 +8,7 @@ interface ConfigState extends BidConfig {
   calculationResult: CalcResult | null;
   currentStep: number;
   exportFormat: 'csv' | 'md';
+  activeRuleId: string | null;
 
   setCurrentStep: (step: number) => void;
   setAlgorithm: (algorithm: Algorithm) => void;
@@ -35,6 +36,7 @@ interface ConfigState extends BidConfig {
   parsePrices: (text: string) => void;
   setTheme: (theme: 'light' | 'dark') => void;
   setExportFormat: (format: 'csv' | 'md') => void;
+  setActiveRuleId: (id: string | null) => void;
   setApiKey: (key: string) => void;
   setApiEndpoint: (endpoint: string) => void;
   loadTemplate: (templateId: string) => void;
@@ -87,6 +89,7 @@ export const useConfigStore = create<ConfigState>()(
       exportFormat: 'csv' as const,
       currentStep: 1,
       calculationResult: null,
+      activeRuleId: null,
       apiKey: undefined,
       apiEndpoint: 'https://api.deepseek.com/v1',
 
@@ -157,6 +160,7 @@ export const useConfigStore = create<ConfigState>()(
       },
       setTheme: (theme) => set({ theme }),
       setExportFormat: (exportFormat) => set({ exportFormat }),
+      setActiveRuleId: (activeRuleId) => set({ activeRuleId }),
       setApiKey: (apiKey) => set({ apiKey }),
       setApiEndpoint: (apiEndpoint) => set({ apiEndpoint }),
       loadTemplate: (templateId) => {
@@ -248,14 +252,15 @@ export const useConfigStore = create<ConfigState>()(
           maxPrice: d.maxPrice,
           customBasePrice: d.customBasePrice,
            validRules: [...defaultValidRules],
-          deduction: d.deduction,
-          bidUnits: [
-            { id: 'default-1', name: '单位A', price: 0, isValid: true },
-            { id: 'default-2', name: '单位B', price: 0, isValid: true },
-            { id: 'default-3', name: '单位C', price: 0, isValid: true },
-            { id: 'default-4', name: '单位D', price: 0, isValid: true },
-          ],
-          currentStep: 1,
+           deduction: d.deduction,
+           bidUnits: [
+             { id: 'default-1', name: '武汉锂钠氪锶科技有限公司', price: 0, isValid: true },
+             { id: 'default-2', name: '武汉懒猫微服科技有限公司', price: 0, isValid: true },
+             { id: 'default-3', name: '武汉铀锂氪锶科技合伙企业（有限合伙）', price: 0, isValid: true },
+             { id: 'default-4', name: '广西锂钠氪锶软件科技有限公司', price: 0, isValid: true },
+           ],
+           activeRuleId: null,
+           currentStep: 1,
           calculationResult: null,
         });
       },
