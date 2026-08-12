@@ -57,7 +57,12 @@ export default function RuleManager() {
           const isActive = rule.id === activeRuleId;
           const isCappedRange = rule.maxCount === -1 && rule.minCount >= 7;
           const displayCount = isCappedRange ? 6 : (rule.maxCount === -1 ? 6 : Math.min(rule.minCount, 6));
-          return (
+  const isCappedRange = validRules.length > 0 && (() => {
+    const last = validRules[validRules.length - 1];
+    return last.maxCount === -1 && last.minCount >= 7;
+  })();
+
+  return (
             <button
               key={rule.id}
               onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
