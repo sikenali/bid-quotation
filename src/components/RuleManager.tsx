@@ -5,7 +5,12 @@ import { ValidRule } from '../types';
 export default function RuleManager() {
   const { validRules, addValidRule, removeValidRule, updateValidRule, theme } = useConfigStore();
   const isDark = theme === 'dark';
-  const [activeRuleId, setActiveRuleId] = useState<string | null>(validRules[0]?.id || null);
+  const [activeRuleId, setActiveRuleId] = useState<string | null>(
+    () => {
+      const rules = useConfigStore.getState().validRules;
+      return rules.find(r => r.minCount === 4 && r.maxCount === 4)?.id || rules[0]?.id || null;
+    }
+  );
 
   const addNewRule = () => {
     const { validRules } = useConfigStore.getState();
@@ -32,7 +37,7 @@ export default function RuleManager() {
           <button
             key={rule.id}
             onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
-            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl min-w-[100px] transition-all border-2 ${
+            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl min-w-[140px] transition-all border-2 ${
               rule.id === activeRuleId
                 ? 'bg-[#C43A31] text-white border-[#C43A31] shadow-sm'
                 : isDark

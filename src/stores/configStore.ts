@@ -53,10 +53,11 @@ const defaultBidUnits = [
   { id: 'default-4', name: '广西锂钠氪锶软件科技有限公司', price: 0, isValid: true },
 ];
 
-const defaultValidRules = [
-  { id: 'r1', minCount: 3, maxCount: 3, action: 'nth_lowest', params: { nth: 2 } },
-  { id: 'r2', minCount: 4, maxCount: 4, action: 'remove_highest_n', params: { removeN: 1 } },
-  { id: 'r3', minCount: 5, maxCount: -1, action: 'trim_percent', params: { trimPercent: 20 } },
+const defaultValidRules: ValidRule[] = [
+  { id: 'r1', minCount: 2, maxCount: 2, action: 'direct', params: {} },
+  { id: 'r2', minCount: 3, maxCount: 3, action: 'nth_lowest', params: { nth: 2 } },
+  { id: 'r3', minCount: 4, maxCount: 4, action: 'remove_highest_n', params: { removeN: 1 } },
+  { id: 'r4', minCount: 5, maxCount: -1, action: 'trim_percent', params: { trimPercent: 20 } },
 ];
 
 export const useConfigStore = create<ConfigState>()(
@@ -246,7 +247,7 @@ export const useConfigStore = create<ConfigState>()(
           k2: d.k2,
           maxPrice: d.maxPrice,
           customBasePrice: d.customBasePrice,
-          validRules: d.validRules,
+           validRules: [...defaultValidRules],
           deduction: d.deduction,
           bidUnits: [
             { id: 'default-1', name: '单位A', price: 0, isValid: true },
@@ -288,7 +289,7 @@ export const useConfigStore = create<ConfigState>()(
         } else if (state.bidUnits.length === 0) {
           state.bidUnits = [...defaultBidUnits];
         }
-        if (Array.isArray(state.validRules) && state.validRules.length === 4 && state.validRules.some((r: any) => r.id === 'r4')) {
+        if (!Array.isArray(state.validRules) || state.validRules.length < 2) {
           (state as any).validRules = [...defaultValidRules];
         }
       },
