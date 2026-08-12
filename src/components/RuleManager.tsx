@@ -129,38 +129,6 @@ function RuleRow({
           />
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>家时</span>
         </div>
-
-        <div className={`h-5 w-px ${isDark ? 'bg-[#3A3A3A]' : 'bg-[#E8DCC8]'}`} />
-
-        <div className="flex items-center gap-2">
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>执行</span>
-          <select
-            value={rule.action}
-            onChange={(e) => {
-              const v = e.target.value as ValidRule['action'];
-              const baseParams: Record<string, Record<string, number>> = {
-                trim_percent: { trimPercent: 20 },
-                remove_highest_n: { removeN: 1 },
-                remove_lowest_n: { removeN: 1 },
-                nth_lowest: { nth: 2 },
-                direct: {},
-              };
-              onUpdate({ action: v, params: rule.action === v ? rule.params : (baseParams[v] ?? {}) });
-            }}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
-              isDark
-                ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]'
-                : 'bg-white border-[#E8DCC8] text-text'
-            }`}
-          >
-            <option value="trim_percent">去极值</option>
-            <option value="remove_highest_n">去最高N家</option>
-            <option value="remove_lowest_n">去最低N家</option>
-            <option value="nth_lowest">第N低</option>
-            <option value="direct">全部参与</option>
-          </select>
-        </div>
-
         <div className="ml-auto">
           <button
             onClick={onRemove}
@@ -171,55 +139,6 @@ function RuleRow({
           </button>
         </div>
       </div>
-
-      {rule.action === 'trim_percent' && (
-        <div className={`flex items-center gap-2 px-4 py-2.5 border-t ${isDark ? 'border-[#3A3A3A] bg-[#2A2A2A]/50' : 'border-[#F5EFE0] bg-[#FBF7EF]'}`}>
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>各去</span>
-          <input
-            type="number"
-            value={rule.params.trimPercent ?? 20}
-            onChange={(e) => onUpdate({ params: { ...rule.params, trimPercent: parseInt(e.target.value) || 0 } })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
-          />
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>%</span>
-        </div>
-      )}
-      {rule.action === 'remove_highest_n' && (
-        <div className={`flex items-center gap-2 px-4 py-2.5 border-t ${isDark ? 'border-[#3A3A3A] bg-[#2A2A2A]/50' : 'border-[#F5EFE0] bg-[#FBF7EF]'}`}>
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>去掉最高</span>
-          <input
-            type="number"
-            value={rule.params.removeN ?? 1}
-            onChange={(e) => onUpdate({ params: { ...rule.params, removeN: parseInt(e.target.value) || 0 } })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
-          />
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>家</span>
-        </div>
-      )}
-      {rule.action === 'remove_lowest_n' && (
-        <div className={`flex items-center gap-2 px-4 py-2.5 border-t ${isDark ? 'border-[#3A3A3A] bg-[#2A2A2A]/50' : 'border-[#F5EFE0] bg-[#FBF7EF]'}`}>
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>去掉最低</span>
-          <input
-            type="number"
-            value={rule.params.removeN ?? 1}
-            onChange={(e) => onUpdate({ params: { ...rule.params, removeN: parseInt(e.target.value) || 0 } })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
-          />
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>家</span>
-        </div>
-      )}
-      {rule.action === 'nth_lowest' && (
-        <div className={`flex items-center gap-2 px-4 py-2.5 border-t ${isDark ? 'border-[#3A3A3A] bg-[#2A2A2A]/50' : 'border-[#F5EFE0] bg-[#FBF7EF]'}`}>
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>取第</span>
-          <input
-            type="number"
-            value={rule.params.nth ?? 2}
-            onChange={(e) => onUpdate({ params: { ...rule.params, nth: parseInt(e.target.value) || 0 } })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
-          />
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>低</span>
-        </div>
-      )}
     </div>
   );
 }
