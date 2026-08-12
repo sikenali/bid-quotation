@@ -86,13 +86,13 @@ export function AlgorithmParams() {
         <span className={`text-[13px] ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>启用 K 值调整</span>
         <button
           onClick={() => setKEnabled(!kEnabled)}
-          className={`relative w-[18px] h-[18px] rounded-[4px] transition-colors flex-shrink-0 ${
-            kEnabled ? 'bg-primary' : 'bg-border-light'
+          className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 cursor-pointer ${
+            kEnabled ? 'bg-primary' : isDark ? 'bg-[#3A3A3A]' : 'bg-border-light'
           }`}
         >
           <span
-            className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-              kEnabled ? 'translate-x-[14px]' : ''
+            className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform flex items-center justify-center ${
+              kEnabled ? 'translate-x-5' : ''
             }`}
           />
         </button>
