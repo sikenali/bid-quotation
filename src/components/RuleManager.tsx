@@ -32,6 +32,9 @@ export default function RuleManager() {
     }
   );
 
+  const lastRule = validRules[validRules.length - 1];
+  const isCappedRange = lastRule ? lastRule.maxCount === -1 && lastRule.minCount >= 7 : false;
+
   const addNewRule = () => {
     const { validRules } = useConfigStore.getState();
     let nextMin = 5;
@@ -55,14 +58,9 @@ export default function RuleManager() {
       <div className="flex flex-wrap gap-3">
         {validRules.map((rule, index) => {
           const isActive = rule.id === activeRuleId;
-          const isCappedRange = rule.maxCount === -1 && rule.minCount >= 7;
-          const displayCount = isCappedRange ? 6 : (rule.maxCount === -1 ? 6 : Math.min(rule.minCount, 6));
-  const isCappedRange = validRules.length > 0 && (() => {
-    const last = validRules[validRules.length - 1];
-    return last.maxCount === -1 && last.minCount >= 7;
-  })();
-
-  return (
+          const capped = rule.maxCount === -1 && rule.minCount >= 7;
+          const displayCount = capped ? 6 : (rule.maxCount === -1 ? 6 : Math.min(rule.minCount, 6));
+          return (
             <button
               key={rule.id}
               onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
@@ -90,7 +88,7 @@ export default function RuleManager() {
                     规则{index + 1}
                   </span>
                   <span className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                    {isCappedRange ? `大于${rule.minCount}-10` : rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
+                    {capped ? `大于${rule.minCount}-10` : rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
                   </span>
                 </div>
               </div>
@@ -155,6 +153,7 @@ function RuleRow({
   onUpdate: (updates: Partial<ValidRule>) => void;
   onRemove: () => void;
 }) {
+  const isCapped = rule.maxCount === -1 && rule.minCount >= 7;
   return (
     <div className={`rounded-xl border transition-all ${
       isActive
@@ -179,12 +178,13 @@ function RuleRow({
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>~</span>
           <input
             type="number"
-            value={rule.maxCount === -1 ? '' : rule.maxCount}
+            value={isCapped ? 10 : (rule.maxCount === -1 ? '' : rule.maxCount)}
             onChange={(e) => onUpdate({ maxCount: e.target.value ? parseInt(e.target.value) : -1 })}
             className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
-            placeholder="无限"
+            placeholder={isCapped ? '10' : '无限'}
           />
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>家时</span>
+          {isCapped && <span className={`text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
         </div>
         <div className="ml-auto">
           <button
@@ -199,4 +199,3 @@ function RuleRow({
     </div>
   );
 }
-
