@@ -78,8 +78,6 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
           </thead>
           <tbody>
             {result.rankings.map((item) => {
-              const medalIcon = getRankMedalIcon(item.rank);
-              const medalColor = getRankMedalColor(item.rank);
               const us = includeTotalScores ? getUnitScore(item.unit.id) : null;
               const totalScore = us ? us.priceScore + us.businessScore + us.technicalScore : item.score;
               return (
