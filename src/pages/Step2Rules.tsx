@@ -26,6 +26,7 @@ export default function Step2Rules() {
         </button>
         <button onClick={handleNext} className="btn-primary">下一步</button>
       </div>
+      <p className="text-center text-xs text-text-secondary pt-6">© 2026 Powered by LightOS</p>
     </div>
   );
 }

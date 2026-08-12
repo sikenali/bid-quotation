@@ -33,6 +33,7 @@ export default function Step4BidInput() {
           <span>报价测算</span>
         </button>
       </div>
+      <p className="text-center text-xs text-text-secondary pt-6">© 2026 Powered by LightOS</p>
     </div>
   );
 }

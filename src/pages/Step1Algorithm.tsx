@@ -40,6 +40,7 @@ export default function Step1Algorithm() {
           下一步
         </button>
       </div>
+      <p className="text-center text-xs text-text-secondary pt-6">© 2026 Powered by LightOS</p>
     </div>
   );
 }

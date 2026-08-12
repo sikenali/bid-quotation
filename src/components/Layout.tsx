@@ -29,7 +29,7 @@ export default function Layout({ children }: Props) {
               </div>
               <div>
                 <h1 className="text-text font-semibold text-[20px] leading-tight dark:text-dark-text">文价猩</h1>
-                <p className="text-text-secondary text-[11px] dark:text-dark-text-secondary">BidPrice AI</p>
+                <p className="text-text-secondary text-[11px] dark:text-dark-text-secondary">标书智能报价平台</p>
               </div>
             </div>
 
