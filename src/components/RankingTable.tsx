@@ -103,24 +103,24 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
                   <td className={`px-6 py-4 font-medium ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                     <span className="inline-flex items-center gap-2">
                       <span className="truncate max-w-[120px] sm:max-w-[200px] inline-block align-middle">{item.unit.name || '未命名'}</span>
-                      {item.rank === 1 && (
-                        <div className="inline-flex flex-col items-center flex-shrink-0">
-                          <div className="w-10 h-10 relative" style={{ transform: 'rotate(-12deg)' }}>
-                           <svg viewBox="0 0 48 48" className="w-full h-full">
-                             <circle cx="24" cy="24" r="24" fill="#C43A31" opacity="0.85"/>
-                             <circle cx="24" cy="24" r="16" fill="white"/>
-                             <circle cx="24" cy="24" r="9" fill="#C43A31"/>
-                             <circle cx="24" cy="24" r="3.5" fill="white"/>
-                             <circle cx="24" cy="24" r="1.5" fill="#C43A31"/>
-                             <line x1="24" y1="1" x2="24" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                             <line x1="24" y1="42" x2="24" y2="47" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                             <line x1="1" y1="24" x2="6" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                             <line x1="42" y1="24" x2="47" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                           </svg>
-                         </div>
-                         <span className="mt-1 text-[10px] font-bold text-[#C43A31] opacity-80 whitespace-nowrap">中回旋标</span>
-                       </div>
-)}
+{item.rank === 1 && (
+                        <div className="inline-flex flex-col items-center flex-shrink-0 ml-2">
+                          <div className="w-8 h-8 relative" style={{ transform: 'rotate(-12deg)' }}>
+                            <svg viewBox="0 0 48 48" className="w-full h-full">
+                              <circle cx="24" cy="24" r="24" fill="#C43A31" opacity="0.25"/>
+                              <circle cx="24" cy="24" r="16" fill="white" opacity="0.25"/>
+                              <circle cx="24" cy="24" r="9" fill="#C43A31" opacity="0.25"/>
+                              <circle cx="24" cy="24" r="3.5" fill="white" opacity="0.25"/>
+                              <circle cx="24" cy="24" r="1.5" fill="#C43A31" opacity="0.25"/>
+                              <line x1="24" y1="1" x2="24" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.25"/>
+                              <line x1="24" y1="42" x2="24" y2="47" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.25"/>
+                              <line x1="1" y1="24" x2="6" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.25"/>
+                              <line x1="42" y1="24" x2="47" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round" opacity="0.25"/>
+                            </svg>
+                          </div>
+                          <span className="mt-0.5 text-[8px] font-bold text-[#C43A31] opacity-30 whitespace-nowrap">中回旋标</span>
+                        </div>
+                      )}
                     </span>
                     </td>
                   <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
