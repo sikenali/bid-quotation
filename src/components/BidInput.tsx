@@ -137,7 +137,7 @@ export default function BidInput() {
           }`}
         >
           <i className="ri-dice-line"></i>
-          随机填充
+随机厂商
         </button>
         <button
           onClick={() => setShowParseModal(true)}
