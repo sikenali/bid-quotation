@@ -211,14 +211,14 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
               <p className={`font-medium mb-2 ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                 {exampleData.title} · 基准价 = {exampleData.basePrice}
               </p>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+              <div className="grid grid-cols-2 gap-x-2 gap-y-1">
                 {exampleData.rows.map((row) => (
-                  <p key={row.name} className={`flex items-center gap-2 ${row.above ? 'text-[#C43A31]' : ''}`}>
-                    <span className="w-2 h-2 rounded-full flex-shrink-0 bg-current opacity-60" />
-                    <span className="w-20 shrink-0">{row.name}</span>
-                    <span>报价 {row.price}</span>
+                  <p key={row.name} className={`flex items-center gap-1 text-xs ${row.above ? 'text-[#C43A31]' : ''}`}>
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-current opacity-60" />
+                    <span className="truncate max-w-[40px] shrink-0">{row.name}</span>
+                    <span className="shrink-0">{row.price}</span>
                     <span className="text-text-secondary">→</span>
-                    <span className="font-semibold">{row.score} 分</span>
+                    <span className="font-semibold shrink-0">{row.score}分</span>
                     {row.above && <span className="text-[#C43A31]/70">(×0.95)</span>}
                   </p>
                 ))}

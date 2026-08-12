@@ -172,7 +172,7 @@ function RuleRow({
         ? isDark ? 'bg-[#252525] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20' : 'bg-white border-[#C43A31]/40 ring-1 ring-[#C43A31]/10'
         : isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]/50'
     }`}>
-      <div className="flex items-center gap-4 px-4 py-3">
+      <div className="flex items-center gap-4 px-4 py-3 flex-wrap md:flex-nowrap">
         <button
           onClick={onSelect}
           className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${
