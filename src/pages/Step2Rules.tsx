@@ -19,7 +19,7 @@ export default function Step2Rules() {
 
       <RuleManager />
 
-      <div className="flex items-center justify-between pt-4 flex-col sm:flex-row gap-3 sm:gap-0">
+      <div className="flex items-center justify-between pt-4">
         <button onClick={handlePrev} className="btn-secondary">
           <i className="ri-arrow-left-line"></i>
           <span>上一步</span>

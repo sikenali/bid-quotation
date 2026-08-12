@@ -57,23 +57,23 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
         </div>
       </div>
 
-<div className="overflow-x-auto mobile-scroll-table">
-        <table className="w-full text-xs md:text-sm">
+      <div className="overflow-x-auto mobile-scroll-table">
+        <table className="w-full text-sm">
           <thead>
             <tr className={`border-t border-b ${isDark ? 'border-[#3D3D3D] bg-[#252525]' : 'border-[#E8DCC8] bg-white'}`}>
-              <th className={`px-2 py-2 md:px-6 md:py-3 text-left font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>排名</th>
-              <th className={`px-2 py-2 md:px-6 md:py-3 text-left font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>单位名称</th>
-              <th className={`px-2 py-2 md:px-6 md:py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>报价</th>
-              <th className={`px-2 py-2 md:px-6 md:py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>偏差率</th>
-              <th className={`px-2 py-2 md:px-6 md:py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>得分</th>
+              <th className={`px-6 py-3 text-left font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>排名</th>
+              <th className={`px-6 py-3 text-left font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>单位名称</th>
+              <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>报价</th>
+              <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>偏差率</th>
+              <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>得分</th>
               {includeTotalScores && (
                 <>
-                  <th className={`px-2 py-2 md:px-6 md:py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>商务分</th>
-                  <th className={`px-2 py-2 md:px-6 md:py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>技术分</th>
-                  <th className={`px-2 py-2 md:px-6 md:py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>总分</th>
+                  <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>商务分</th>
+                  <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>技术分</th>
+                  <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>总分</th>
                 </>
               )}
-              <th className={`px-2 py-2 md:px-6 md:py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>价差</th>
+              <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>与基准价差</th>
             </tr>
           </thead>
           <tbody>
@@ -82,52 +82,52 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
               const totalScore = us ? us.priceScore + us.businessScore + us.technicalScore : item.score;
               return (
                 <tr key={item.unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3D3D3D]/50 hover:bg-[#252525]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'} ${getRankRowBg(item.rank)}`}>
-                  <td className="px-2 py-2 md:px-6 md:py-4">
-                    <div className="flex items-center gap-1 md:gap-2">
-                      <span className={`inline-flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-full border text-xs md:text-sm font-semibold ${getRankBadgeClass(item.rank)}`}>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full border text-sm font-semibold ${getRankBadgeClass(item.rank)}`}>
                         {item.rank}
                       </span>
-                      <span className={`text-sm md:text-lg font-bold leading-none ${getRankMedalClass(item.rank)}`} style={{ fontSize: '14px', lineHeight: 1 }}>
+                      <span className={`text-lg font-bold leading-none ${getRankMedalClass(item.rank)}`} style={{ fontSize: '16px', lineHeight: 1 }}>
                         {item.rank === 1 ? '🏆' : item.rank === 2 ? '🥈' : item.rank === 3 ? '🥉' : ''}
                       </span>
                     </div>
                   </td>
-                  <td className={`px-2 py-2 md:px-6 md:py-4 font-medium ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
-                    <span className="inline-flex items-center gap-1 md:gap-2">
-                      <span className="truncate max-w-[80px] md:max-w-[200px] inline-block align-middle text-xs md:text-sm">{item.unit.name || '未命名'}</span>
+                  <td className={`px-6 py-4 font-medium ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="truncate max-w-[120px] sm:max-w-[200px] inline-block align-middle">{item.unit.name || '未命名'}</span>
                       {item.rank === 1 && (
                         <div className="inline-flex flex-col items-center flex-shrink-0">
-                          <div className="w-8 h-8 md:w-10 md:h-10 relative" style={{ transform: 'rotate(-12deg)' }}>
-                            <svg viewBox="0 0 48 48" className="w-full h-full">
-                              <circle cx="24" cy="24" r="24" fill="#C43A31" opacity="0.85"/>
-                              <circle cx="24" cy="24" r="16" fill="white"/>
-                              <circle cx="24" cy="24" r="9" fill="#C43A31"/>
-                              <circle cx="24" cy="24" r="3.5" fill="white"/>
-                              <circle cx="24" cy="24" r="1.5" fill="#C43A31"/>
-                              <line x1="24" y1="1" x2="24" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                              <line x1="24" y1="42" x2="24" y2="47" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                              <line x1="1" y1="24" x2="6" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                              <line x1="42" y1="24" x2="47" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                            </svg>
-                          </div>
-                          <span className="mt-1 text-[8px] md:text-[10px] font-bold text-[#C43A31] opacity-80 whitespace-nowrap">中回旋标</span>
-                        </div>
-                      )}
+                          <div className="w-10 h-10 relative" style={{ transform: 'rotate(-12deg)' }}>
+                           <svg viewBox="0 0 48 48" className="w-full h-full">
+                             <circle cx="24" cy="24" r="24" fill="#C43A31" opacity="0.85"/>
+                             <circle cx="24" cy="24" r="16" fill="white"/>
+                             <circle cx="24" cy="24" r="9" fill="#C43A31"/>
+                             <circle cx="24" cy="24" r="3.5" fill="white"/>
+                             <circle cx="24" cy="24" r="1.5" fill="#C43A31"/>
+                             <line x1="24" y1="1" x2="24" y2="6" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                             <line x1="24" y1="42" x2="24" y2="47" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                             <line x1="1" y1="24" x2="6" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                             <line x1="42" y1="24" x2="47" y2="24" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                           </svg>
+                         </div>
+                         <span className="mt-1 text-[10px] font-bold text-[#C43A31] opacity-80 whitespace-nowrap">中回旋标</span>
+                       </div>
+)}
                     </span>
                     </td>
-                  <td className={`px-2 py-2 md:px-6 md:py-4 text-right font-mono text-xs md:text-sm ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
-                  <td className={`px-2 py-2 md:px-6 md:py-4 text-right font-mono text-xs md:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>{item.deviationPercent > 0 ? '+' : ''}{item.deviationPercent}%</td>
-                  <td className={`px-2 py-2 md:px-6 md:py-4 text-right font-semibold text-xs md:text-sm ${getScoreColor(item.score, fullScore)}`}>
+                  <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
+                  <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>{item.deviationPercent > 0 ? '+' : ''}{item.deviationPercent}%</td>
+                  <td className={`px-6 py-4 text-right font-semibold ${getScoreColor(item.score, fullScore)}`}>
                     {includeTotalScores && us ? us.priceScore.toFixed(2) : item.score}
                   </td>
                   {includeTotalScores && us && (
                     <>
-                      <td className={`px-2 py-2 md:px-6 md:py-4 text-right font-mono text-xs md:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>{us.businessScore.toFixed(2)}</td>
-                      <td className={`px-2 py-2 md:px-6 md:py-4 text-right font-mono text-xs md:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>{us.technicalScore.toFixed(2)}</td>
-                      <td className={`px-2 py-2 md:px-6 md:py-4 text-right font-bold text-xs md:text-sm text-[#C43A31]`}>{totalScore.toFixed(2)}</td>
+                      <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>{us.businessScore.toFixed(2)}</td>
+                      <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>{us.technicalScore.toFixed(2)}</td>
+                      <td className={`px-6 py-4 text-right font-bold text-[#C43A31]`}>{totalScore.toFixed(2)}</td>
                     </>
                   )}
-                  <td className={`px-2 py-2 md:px-6 md:py-4 text-right font-mono text-xs md:text-sm ${item.priceDiff > 0 ? 'text-[#C43A31]' : item.priceDiff < 0 ? 'text-[#5B8C5A]' : isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
+                  <td className={`px-6 py-4 text-right font-mono ${item.priceDiff > 0 ? 'text-[#C43A31]' : item.priceDiff < 0 ? 'text-[#5B8C5A]' : isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
                     {item.priceDiff > 0 ? '+' : ''}{item.priceDiff.toLocaleString()}
                   </td>
                 </tr>
