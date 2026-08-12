@@ -19,12 +19,12 @@ export default function Step2Rules() {
 
       <RuleManager />
 
-      <div className="flex items-center justify-between pt-4">
-        <button onClick={handlePrev} className="btn-secondary">
+      <div className="flex items-center justify-between pt-4 flex-col sm:flex-row gap-3 sm:gap-0">
+        <button onClick={handlePrev} className="btn-secondary w-full sm:w-auto">
           <i className="ri-arrow-left-line"></i>
           <span>上一步</span>
         </button>
-        <button onClick={handleNext} className="btn-primary">下一步</button>
+        <button onClick={handleNext} className="btn-primary w-full sm:w-auto">下一步</button>
       </div>
       <p className="text-center text-xs text-text-secondary pt-6">© {new Date().getFullYear()} 文价猩 Powered by <a href="https://lazycat.cloud/" target="_blank" className="text-primary hover:underline">LightOS</a></p>
     </div>
