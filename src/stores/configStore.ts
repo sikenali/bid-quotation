@@ -39,6 +39,22 @@ interface ConfigState extends BidConfig {
 
 const defaultConfig = createDefaultConfig();
 
+function getAlgorithmDeduction(algorithm: Algorithm): Partial<DeductionParams> {
+  switch (algorithm) {
+    case 'low_price_priority':
+    case 'conventional_method':
+      return { fullScore: 20, deductPerHighPercent: 0, deductPerLowPercent: 0, minScore: 0 };
+    case 'average_price':
+      return { fullScore: 20, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 };
+    case 'gradient_method':
+      return { fullScore: 20, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 };
+    case 'ai_parse':
+      return { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 };
+    default:
+      return { fullScore: 60, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 };
+  }
+}
+
 const defaultBidUnits = [
   { id: 'default-1', name: '武汉锂钠氪锶科技有限公司', price: 0, isValid: true },
   { id: 'default-2', name: '武汉懒猫微服科技有限公司', price: 0, isValid: true },
@@ -57,7 +73,7 @@ export const useConfigStore = create<ConfigState>()(
     (set) => ({
       algorithm: defaultConfig.algorithm,
       validRules: defaultConfig.validRules,
-      deduction: defaultConfig.deduction,
+      deduction: getAlgorithmDeduction(defaultConfig.algorithm),
       bidUnits: [...defaultBidUnits],
       theme: 'light' as const,
       exportFormat: 'csv' as const,
@@ -69,7 +85,7 @@ export const useConfigStore = create<ConfigState>()(
       apiEndpoint: 'https://api.deepseek.com/v1',
 
       setCurrentStep: (step) => set({ currentStep: step }),
-      setAlgorithm: (algorithm) => set({ algorithm, showAlgorithmDesc: false }),
+      setAlgorithm: (algorithm) => set({ algorithm, showAlgorithmDesc: false, ...getAlgorithmDeduction(algorithm) }),
       setValidRules: (validRules) => set({ validRules }),
       addValidRule: (rule) => set((s) => ({ validRules: [...s.validRules, rule] })),
       removeValidRule: (id) => set((s) => ({ validRules: s.validRules.filter((r) => r.id !== id) })),
@@ -173,7 +189,7 @@ export const useConfigStore = create<ConfigState>()(
         set({
           algorithm: defaultConfig.algorithm,
           validRules: [...defaultValidRules],
-          deduction: defaultConfig.deduction,
+          deduction: getAlgorithmDeduction(defaultConfig.algorithm),
           bidUnits: [...defaultBidUnits],
           activeRuleId: 'r2',
           showAlgorithmDesc: false,

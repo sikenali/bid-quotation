@@ -1,21 +1,84 @@
 import React, { useState } from 'react';
 import { useConfigStore } from '../stores/configStore';
-import { DeductionParams } from '../types';
+import { Algorithm, DeductionParams } from '../types';
+
+const ALGORITHM_FORMULA: Record<Algorithm, { title: string; steps: string[] }> = {
+  low_price_priority: {
+    title: '低价优先法',
+    steps: [
+      '基准价 = 满足要求且最后磋商报价最低的报价',
+      '得分 = (基准价 / 最终报价) × 满分',
+      '最低价得满分，报价越低得分越高',
+    ],
+  },
+  average_price: {
+    title: '平均价计法',
+    steps: [
+      '基准价 = 满足要求且最后磋商报价的平均值',
+      '得分 = ((基准价 - |基准价 - 最终报价|) / 基准价) × 满分',
+      '偏离平均值越多，得分越低',
+    ],
+  },
+  gradient_method: {
+    title: '基准价梯度法',
+    steps: [
+      '基准价 = 技术评审得分前两名的投标单位报价的算术平均值',
+      '报价 ≤ 基准价：得分 = (1 - |报价 - 基准价| / 基准价) × 标准分',
+      '报价 > 基准价：得分 = 上述结果 × 0.95（高于基准价额外打95折）',
+    ],
+  },
+  conventional_method: {
+    title: '基准价常规法',
+    steps: [
+      '基准价为满足磋商文件要求且最后磋商报价的平均值',
+      '价格评分 = (评标基准价格 / 评标价格) × 价格分',
+      '报价越低得分越高，四舍五入保留两位小数',
+    ],
+  },
+  ai_parse: {
+    title: 'AI 智能解析',
+    steps: ['粘贴招标文件原文，AI 自动识别评分办法'],
+  },
+};
 
 interface DeductionFormProps {
   bidDocumentText?: string;
 }
 
 export default function DeductionForm({ bidDocumentText = '' }: DeductionFormProps) {
-  const { deduction, setDeduction, theme } = useConfigStore();
+  const { deduction, setDeduction, algorithm, theme } = useConfigStore();
   const [isDragging, setIsDragging] = useState(false);
   const isDark = theme === 'dark';
+  const formula = ALGORITHM_FORMULA[algorithm];
 
   const update = (partial: Partial<DeductionParams>) =>
     setDeduction({ ...deduction, ...partial });
 
+  const currentDeduct = deduction.deductPerHighPercent || 0;
+  const currentDeductLow = deduction.deductPerLowPercent || 0;
+
   return (
     <div className="space-y-6">
+      {/* 算法说明区 */}
+      {formula && (
+        <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+          <div className="flex items-center gap-5 mb-4">
+            <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
+            <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+              {formula.title} · 评分规则
+            </h3>
+          </div>
+          <div className={`rounded-xl px-4 py-3 space-y-1.5 text-sm ${isDark ? 'bg-[#1A1A1A] text-[#A89880]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
+            {formula.steps.map((step, i) => (
+              <p key={i} className="flex items-start gap-2">
+                <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-white text-[#8B7355]'}`}>{i + 1}</span>
+                <span>{step}</span>
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 扣分参数区 */}
       <div className={`rounded-2xl p-6 space-y-5 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
         <div className="flex items-center gap-5">
@@ -44,7 +107,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
               type="number"
               step="0.1"
               min="0"
-              value={deduction.deductPerHighPercent}
+              value={currentDeduct}
               onChange={(e) => update({ deductPerHighPercent: parseFloat(e.target.value) || 0 })}
               className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
             />
@@ -57,7 +120,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
               type="number"
               step="0.1"
               min="0"
-              value={deduction.deductPerLowPercent}
+              value={currentDeductLow}
               onChange={(e) => update({ deductPerLowPercent: parseFloat(e.target.value) || 0 })}
               className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
             />
@@ -78,18 +141,23 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
         </div>
 
         {/* 公式说明 */}
-        <div className={`rounded-lg px-4 py-3 text-xs space-y-1 ${isDark ? 'bg-[#1A1A1A] text-[#A89880]' : 'bg-bg text-text-secondary'}`}>
+        <div className={`rounded-lg px-4 py-3 text-xs space-y-1 ${isDark ? 'bg-[#1A1A1A] text-[#A89880]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
           <p>
-            <span className={`font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>得分公式：</span>
+            <span className={`font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>通用得分公式：</span>
             得分 = 满分 − |报价 − 基准价|/基准价 × 100% × 扣分值
           </p>
-          <p className="text-text-secondary/70">
-            高于基准价：每高 1% 扣 {deduction.deductPerHighPercent} 分
+          <p>
+            高于基准价：每高 1% 扣 {currentDeduct} 分
             {' · '}
-            低于基准价：每低 1% 扣 {deduction.deductPerLowPercent} 分
+            低于基准价：每低 1% 扣 {currentDeductLow} 分
             {' · '}
             得分不低于 {deduction.minScore} 分
           </p>
+          {algorithm === 'gradient_method' && (
+            <p className="text-[#C43A31] font-medium mt-1">
+              梯度法附加规则：报价高于基准价时，最终得分 × 0.95（打九五折）
+            </p>
+          )}
         </div>
       </div>
 
