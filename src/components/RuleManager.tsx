@@ -129,6 +129,7 @@ export default function RuleManager() {
             <RuleRow
               key={rule.id}
               rule={rule}
+              index={index}
               isActive={rule.id === activeRuleId}
               isLocked={index < 2}
               isDark={isDark}
@@ -153,6 +154,7 @@ function RuleRow({
   onRemove,
 }: {
   rule: ValidRule;
+  index: number;
   isActive: boolean;
   isLocked: boolean;
   isDark: boolean;
