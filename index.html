@@ -8,12 +8,22 @@
     <script>
       (function () {
         try {
+          var isDark = false;
           var raw = localStorage.getItem('bidQuotationConfig');
           if (raw) {
             var parsed = JSON.parse(raw);
             if (parsed && parsed.state && parsed.state.theme === 'dark') {
-              document.documentElement.classList.add('dark');
+              isDark = true;
             }
+          }
+          var html = document.documentElement;
+          if (isDark) {
+            html.classList.add('dark');
+            html.style.backgroundColor = '#222222';
+            html.style.color = '#F2EDE4';
+          } else {
+            html.style.backgroundColor = '#FDF5E6';
+            html.style.color = '#3D2B1F';
           }
         } catch (e) {}
       })();
