@@ -32,15 +32,16 @@ export default function RuleManager() {
 
   // 计算下一个可用规则的最小家数（从5开始找未被覆盖的第一个值）
   const nextMin = (() => {
+    // 如果存在无限规则，nextMin = 其 minCount + 1
+    const infiniteRule = validRules.find(r => r.maxCount === -1);
+    if (infiniteRule) return infiniteRule.minCount + 1;
     let n = 5;
-    while (true) {
-      const covered = validRules.some(r => {
-        if (r.maxCount === -1) return n >= r.minCount;
-        return n >= r.minCount && n <= r.maxCount;
-      });
+    while (n <= 20) {
+      const covered = validRules.some(r => n >= r.minCount && n <= r.maxCount);
       if (!covered) return n;
       n++;
     }
+    return 5;
   })();
 
   const addNewRule = () => {
