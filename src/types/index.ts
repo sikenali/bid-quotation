@@ -72,7 +72,6 @@ export interface CalcResult {
   effectiveCount: number;
   algorithmName: string;
   trimmedNames?: string[];
-  unitPriceScores?: Record<string, number>;
   rankings: Array<{
     rank: number;
     unit: BidUnit;

@@ -46,7 +46,7 @@ function getAlgorithmDeduction(algorithm: Algorithm): DeductionParams {
   switch (algorithm) {
     case 'low_price_priority':
     case 'conventional_method':
-      return { fullScore: 20, deductPerHighPercent: 0, deductPerLowPercent: 0, minScore: 0 };
+      return { fullScore: 20, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 };
     case 'average_price':
       return { fullScore: 20, deductPerHighPercent: 0.6, deductPerLowPercent: 0.3, minScore: 0 };
     case 'gradient_method':
@@ -203,8 +203,6 @@ export const useConfigStore = create<ConfigState>()(
         const s = useConfigStore.getState();
         const result = calculateResult(s as unknown as BidConfig);
         if (result) {
-          // Build unitPriceScores from rankings
-          const unitPriceScores: Record<string, number> = {};
           const unitScores: UnitScore[] = s.bidUnits.map((unit) => {
             const ranking = result.rankings.find(r => r.unit.id === unit.id);
             const priceScore = ranking ? ranking.score : 0;
@@ -218,7 +216,6 @@ export const useConfigStore = create<ConfigState>()(
               technicalScore: existing?.technicalScore ?? 0,
             };
           });
-          result.unitPriceScores = unitPriceScores;
           set({ calculationResult: result, unitScores });
         } else {
           set({ calculationResult: null });
