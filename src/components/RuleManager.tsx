@@ -48,7 +48,7 @@ export default function RuleManager() {
     const newRule: ValidRule = {
       id: crypto.randomUUID(),
       minCount: nextMin,
-      maxCount: nextMin >= 10 ? -1 : 10,
+      maxCount: nextMin >= 7 ? 10 : -1,
       action: 'trim_percent',
       params: { trimPercent: 20 },
     };
@@ -99,7 +99,7 @@ export default function RuleManager() {
             </button>
           );
         })}
-        {!isCappedRange && !isFixedRange && nextMin <= 6 && (
+        {!isCappedRange && !isFixedRange && (
           <button
             onClick={addNewRule}
             className={`min-w-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
