@@ -57,7 +57,7 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto mobile-scroll-table">
         <table className="w-full text-sm">
           <thead>
             <tr className={`border-t border-b ${isDark ? 'border-[#3D3D3D] bg-[#252525]' : 'border-[#E8DCC8] bg-white'}`}>

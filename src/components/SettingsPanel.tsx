@@ -63,7 +63,7 @@ export default function SettingsPanel({ onClose }: Props) {
 
         <div className="flex flex-1 overflow-hidden">
           {/* 左侧标签面板 */}
-          <div className={`w-[280px] border-r flex flex-col ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#FBF7EF] border-[#E8DCC8]'}`}>
+          <div className={`w-[280px] border-r flex-col hidden md:flex ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#FBF7EF] border-[#E8DCC8]'}`}>
             <div className={`px-6 py-5 border-b ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
               <div className={`font-semibold text-[16px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>系统设置</div>
               <div className={`text-[12px] mt-1 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>配置主题、导出与API</div>
@@ -101,10 +101,28 @@ export default function SettingsPanel({ onClose }: Props) {
           </div>
 
           {/* 右侧内容区 */}
-          <div className={`flex-1 p-8 overflow-y-auto ${isDark ? 'bg-[#252525]' : 'bg-[#EAE5D9]'}`}>
+          <div className={`flex-1 p-4 md:p-8 overflow-y-auto ${isDark ? 'bg-[#252525]' : 'bg-[#EAE5D9]'}`}>
             <div className="max-w-2xl">
+              {/* 移动端标签切换栏 */}
+              <div className="flex md:hidden gap-2 mb-4 overflow-x-auto">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex-1 px-4 py-3 rounded-xl text-sm font-medium transition-all min-h-[44px] whitespace-nowrap flex items-center gap-2 justify-center ${
+                      activeTab === tab.id
+                        ? 'bg-[#C43A31] text-white'
+                        : isDark ? 'bg-[#3D3D3D] text-[#C0B098]' : 'bg-[#F5EFE0] text-text-secondary'
+                    }`}
+                  >
+                    <i className={`${TAB_ICONS[tab.id]}`}></i>
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
               {/* 内容标题栏 */}
-              <div className={`rounded-xl px-8 py-5 mb-6 ${isDark ? 'bg-[#2D2D2D] border border-[#3D3D3D]' : 'bg-[#FDF5E6]'}`}>
+              <div className={`rounded-xl p-4 md:p-8 py-5 mb-6 ${isDark ? 'bg-[#2D2D2D] border border-[#3D3D3D]' : 'bg-[#FDF5E6]'}`}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[#C43A31] flex items-center justify-center text-white">
                     <i className={`text-xl ${HEADER_ICONS[activeTab].icon}`}></i>

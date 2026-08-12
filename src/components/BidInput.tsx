@@ -64,7 +64,7 @@ export default function BidInput() {
           <button
             key={unit.id}
             onClick={() => setActiveUnitId(unit.id === activeUnitId ? null : unit.id)}
-            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl min-w-[140px] transition-all border-2 ${
+            className={`flex flex-col items-center justify-center px-4 py-3 rounded-xl min-w-[120px] sm:min-w-[140px] transition-all border-2 flex-1 sm:flex-none ${
               unit.id === activeUnitId
                 ? 'bg-[#C43A31] text-white border-[#C43A31] shadow-sm'
                 : isDark
@@ -116,7 +116,7 @@ export default function BidInput() {
             {bidUnits.map((unit) => (
               <div
                 key={unit.id}
-                className={`flex items-center gap-3 p-4 rounded-xl border transition-colors ${
+                className={`flex items-center gap-3 p-4 rounded-xl border transition-colors flex-col sm:flex-row ${
                   unit.id === activeUnitId
                     ? isDark
                       ? 'bg-[#252525] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20'
@@ -131,19 +131,21 @@ export default function BidInput() {
                   value={unit.name}
                   onChange={(e) => handleChange(unit.id, 'name', e.target.value)}
                   placeholder="单位名称"
-                  className={`input-field flex-1 ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
+                  className={`input-field w-full sm:flex-1 ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                 />
-                <input
-                  type="number"
-                  value={unit.price}
-                  onChange={(e) => handleChange(unit.id, 'price', parseFloat(e.target.value) || 0)}
-                  placeholder="报价金额"
-                  className={`input-field w-[200px] text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
-                />
-                <span className={`text-sm font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>元</span>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <input
+                    type="number"
+                    value={unit.price}
+                    onChange={(e) => handleChange(unit.id, 'price', parseFloat(e.target.value) || 0)}
+                    placeholder="报价金额"
+                    className={`input-field w-full sm:w-[200px] text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
+                  />
+                  <span className={`text-sm font-medium whitespace-nowrap ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>元</span>
+                </div>
                 <button
                   onClick={() => removeBidUnit(unit.id)}
-                  className="px-4 py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm font-medium hover:bg-[#FFE0DC] transition-colors flex items-center gap-1"
+                  className="px-4 py-3 sm:py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm font-medium hover:bg-[#FFE0DC] transition-colors flex items-center gap-1 min-h-[44px] w-full sm:w-auto justify-center"
                   aria-label="删除"
                 >
                   <i className="ri-delete-bin-line"></i>
@@ -156,10 +158,10 @@ export default function BidInput() {
       </div>
 
       {/* 快捷操作区 */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
         <button
           onClick={() => setShowRandomModal(true)}
-          className={`px-5 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${
+          className={`px-5 py-3 sm:py-2 rounded-lg text-sm flex items-center gap-2 min-h-[44px] transition-colors ${
             isDark
               ? 'bg-[#2D2D2D] border border-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4] hover:border-[#C43A31]/50'
               : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-[#C43A31] hover:border-[#C43A31]'
@@ -170,7 +172,7 @@ export default function BidInput() {
         </button>
         <button
           onClick={() => openScoreModal()}
-          className={`px-5 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${
+          className={`px-5 py-3 sm:py-2 rounded-lg text-sm flex items-center gap-2 min-h-[44px] transition-colors ${
             isDark
               ? 'bg-[#2D2D2D] border border-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4] hover:border-[#C43A31]/50'
               : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-[#C43A31] hover:border-[#C43A31]'
@@ -181,7 +183,7 @@ export default function BidInput() {
         </button>
         <button
           onClick={clearBidUnits}
-          className="px-5 py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm hover:bg-[#FFE0DC] transition-colors flex items-center gap-2"
+          className="px-5 py-3 sm:py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm hover:bg-[#FFE0DC] transition-colors flex items-center gap-2 min-h-[44px]"
         >
           <i className="ri-delete-bin-line"></i>
           清空所有
@@ -191,7 +193,7 @@ export default function BidInput() {
       {/* 随机厂商弹窗 */}
       {showRandomModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowRandomModal(false)}>
-          <div className={`rounded-xl p-6 w-96 max-h-[80vh] overflow-y-auto ${isDark ? 'bg-[#2D2D2D]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
+          <div className={`rounded-xl p-6 w-full max-w-md mx-4 sm:mx-auto mobile-modal sm:rounded-xl sm:max-w-md ${isDark ? 'bg-[#2D2D2D]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div>
                 <span className={`font-semibold text-lg ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>随机厂商</span>
@@ -249,7 +251,7 @@ export default function BidInput() {
       {/* 报价解析 / 测算得分弹窗 */}
       {showScoreModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowScoreModal(false)}>
-          <div className={`rounded-xl p-6 w-[720px] max-h-[80vh] overflow-y-auto ${isDark ? 'bg-[#2D2D2D]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
+          <div className={`rounded-xl p-6 w-full max-w-[720px] mx-4 sm:mx-auto max-h-[80vh] overflow-y-auto mobile-modal sm:rounded-xl sm:max-w-[720px] ${isDark ? 'bg-[#2D2D2D]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div>
                 <span className={`font-semibold text-lg ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>总价计算</span>

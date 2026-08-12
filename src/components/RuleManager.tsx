@@ -68,7 +68,7 @@ export default function RuleManager() {
             <button
               key={rule.id}
               onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
-              className={`relative p-5 rounded-xl border-2 text-left transition-all duration-200 w-[292px] ${
+              className={`relative p-5 rounded-xl border-2 text-left transition-all duration-200 w-full sm:w-[292px] flex-shrink-0 sm:flex-shrink ${
                 isActive
                   ? 'border-[#C43A31] bg-white shadow-sm'
                   : isDark

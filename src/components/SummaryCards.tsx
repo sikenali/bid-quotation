@@ -29,7 +29,7 @@ export default function SummaryCards({ result, includeTotalScores = false }: Pro
   const allCards = [...cards, ...extraCards];
 
   return (
-    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${allCards.length}, minmax(0, 1fr))` }}>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {allCards.map((card) => (
         <div key={card.key} className={`rounded-xl p-5 flex items-center gap-4 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
           <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${card.bg}`}>

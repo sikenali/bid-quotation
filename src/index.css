@@ -127,4 +127,15 @@
     margin-top: auto !important;
     max-height: 90vh !important;
   }
+
+  .btn-primary, .btn-secondary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .input-field {
+    min-height: 44px;
+  }
 }

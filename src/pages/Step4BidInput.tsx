@@ -36,20 +36,20 @@ export default function Step4BidInput() {
 
       <BidInput />
 
-      <div className="flex items-center justify-between pt-4">
-        <button onClick={handlePrev} className="btn-secondary">
+      <div className="flex items-start justify-between pt-4 flex-col sm:flex-row gap-3 sm:gap-0">
+        <button onClick={handlePrev} className="btn-secondary w-full sm:w-auto">
           <i className="ri-arrow-left-line"></i>
           <span>上一步</span>
         </button>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={handleTotalCalc}
-            className="px-6 py-2.5 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+            className="flex-1 sm:flex-none px-6 py-2.5 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2 min-h-[44px]"
           >
             <i className="ri-calculator-line"></i>
             <span>总价测算</span>
           </button>
-          <button onClick={handlePriceCalc} className="btn-primary">
+          <button onClick={handlePriceCalc} className="flex-1 sm:flex-none btn-primary min-h-[44px]">
             <i className="ri-bar-chart-grouped-line"></i>
             <span>报价测算</span>
           </button>
