@@ -13,7 +13,7 @@ export default function Step2Rules() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h2 className="text-[28px] font-semibold text-text">判定规则</h2>
+        <h2 className="text-[28px] font-semibold text-text">Valid Rules</h2>
         <p className="text-text-secondary text-[14px]">配置有效投标判定规则，按区间从上到下命中执行</p>
       </div>
 

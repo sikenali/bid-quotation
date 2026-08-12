@@ -20,7 +20,7 @@ export default function Step3Deduction() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h2 className="text-[28px] font-semibold text-text">扣分规则</h2>
+        <h2 className="text-[28px] font-semibold text-text">Deduction Rules</h2>
         <p className="text-text-secondary text-[14px]">配置报价偏离基准价的扣分标准</p>
       </div>
 

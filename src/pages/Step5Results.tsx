@@ -62,7 +62,6 @@ export default function Step5Results({ includeTotalScores = false }: Props) {
           </button>
         </div>
       </div>
-      <p className="text-center text-xs text-text-secondary pt-6">© {new Date().getFullYear()} 文价猩 Powered by <a href="https://lazycat.cloud/" target="_blank" className="text-primary hover:underline">LightOS</a></p>
     </div>
   );
 }
