@@ -33,7 +33,7 @@ export default function Step3Deduction() {
         </button>
         <button onClick={handleNext} className="btn-primary w-full sm:w-auto">下一步</button>
       </div>
-      <p className="text-center text-xs text-text-secondary pt-6">© {new Date().getFullYear()} 文价猩 Powered by <a href="https://lazycat.cloud/" target="_blank" className="text-primary hover:underline">LightOS</a></p>
+      <p className="text-center text-xs text-text-secondary pt-6 md:pt-3 lg:pt-6">© {new Date().getFullYear()} 文价猩 Powered by <a href="https://lazycat.cloud/" target="_blank" className="text-primary hover:underline">LightOS</a></p>
     </div>
   );
 }
