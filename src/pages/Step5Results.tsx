@@ -40,22 +40,22 @@ export default function Step5Results({ includeTotalScores = false }: Props) {
       {/* 排名表格区 */}
       <RankingTable result={calculationResult} includeTotalScores={includeTotalScores} />
 
-      <div className="flex items-center justify-between pt-4">
-        <button onClick={handlePrev} className="btn-secondary">
+      <div className="flex items-start justify-between pt-4 flex-col sm:flex-row gap-3 sm:gap-0">
+        <button onClick={handlePrev} className="btn-secondary w-full sm:w-auto">
           <i className="ri-arrow-left-line"></i>
           <span>上一步</span>
         </button>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={handleExport}
-            className="px-6 py-2.5 bg-[#F5EFE0] border border-[#E0D5C0] rounded-xl text-text-secondary hover:text-text transition-colors text-sm flex items-center gap-2"
+            className="flex-1 sm:flex-none px-6 py-2.5 bg-[#F5EFE0] border border-[#E0D5C0] rounded-xl text-text-secondary hover:text-text transition-colors text-sm flex items-center gap-2 min-h-[44px]"
           >
             <i className="ri-download-line"></i>
             <span>导出报价</span>
           </button>
           <button
             onClick={() => { setCurrentStep(4); navigate('/bids'); }}
-            className="btn-primary"
+            className="flex-1 sm:flex-none btn-primary min-h-[44px]"
           >
             <i className="ri-arrow-left-right-line"></i>
             <span>重新测算</span>
