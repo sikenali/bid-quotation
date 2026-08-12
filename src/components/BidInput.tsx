@@ -249,7 +249,7 @@ export default function BidInput() {
           <div className={`rounded-xl p-6 w-[720px] max-h-[80vh] overflow-y-auto ${isDark ? 'bg-[#2D2D2D]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <span className={`font-semibold text-lg ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>报价解析</span>
+                <span className={`font-semibold text-lg ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>总价计算</span>
                 <p className={`text-xs mt-0.5 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>价格得分自动计算，商务/技术得分可手动调整</p>
               </div>
               <button onClick={() => setShowScoreModal(false)} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
@@ -258,16 +258,16 @@ export default function BidInput() {
             </div>
 
             <div className={`rounded-xl overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
-              <table className="w-full text-sm">
+              <table className="w-full text-sm table-fixed">
                 <thead>
                   <tr className={`border-b ${isDark ? 'border-[#3D3D3D] bg-[#252525]' : 'border-[#E8DCC8] bg-white'}`}>
-                    <th className={`px-4 py-2.5 text-left font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>序号</th>
-                    <th className={`px-4 py-2.5 text-left font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>单位名称</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>报价(元)</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>价格得分</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>商务得分</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>技术得分</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>合计</th>
+                    <th className="w-12 px-4 py-2.5 text-left font-medium">序号</th>
+                    <th className="px-4 py-2.5 text-left font-medium">单位名称</th>
+                    <th className="w-28 px-4 py-2.5 text-right font-medium">报价(元)</th>
+                    <th className="w-20 px-4 py-2.5 text-right font-medium">价格得分</th>
+                    <th className="w-20 px-4 py-2.5 text-right font-medium">商务得分</th>
+                    <th className="w-20 px-4 py-2.5 text-right font-medium">技术得分</th>
+                    <th className="w-20 px-4 py-2.5 text-right font-medium">合计</th>
                   </tr>
                 </thead>
                 <tbody>
