@@ -2,17 +2,6 @@ import React, { useState } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { ValidRule } from '../types';
 
-function getRuleIcon(action: ValidRule['action']) {
-  const map: Record<string, string> = {
-    trim_percent: 'ri-filter-line',
-    remove_highest_n: 'ri-arrow-up-circle-line',
-    remove_lowest_n: 'ri-arrow-down-circle-line',
-    nth_lowest: 'ri-order-play-line',
-    direct: 'ri-check-line',
-  };
-  return map[action] || 'ri-settings-line';
-}
-
 function DiceDots({ count }: { count: number }) {
   const dots = count >= 6 ? 6 : count;
   const grid: Record<number, [number, number][]> = {
@@ -71,7 +60,7 @@ export default function RuleManager() {
             <button
               key={rule.id}
               onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
-              className={`relative p-5 rounded-xl border-2 text-left transition-all duration-200 ${
+              className={`relative p-5 rounded-xl border-2 text-left transition-all duration-200 w-[292px] ${
                 isActive
                   ? 'border-[#C43A31] bg-white shadow-sm'
                   : isDark
@@ -88,7 +77,7 @@ export default function RuleManager() {
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
                   isActive ? 'bg-[#FFF0ED]' : isDark ? 'bg-[#3A3A3A]' : 'bg-[#F0E8D5]'
                 }`}>
-                  <i className={`${getRuleIcon(rule.action)} text-[20px] ${isActive ? 'text-[#C43A31]' : isDark ? 'text-[#A89880]' : 'text-[#5C4033]'}`}></i>
+                  <DiceDots count={displayCount} />
                 </div>
                 <div className="flex flex-col">
                   <span className={`font-semibold text-[15px] ${isActive ? 'text-[#C43A31]' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
