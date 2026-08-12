@@ -104,18 +104,18 @@ export default function SettingsPanel({ onClose }: Props) {
           <div className={`flex-1 p-4 md:p-8 overflow-y-auto ${isDark ? 'bg-[#252525]' : 'bg-[#EAE5D9]'}`}>
             <div className="max-w-2xl">
               {/* 移动端标签切换栏 */}
-              <div className="flex md:hidden gap-2 mb-4 overflow-x-auto">
+              <div className="flex md:hidden gap-2 mb-4">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex-1 px-4 py-3 rounded-xl text-sm font-medium transition-all min-h-[44px] whitespace-nowrap flex items-center gap-2 justify-center ${
+                    className={`flex-1 px-2 py-2.5 rounded-xl text-[11px] font-medium transition-all min-h-[36px] flex items-center gap-1 justify-center ${
                       activeTab === tab.id
                         ? 'bg-[#C43A31] text-white'
                         : isDark ? 'bg-[#3D3D3D] text-[#C0B098]' : 'bg-[#F5EFE0] text-text-secondary'
                     }`}
                   >
-                    <i className={`${TAB_ICONS[tab.id]}`}></i>
+                    <i className={`${TAB_ICONS[tab.id]} text-sm`}></i>
                     {tab.label}
                   </button>
                 ))}

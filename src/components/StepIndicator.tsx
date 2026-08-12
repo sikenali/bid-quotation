@@ -36,7 +36,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
                 {isDone ? (
                   <i className="ri-check-line text-white text-[16px]"></i>
                 ) : (
-                  <span className={`text-sm font-medium ${
+                  <span className={`text-[11px] sm:text-sm font-medium ${
                     isActive ? 'text-white' : isDark ? 'text-[#C0B098]' : 'text-text-secondary'
                   }`}>
                     {stepNum}
