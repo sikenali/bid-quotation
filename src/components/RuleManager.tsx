@@ -39,7 +39,7 @@ export default function RuleManager() {
     const newRule: ValidRule = {
       id: crypto.randomUUID(),
       minCount: nextMin,
-      maxCount: -1,
+      maxCount: nextMin >= 7 ? 10 : -1,
       action: 'trim_percent',
       params: { trimPercent: 20 },
     };
@@ -52,8 +52,9 @@ export default function RuleManager() {
       <div className="flex flex-wrap gap-3">
         {validRules.map((rule, index) => {
           const isActive = rule.id === activeRuleId;
-          const capped = rule.maxCount === -1 && rule.minCount >= 7;
-          const displayCount = capped ? 6 : (rule.maxCount === -1 ? 6 : Math.min(rule.minCount, 6));
+          const isCappedRule = rule.maxCount === -1 && rule.minCount >= 7;
+          const isFixedRange = rule.minCount >= 7 && rule.maxCount === 10;
+          const displayCount = isCappedRule || isFixedRange ? 6 : (rule.maxCount === -1 ? 6 : Math.min(rule.minCount, 6));
           return (
             <button
               key={rule.id}
@@ -82,14 +83,14 @@ export default function RuleManager() {
                     规则{index + 1}
                   </span>
                   <span className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                    {capped ? `大于${rule.minCount}-10` : rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
+                    {isCappedRule ? `≥${rule.minCount}家` : isFixedRange ? `${rule.minCount}~${rule.maxCount}家` : rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
                   </span>
                 </div>
               </div>
             </button>
           );
         })}
-        {!isCappedRange && (
+        {!isCappedRange && !isFixedRange && (
           <button
             onClick={addNewRule}
             className={`min-w-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
@@ -151,6 +152,8 @@ function RuleRow({
   onRemove: () => void;
 }) {
   const isCapped = rule.maxCount === -1 && rule.minCount >= 7;
+  const isFixedRange = rule.minCount >= 7 && rule.maxCount === 10;
+  const showCappedBadge = isCapped || isFixedRange;
   return (
     <div className={`rounded-xl border transition-all ${
       isActive
@@ -184,7 +187,7 @@ function RuleRow({
           />
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>家时</span>
           {isLocked && <span className="text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
-          {isCapped && <span className={`text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
+          {showCappedBadge && <span className={`text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
         </div>
         <div className="ml-auto">
           <button
