@@ -3,6 +3,7 @@ import { useConfigStore } from '../stores/configStore';
 
 export default function ThemeSelector() {
   const { theme, setTheme } = useConfigStore();
+  const isDark = theme === 'dark';
 
   return (
     <div className="space-y-4">
@@ -35,8 +36,8 @@ export default function ThemeSelector() {
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gray-800 border border-gray-600 flex items-center justify-center"><i className="ri-moon-clear-line text-xl text-indigo-300"></i></div>
           <div>
-            <div className="font-semibold text-text dark:text-white">深色主题</div>
-            <div className="text-text-secondary text-sm dark:text-gray-400">暗色配色，夜间使用</div>
+            <div className={`font-semibold ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>深色主题</div>
+            <div className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>暗色配色，夜间使用</div>
           </div>
           {theme === 'dark' && (
             <div className="ml-auto w-5 h-5 rounded-full bg-[#C43A31] flex items-center justify-center">

@@ -11,7 +11,7 @@ interface Props {
 
 export default function Step5Results({ includeTotalScores = false }: Props) {
   const navigate = useNavigate();
-  const { calculationResult, setCurrentStep, exportFormat } = useConfigStore();
+  const { calculationResult, setCurrentStep, exportFormat, unitScores } = useConfigStore();
 
   if (!calculationResult) {
     return (
@@ -24,7 +24,9 @@ export default function Step5Results({ includeTotalScores = false }: Props) {
     );
   }
 
-  const handleExport = () => exportFormat === 'md' ? exportMarkdown(calculationResult) : exportCSV(calculationResult);
+  const handleExport = () => exportFormat === 'md'
+    ? exportMarkdown(calculationResult, includeTotalScores ? unitScores : undefined)
+    : exportCSV(calculationResult, includeTotalScores ? unitScores : undefined);
   const handlePrev = () => { setCurrentStep(4); navigate('/bids'); };
 
   return (
