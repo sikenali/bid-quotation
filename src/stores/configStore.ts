@@ -39,7 +39,7 @@ interface ConfigState extends BidConfig {
 
 const defaultConfig = createDefaultConfig();
 
-function getAlgorithmDeduction(algorithm: Algorithm): Partial<DeductionParams> {
+function getAlgorithmDeduction(algorithm: Algorithm): DeductionParams {
   switch (algorithm) {
     case 'low_price_priority':
     case 'conventional_method':
@@ -73,7 +73,7 @@ export const useConfigStore = create<ConfigState>()(
     (set) => ({
       algorithm: defaultConfig.algorithm,
       validRules: defaultConfig.validRules,
-      deduction: getAlgorithmDeduction(defaultConfig.algorithm) as DeductionParams,
+          deduction: getAlgorithmDeduction(defaultConfig.algorithm),
       bidUnits: [...defaultBidUnits],
       theme: 'light' as const,
       exportFormat: 'csv' as const,
