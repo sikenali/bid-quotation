@@ -164,72 +164,54 @@ export default function SettingsPanel({ onClose }: Props) {
                 )}
 
                 {activeTab === 'export' && (
-                  <div className="space-y-6">
-                    {/* 测算结果导出格式选择 — 始终显示 */}
-                    <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
-                      <div className="space-y-3">
-                        {[
-                          {
-                            id: 'csv' as const,
-                            label: 'CSV 格式',
-                            desc: 'Excel 表格直接打开，支持中文',
-                            icon: (
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                <path d="M4 4h10l4 4v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm9 3V5.5L16.5 7H13z"/>
-                              </svg>
-                            ),
-                          },
-                          {
-                            id: 'md' as const,
-                            label: 'Markdown 格式',
-                            desc: '表格渲染友好，适合文档嵌入',
-                            icon: (
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                <path d="M3 3h18v2H3V3zm0 8h18v2H3v-2zm0 4h18v2H3v-2zm0-8h2v8H3v-8z"/>
-                              </svg>
-                            ),
-                          },
-                        ].map((opt) => (
-                          <div
-                            key={opt.id}
-                            className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${
-                              exportFormat === opt.id
-                                ? isDark
-                                  ? 'border-[#C43A31] bg-[#C43A31]/10'
-                                  : 'border-[#C43A31] bg-[#FFF0ED]'
-                                : isDark
-                                  ? 'border-[#3A3A3A] bg-[#1A1A1A] hover:border-[#C43A31]/50'
-                                  : 'border-[#E8DCC8] bg-white hover:border-[#C43A31]/50'
-                            }`}
-                            onClick={() => setExportFormat(opt.id)}
-                          >
-                            <div className="flex items-center gap-4">
-                              <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                                exportFormat === opt.id
-                                  ? 'bg-[#C43A31] text-white'
-                                  : isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-[#FFF0ED] text-[#C43A31]'
-                              }`}>
-                                {opt.icon}
-                              </div>
-                              <div className="flex-1">
-                                <div className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
-                                <div className={`text-sm mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
-                              </div>
-                              {exportFormat === opt.id && (
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#C43A31] flex-shrink-0">
-                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                                </svg>
-                              )}
-                            </div>
+                  <div className="space-y-4">
+                    {[
+                      {
+                        id: 'csv' as const,
+                        label: 'CSV 格式',
+                        desc: 'Excel 表格直接打开，支持中文',
+                        icon: 'ri-file-text-line',
+                      },
+                      {
+                        id: 'md' as const,
+                        label: 'Markdown 格式',
+                        desc: '表格渲染友好，适合文档嵌入',
+                        icon: 'ri-markdown-line',
+                      },
+                    ].map((opt) => (
+                      <div
+                        key={opt.id}
+                        className={`p-8 rounded-xl border-2 cursor-pointer transition-all ${
+                          exportFormat === opt.id
+                            ? isDark
+                              ? 'border-[#C43A31] bg-[#2A2A2A]'
+                              : 'border-[#C43A31] bg-white'
+                            : isDark
+                              ? 'border-[#E8DCC8] bg-[#FBF7EF]'
+                              : 'border-[#E8DCC8] bg-[#FBF7EF]'
+                        }`}
+                        onClick={() => setExportFormat(opt.id)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            exportFormat === opt.id
+                              ? 'bg-[#C43A31] text-white'
+                              : isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-white border border-[#E8DCC8] text-[#C43A31]'
+                          }`}>
+                            <i className={`text-xl ${opt.icon}`}></i>
                           </div>
-                        ))}
+                          <div>
+                            <div className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
+                            <div className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
+                          </div>
+                          {exportFormat === opt.id && (
+                            <div className="ml-auto w-5 h-5 rounded-full bg-[#C43A31] flex items-center justify-center">
+                              <i className="ri-check-line text-white text-sm"></i>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      {!calculationResult && (
-                        <p className={`mt-4 text-xs text-center ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                          完成测算后将按所选格式自动导出
-                        </p>
-                      )}
-                    </div>
+                    ))}
                   </div>
                 )}
 
