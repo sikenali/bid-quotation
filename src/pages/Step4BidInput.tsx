@@ -6,7 +6,7 @@ import Step5Results from '../pages/Step5Results';
 
 export default function Step4BidInput() {
   const navigate = useNavigate();
-  const { setCurrentStep, calculate, unitScores } = useConfigStore();
+  const { setCurrentStep, calculate, unitScores, calculationResult } = useConfigStore();
   const [isCalculating, setIsCalculating] = useState(false);
 
   const handlePrev = () => { setCurrentStep(3); navigate('/deduction'); };
@@ -32,20 +32,13 @@ export default function Step4BidInput() {
   const showTotal = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('total') === '1';
   const showCalc = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('calc') === '1';
 
-  if ((showTotal || showCalc) && unitScores.length > 0) {
+  if ((showTotal || showCalc) && unitScores.length > 0 && calculationResult) {
     return <Step5Results includeTotalScores={showTotal} />;
   }
 
   if (showTotal || showCalc) {
-    return (
-      <div className="text-center py-20">
-        <p className="text-text-secondary text-lg">暂无测算数据，请先录入报价</p>
-        <button onClick={() => navigate('/bids')} className="btn-primary mt-6">
-          <i className="ri-arrow-left-line"></i>
-          <span>返回录入</span>
-        </button>
-      </div>
-    );
+    navigate('/bids');
+    return null;
   }
 
   return (
