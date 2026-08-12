@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import BidInput from '../components/BidInput';
+import ScoreInput from '../components/ScoreInput';
 
 export default function Step4BidInput() {
   const navigate = useNavigate();
-  const { setCurrentStep, calculate } = useConfigStore();
+  const { setCurrentStep, calculate, unitScores, bidUnits } = useConfigStore();
+  const [showScoreInput, setShowScoreInput] = useState(false);
 
   const handlePrev = () => { setCurrentStep(3); navigate('/step-3'); };
   const handleNext = () => {
@@ -13,6 +15,13 @@ export default function Step4BidInput() {
     calculate();
     navigate('/step-5');
   };
+  const handleTotalCalculate = () => {
+    calculate();
+    setShowScoreInput(true);
+  };
+
+  // Total score from saved unitScores
+  const totalPrice = unitScores.reduce((sum, us) => sum + us.priceScore + us.businessScore + us.technicalScore, 0);
 
   return (
     <div className="space-y-6">
@@ -23,10 +32,17 @@ export default function Step4BidInput() {
 
       <BidInput />
 
-      <div className="flex items-center justify-between pt-4">
+      <div className="flex items-center gap-3 pt-4">
         <button onClick={handlePrev} className="btn-secondary">
           <i className="ri-arrow-left-line"></i>
           <span>上一步</span>
+        </button>
+        <button
+          onClick={handleTotalCalculate}
+          className="px-6 py-2.5 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+        >
+          <i className="ri-calculator-line"></i>
+          <span>总价测算</span>
         </button>
         <button onClick={handleNext} className="btn-primary">
           <i className="ri-bar-chart-grouped-line"></i>
@@ -34,6 +50,8 @@ export default function Step4BidInput() {
         </button>
       </div>
       <p className="text-center text-xs text-text-secondary pt-6">© 2026 Powered by LightOS</p>
+
+      {showScoreInput && <ScoreInput onClose={() => setShowScoreInput(false)} />}
     </div>
   );
 }

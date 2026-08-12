@@ -36,6 +36,8 @@ export interface BidUnit {
   name: string;
   price: number;
   isValid: boolean;
+  businessScore?: number;
+  technicalScore?: number;
 }
 
 export interface BidConfig {
@@ -62,12 +64,16 @@ export interface CalcResult {
   effectiveCount: number;
   algorithmName: string;
   trimmedNames?: string[];
+  unitPriceScores?: Record<string, number>;
   rankings: Array<{
     rank: number;
     unit: BidUnit;
     deviationPercent: number;
     score: number;
     priceDiff: number;
+    businessScore?: number;
+    technicalScore?: number;
+    totalPrice?: number;
   }>;
 }
 

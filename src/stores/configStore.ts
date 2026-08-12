@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Algorithm, BidConfig, BidUnit, CalcResult, DeductionParams, ValidRule } from '../types';
+import type { Algorithm, BidConfig, BidUnit, CalcResult, DeductionParams, ValidRule, UnitScore } from '../types';
 import { createDefaultConfig, PRESET_TEMPLATES } from '../utils/templates';
 import { calculateResult } from '../utils/algorithms';
 
@@ -10,6 +10,7 @@ interface ConfigState extends BidConfig {
   exportFormat: 'csv' | 'md';
   activeRuleId: string | null;
   showAlgorithmDesc: boolean;
+  unitScores: UnitScore[];
 
   setCurrentStep: (step: number) => void;
   setAlgorithm: (algorithm: Algorithm) => void;
@@ -31,6 +32,8 @@ interface ConfigState extends BidConfig {
   setApiKey: (key: string) => void;
   setApiEndpoint: (endpoint: string) => void;
   loadTemplate: (templateId: string) => void;
+  setUnitScores: (scores: UnitScore[]) => void;
+  updateUnitScore: (unitId: string, updates: Partial<Pick<UnitScore, 'businessScore' | 'technicalScore'>>) => void;
   exportConfig: () => string;
   importConfig: (json: string) => void;
   calculate: () => void;
@@ -81,6 +84,7 @@ export const useConfigStore = create<ConfigState>()(
       calculationResult: null,
       activeRuleId: 'r2',
       showAlgorithmDesc: false,
+      unitScores: [],
       apiKey: undefined,
       apiEndpoint: 'https://api.deepseek.com/v1',
 
@@ -144,6 +148,12 @@ export const useConfigStore = create<ConfigState>()(
       setShowAlgorithmDesc: (showAlgorithmDesc) => set({ showAlgorithmDesc }),
       setApiKey: (apiKey) => set({ apiKey }),
       setApiEndpoint: (apiEndpoint) => set({ apiEndpoint }),
+      setUnitScores: (unitScores) => set({ unitScores }),
+      updateUnitScore: (unitId, updates) => set((s) => ({
+        unitScores: s.unitScores.map((us) =>
+          us.unitId === unitId ? { ...us, ...updates } : us
+        ),
+      })),
       loadTemplate: (templateId) => {
         const template = PRESET_TEMPLATES.find((t) => t.id === templateId);
         if (template) {
@@ -183,7 +193,27 @@ export const useConfigStore = create<ConfigState>()(
       calculate: () => {
         const s = useConfigStore.getState();
         const result = calculateResult(s as unknown as BidConfig);
-        set({ calculationResult: result });
+        if (result) {
+          // Build unitPriceScores from rankings
+          const unitPriceScores: Record<string, number> = {};
+          const unitScores: UnitScore[] = s.bidUnits.map((unit) => {
+            const ranking = result.rankings.find(r => r.unit.id === unit.id);
+            const priceScore = ranking ? ranking.score : 0;
+            // Find existing saved scores
+            const existing = s.unitScores.find(us => us.unitId === unit.id);
+            return {
+              id: crypto.randomUUID(),
+              unitId: unit.id,
+              priceScore,
+              businessScore: existing?.businessScore ?? 0,
+              technicalScore: existing?.technicalScore ?? 0,
+            };
+          });
+          result.unitPriceScores = unitPriceScores;
+          set({ calculationResult: result, unitScores });
+        } else {
+          set({ calculationResult: null });
+        }
       },
       reset: () => {
         set({
@@ -192,8 +222,9 @@ export const useConfigStore = create<ConfigState>()(
           deduction: getAlgorithmDeduction(defaultConfig.algorithm),
           bidUnits: [...defaultBidUnits],
           activeRuleId: 'r2',
-          showAlgorithmDesc: false,
-          currentStep: 1,
+           showAlgorithmDesc: false,
+           unitScores: [],
+           currentStep: 1,
           calculationResult: null,
         });
       },
@@ -208,6 +239,7 @@ export const useConfigStore = create<ConfigState>()(
         exportFormat: s.exportFormat,
         apiKey: s.apiKey,
         apiEndpoint: s.apiEndpoint,
+        unitScores: s.unitScores,
       }),
       onRehydrateStorage: () => (state: ConfigState | undefined) => {
         if (!state) return;
