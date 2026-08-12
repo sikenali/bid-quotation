@@ -10,28 +10,16 @@ interface Props {
 
 type Tab = 'theme' | 'export' | 'api';
 
-const SVG_ICONS: Record<string, React.ReactNode> = {
-  palette: (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-      <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-    </svg>
-  ),
-  archive: (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-      <path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.83 1H5.42l.82-1zM5 19V8h14v11H5zm7-1.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5z"/>
-    </svg>
-  ),
-  key: (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-      <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-    </svg>
-  ),
+const TAB_ICONS: Record<Tab, string> = {
+  theme: 'ri-palette-line',
+  export: 'ri-download-2-line',
+  api: 'ri-key-line',
 };
 
-const tabs: Array<{ id: Tab; label: string; subLabel: string; iconKey: string }> = [
-  { id: 'theme', label: '主题管理', subLabel: 'Theme', iconKey: 'palette' },
-  { id: 'export', label: '导出管理', subLabel: 'Export', iconKey: 'archive' },
-  { id: 'api', label: 'API 管理', subLabel: 'API Keys', iconKey: 'key' },
+const tabs: Array<{ id: Tab; label: string; subLabel: string }> = [
+  { id: 'theme', label: '主题管理', subLabel: 'Theme' },
+  { id: 'export', label: '导出管理', subLabel: 'Export' },
+  { id: 'api', label: 'API 管理', subLabel: 'API Keys' },
 ];
 
 const HEADER_ICONS: Record<Tab, { icon: string; title: string; subtitle: string }> = {
@@ -117,7 +105,7 @@ export default function SettingsPanel({ onClose }: Props) {
                   }`}
                 >
                   <div className={`flex-shrink-0 ${activeTab === tab.id ? 'text-white' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                    {SVG_ICONS[tab.iconKey]}
+                    <i className={`text-lg ${TAB_ICONS[tab.id]}`}></i>
                   </div>
                   <div className="flex-1">
                     <div className={`font-medium text-sm ${activeTab === tab.id ? 'text-white' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
