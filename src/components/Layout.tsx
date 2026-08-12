@@ -25,7 +25,7 @@ export default function Layout({ children }: Props) {
             {/* 左侧品牌 */}
             <div
               className="flex items-center gap-3 cursor-pointer select-none"
-              onClick={() => { setCurrentStep(1); navigate('/step-1'); }}
+              onClick={() => { setCurrentStep(1); navigate('/algorithm'); }}
             >
               <div className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center">
                 <i className="ri-auction-line text-white text-xl"></i>

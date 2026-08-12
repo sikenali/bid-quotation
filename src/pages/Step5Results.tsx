@@ -17,7 +17,7 @@ export default function Step5Results({ includeTotalScores = false }: Props) {
     return (
       <div className="text-center py-20">
         <p className="text-text-secondary text-lg">暂无测算结果，请先完成前面的步骤</p>
-        <button onClick={() => { setCurrentStep(1); navigate('/step-1'); }} className="btn-primary mt-6">
+        <button onClick={() => { setCurrentStep(1); navigate('/algorithm'); }} className="btn-primary mt-6">
           返回开始
         </button>
       </div>
@@ -25,7 +25,7 @@ export default function Step5Results({ includeTotalScores = false }: Props) {
   }
 
   const handleExport = () => exportFormat === 'md' ? exportMarkdown(calculationResult) : exportCSV(calculationResult);
-  const handlePrev = () => { setCurrentStep(4); navigate('/step-4'); };
+  const handlePrev = () => { setCurrentStep(4); navigate('/bids'); };
 
   return (
     <div className="space-y-6">
@@ -54,7 +54,7 @@ export default function Step5Results({ includeTotalScores = false }: Props) {
             <span>导出报价</span>
           </button>
           <button
-            onClick={() => { setCurrentStep(4); navigate('/step-4'); }}
+            onClick={() => { setCurrentStep(4); navigate('/bids'); }}
             className="btn-primary"
           >
             <i className="ri-arrow-left-right-line"></i>
