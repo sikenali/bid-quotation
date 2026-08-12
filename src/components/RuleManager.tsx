@@ -204,16 +204,5 @@ function RuleRow({
         </button>
       </div>
     </div>
-        <div className="ml-auto">
-          <button
-            onClick={onRemove}
-            className={`p-2 rounded-lg transition-colors ${isDark ? 'text-[#C0B098] hover:text-[#C43A31] hover:bg-[#2D2D2D]' : 'text-text-secondary hover:text-[#C43A31] hover:bg-[#FFF0ED]'}`}
-            aria-label="删除规则"
-          >
-            <i className="ri-close-line text-base"></i>
-          </button>
-        </div>
-      </div>
-    </div>
   );
 }
