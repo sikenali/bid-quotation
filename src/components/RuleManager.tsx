@@ -44,8 +44,10 @@ export default function RuleManager() {
         ))}
         <button
           onClick={() => addNewRule('trim_percent')}
-          className={`w-[120px] h-[52px] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors ${
-            isDark ? 'border-[#3A3A3A] text-[#A89880] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#1A1A1A]' : 'bg-[#FBF7EF] border-[#D4C4A8] hover:border-[#C43A31] hover:text-[#C43A31]'
+          className={`min-w-[120px] h-[54px] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
+            isDark
+              ? 'border-[#3A3A3A] text-[#A89880] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#1A1A1A]'
+              : 'bg-white border-[#D4C4A8] hover:border-[#C43A31]/60 hover:bg-[#FFF8F5] text-text-secondary'
           }`}
         >
           <i className="ri-add-line text-xl"></i>
@@ -117,7 +119,7 @@ function RuleRow({
         <select
           value={rule.action}
           onChange={(e) => onUpdate({ action: e.target.value as TrimAction })}
-          className="styled-select"
+          className="styled-select select-default"
         >
           {Object.entries(ACTION_LABELS).map(([k, v]) => (
             <option key={k} value={k}>{v}</option>
