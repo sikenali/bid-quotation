@@ -13,6 +13,7 @@ export default function Layout({ children }: Props) {
   const navigate = useNavigate();
   const { currentStep, theme } = useConfigStore();
   const [showSettings, setShowSettings] = useState(false);
+  const isDark = theme === 'dark';
 
   const isResultPage = currentStep === 5;
 
@@ -28,8 +29,8 @@ export default function Layout({ children }: Props) {
                 <i className="ri-file-text-line text-white text-xl"></i>
               </div>
               <div>
-                <h1 className="text-text font-semibold text-[20px] leading-tight">文价猩</h1>
-                <p className="text-text-secondary text-[11px]">BidPrice AI</p>
+                <h1 className="text-text font-semibold text-[20px] leading-tight dark:text-dark-text">文价猩</h1>
+                <p className="text-text-secondary text-[11px] dark:text-dark-text-secondary">BidPrice AI</p>
               </div>
             </div>
 
@@ -41,7 +42,7 @@ export default function Layout({ children }: Props) {
                 <>
                   <button
                     onClick={() => navigate('/step-4')}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#F5EFE0] border border-[#E0D5C0] rounded-lg text-[#5C4033] hover:bg-[#E8DCC8] transition-colors text-sm"
+                    className="flex items-center gap-2 px-4 py-2 bg-[#F5EFE0] border border-[#E0D5C0] rounded-lg text-[#5C4033] hover:bg-[#E8DCC8] transition-colors text-sm dark:bg-[#2A2A2A] dark:border-[#3A3A3A] dark:text-[#E8E0D0] dark:hover:bg-[#3A3A3A]"
                   >
                     <i className="ri-arrow-left-line text-[16px]"></i>
                     <span>返回编辑</span>
@@ -64,7 +65,7 @@ export default function Layout({ children }: Props) {
                 className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
                   showSettings
                     ? 'bg-primary text-white'
-                    : 'bg-card border border-border text-text-secondary hover:bg-border-light'
+                    : 'bg-card border border-border text-text-secondary hover:bg-border-light dark:bg-dark-card dark:border-dark-border dark:text-dark-text-secondary dark:hover:bg-dark-border'
                 }`}
                 aria-label="设置"
               >

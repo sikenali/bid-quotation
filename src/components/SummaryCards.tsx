@@ -1,5 +1,6 @@
 import React from 'react';
 import { CalcResult } from '../types';
+import { useConfigStore } from '../stores/configStore';
 
 interface Props {
   result: CalcResult;
@@ -13,15 +14,18 @@ const cards = [
 ];
 
 export default function SummaryCards({ result }: Props) {
+  const { theme } = useConfigStore();
+  const isDark = theme === 'dark';
+
   return (
     <div className="grid grid-cols-4 gap-4">
       {cards.map((card) => (
-        <div key={card.key} className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-xl p-5 flex items-center gap-4">
+        <div key={card.key} className={`rounded-xl p-5 flex items-center gap-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
           <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${card.bg}`}>
             <i className={`text-2xl ${card.iconFill}`}></i>
           </div>
           <div>
-            <div className="text-[#8B7355] text-[12px]">{card.label}</div>
+            <div className={`text-[12px] ${isDark ? 'text-[#A89880]' : 'text-[#8B7355]'}`}>{card.label}</div>
             <div className={`font-bold text-[22px] ${card.color}`}>
               {card.key === 'algorithmName' ? result[card.key] : result[card.key]?.toLocaleString('zh-CN', { maximumFractionDigits: 2 })}
             </div>

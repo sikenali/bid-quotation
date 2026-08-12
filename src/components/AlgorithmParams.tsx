@@ -13,9 +13,11 @@ export function AlgorithmParams() {
     setRemoveHighestN, setNthLowest,
     setQ1Weight, setK1, setK2, setMaxPrice, setCustomBasePrice,
     setDeduction, setValidRules,
+    theme,
   } = useConfigStore();
   const [isParsing, setIsParsing] = useState(false);
   const [parseError, setParseError] = useState('');
+  const isDark = theme === 'dark';
 
   const handleParse = async () => {
     const textarea = document.querySelector('textarea') as HTMLTextAreaElement | null;
@@ -62,11 +64,11 @@ export function AlgorithmParams() {
   };
 
   return (
-    <div className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-2xl p-6 space-y-5">
+    <div className={`rounded-2xl p-6 space-y-5 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
       {/* 装饰条 */}
       <div className="flex items-center gap-5">
-        <div className="w-1.5 h-4.5 bg-[#D4C4A8] rounded-[3px] flex-shrink-0" />
-        <h3 className="font-semibold text-text text-[15px]">
+        <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
+        <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
           {algorithm === 'trimmed_mean' && '去极值平均法 · 参数配置'}
           {algorithm === 'remove_highest' && '去最高平均法 · 参数配置'}
           {algorithm === 'second_lowest' && '次低报价法 · 参数配置'}
@@ -81,7 +83,7 @@ export function AlgorithmParams() {
 
       {/* K值设置 */}
       <div className="flex items-center gap-4">
-        <span className="text-text-secondary text-[13px]">启用 K 值调整</span>
+        <span className={`text-[13px] ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>启用 K 值调整</span>
         <button
           onClick={() => setKEnabled(!kEnabled)}
           className={`relative w-[18px] h-[18px] rounded-[4px] transition-colors flex-shrink-0 ${
@@ -106,7 +108,7 @@ export function AlgorithmParams() {
             max="2"
             value={kValue}
             onChange={(e) => setKValue(parseFloat(e.target.value) || 0)}
-            className="input-field w-full text-sm"
+            className={`input-field w-full text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
           />
         </div>
       )}
@@ -123,7 +125,7 @@ export function AlgorithmParams() {
               max="50"
               value={trimHighPercent}
               onChange={(e) => setTrimHighPercent(parseFloat(e.target.value) || 0)}
-              className="input-field w-full text-sm"
+              className={`input-field w-full text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
             />
           </div>
           <div>
@@ -135,7 +137,7 @@ export function AlgorithmParams() {
               max="50"
               value={trimLowPercent}
               onChange={(e) => setTrimLowPercent(parseFloat(e.target.value) || 0)}
-              className="input-field w-full text-sm"
+              className={`input-field w-full text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
             />
           </div>
         </div>
@@ -185,7 +187,7 @@ export function AlgorithmParams() {
               max="100"
               value={q1Weight}
               onChange={(e) => setQ1Weight(parseFloat(e.target.value) || 0)}
-              className="input-field w-full text-sm"
+              className={`input-field w-full text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
@@ -198,7 +200,7 @@ export function AlgorithmParams() {
                 max="2"
                 value={k1}
                 onChange={(e) => setK1(parseFloat(e.target.value) || 0)}
-                className="input-field w-full text-sm"
+                className={`input-field w-full text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
               />
             </div>
             <div>
@@ -210,7 +212,7 @@ export function AlgorithmParams() {
                 max="2"
                 value={k2}
                 onChange={(e) => setK2(parseFloat(e.target.value) || 0)}
-                className="input-field w-full text-sm"
+                className={`input-field w-full text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
               />
             </div>
           </div>
@@ -222,7 +224,7 @@ export function AlgorithmParams() {
               min="0"
               value={maxPrice}
               onChange={(e) => setMaxPrice(parseFloat(e.target.value) || 0)}
-              className="input-field w-full text-sm"
+              className={`input-field w-full text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
             />
           </div>
         </>

@@ -5,16 +5,19 @@ interface Props {
   option: AlgorithmOption;
   isSelected: boolean;
   onSelect: () => void;
+  isDark?: boolean;
 }
 
-export function AlgorithmCard({ option, isSelected, onSelect }: Props) {
+export function AlgorithmCard({ option, isSelected, onSelect, isDark = false }: Props) {
   return (
     <button
       onClick={onSelect}
       className={`relative p-5 rounded-xl border-2 text-left transition-all duration-200 ${
         isSelected
           ? 'border-[#C43A31] bg-white shadow-sm'
-          : 'border-[#E8DCC8] bg-[#FBF7EF] hover:border-[#C43A31]/40'
+          : isDark
+            ? 'border-[#3A3A3A] bg-[#2A2A2A] hover:border-[#C43A31]/40'
+            : 'border-[#E8DCC8] bg-[#FBF7EF] hover:border-[#C43A31]/40'
       }`}
     >
       {isSelected && (
@@ -24,15 +27,15 @@ export function AlgorithmCard({ option, isSelected, onSelect }: Props) {
       )}
       <div className="flex items-center gap-3 mb-2">
         <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-          isSelected ? 'bg-[#FFF0ED]' : 'bg-[#F0E8D5]'
+          isSelected ? 'bg-[#FFF0ED]' : isDark ? 'bg-[#3A3A3A]' : 'bg-[#F0E8D5]'
         }`}>
-          <i className={`${option.icon} text-[20px] ${isSelected ? 'text-[#C43A31]' : 'text-[#5C4033]'}`}></i>
+          <i className={`${option.icon} text-[20px] ${isSelected ? 'text-[#C43A31]' : isDark ? 'text-[#A89880]' : 'text-[#5C4033]'}`}></i>
         </div>
         <div className="flex flex-col">
-          <div className={`font-semibold text-[15px] ${isSelected ? 'text-[#C43A31]' : 'text-text'}`}>
+          <div className={`font-semibold text-[15px] ${isSelected ? 'text-[#C43A31]' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
             {option.name}
           </div>
-          <div className="text-text-secondary text-[11px] leading-tight mt-0.5">
+          <div className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
             {option.shortDesc || option.description}
           </div>
         </div>

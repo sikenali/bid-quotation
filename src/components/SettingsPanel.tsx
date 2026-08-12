@@ -15,7 +15,7 @@ const tabs: Array<{ id: Tab; label: string; subLabel: string; icon: string }> = 
 ];
 
 export default function SettingsPanel({ onClose }: Props) {
-  const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, exportConfig, importConfig } = useConfigStore();
+  const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, exportConfig, importConfig, theme } = useConfigStore();
   const [activeTab, setActiveTab] = useState<Tab>('theme');
 
   useEffect(() => {
@@ -56,29 +56,31 @@ export default function SettingsPanel({ onClose }: Props) {
     return configs[tab];
   };
 
+  const isDark = theme === 'dark';
+
   return (
     <div className="fixed inset-0 z-50 flex" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50" />
-      <div className="relative ml-auto w-full max-w-4xl bg-bg flex flex-col" onClick={(e) => e.stopPropagation()}>
+      <div className={`relative ml-auto w-full max-w-4xl flex flex-col ${isDark ? 'bg-[#2A2A2A]' : 'bg-[#FBF7EF]'}`}>
         {/* 顶部导航栏 */}
-        <div className="flex items-center justify-between px-8 py-5 bg-[#FBF7EF] border-b border-[#E8DCC8]">
+        <div className={`flex items-center justify-between px-8 py-5 border-b ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#FBF7EF] border-[#E8DCC8]'}`}>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-[#C43A31] flex items-center justify-center text-white">
               <i className="ri-settings-3-line text-xl text-white"></i>
             </div>
-            <span className="font-semibold text-text text-lg">设置</span>
+            <span className={`font-semibold text-lg ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>设置</span>
           </div>
-          <button onClick={onClose} className="text-textSecondary hover:text-text transition-colors">
+          <button onClick={onClose} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
             <i className="ri-close-line text-xl"></i>
           </button>
         </div>
 
         <div className="flex flex-1 overflow-hidden">
           {/* 左侧标签面板 */}
-          <div className="w-[280px] bg-[#FBF7EF] border-r border-[#E8DCC8] flex flex-col">
-            <div className="px-6 py-5 border-b border-[#E8DCC8]">
-              <div className="font-semibold text-text text-[16px]">系统设置</div>
-              <div className="text-text-secondary text-[12px] mt-1">配置主题、导出与API</div>
+          <div className={`w-[280px] border-r flex flex-col ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#FBF7EF] border-[#E8DCC8]'}`}>
+            <div className={`px-6 py-5 border-b ${isDark ? 'border-[#3A3A3A]' : 'border-[#E8DCC8]'}`}>
+              <div className={`font-semibold text-[16px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>系统设置</div>
+              <div className={`text-[12px] mt-1 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>配置主题、导出与API</div>
             </div>
             <div className="p-4 flex flex-col gap-2">
               {tabs.map((tab) => (
@@ -88,17 +90,19 @@ export default function SettingsPanel({ onClose }: Props) {
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
                     activeTab === tab.id
                       ? 'bg-[#C43A31] text-white'
-                      : 'bg-[#F5EFE0] text-textSecondary hover:bg-white hover:text-text'
+                      : isDark
+                        ? 'bg-[#3A3A3A] text-[#A89880] hover:bg-[#2A2A2A] hover:text-[#E8E0D0]'
+                        : 'bg-[#F5EFE0] text-text-secondary hover:bg-white hover:text-text'
                   }`}
                 >
-                  <i className={`text-lg ${activeTab === tab.id ? 'text-white' : 'text-text-secondary'}`}>
+                  <i className={`text-lg ${activeTab === tab.id ? 'text-white' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
                     {tab.icon}
                   </i>
                   <div className="flex-1">
-                    <div className={`font-medium text-sm ${activeTab === tab.id ? 'text-white' : 'text-text'}`}>
+                    <div className={`font-medium text-sm ${activeTab === tab.id ? 'text-white' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
                       {tab.label}
                     </div>
-                    <div className={`text-[11px] ${activeTab === tab.id ? 'text-white/75' : 'text-text-secondary'}`}>
+                    <div className={`text-[11px] ${activeTab === tab.id ? 'text-white/75' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
                       {tab.subLabel}
                     </div>
                   </div>
@@ -111,17 +115,17 @@ export default function SettingsPanel({ onClose }: Props) {
           </div>
 
           {/* 右侧内容区 */}
-          <div className="flex-1 bg-[#EAE5D9] p-8 overflow-y-auto">
+          <div className={`flex-1 p-8 overflow-y-auto ${isDark ? 'bg-[#1A1A1A]' : 'bg-[#EAE5D9]'}`}>
             <div className="max-w-2xl">
               {/* 内容标题栏 */}
-              <div className="bg-[#FDF5E6] rounded-xl px-8 py-5 mb-6">
+              <div className={`rounded-xl px-8 py-5 mb-6 ${isDark ? 'bg-[#2A2A2A] border border-[#3A3A3A]' : 'bg-[#FDF5E6]'}`}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[#C43A31] flex items-center justify-center text-white">
                     <i className={`text-xl ${getContentHeader(activeTab).icon}`}></i>
                   </div>
                   <div>
-                    <h2 className="font-semibold text-text text-[18px]">{getContentHeader(activeTab).title}</h2>
-                    <p className="text-text-secondary text-sm">{getContentHeader(activeTab).subtitle}</p>
+                    <h2 className={`font-semibold text-[18px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{getContentHeader(activeTab).title}</h2>
+                    <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{getContentHeader(activeTab).subtitle}</p>
                   </div>
                 </div>
               </div>
@@ -129,7 +133,7 @@ export default function SettingsPanel({ onClose }: Props) {
               {/* 设置内容区 */}
               <div className="space-y-6">
                 {activeTab === 'theme' && (
-                  <div className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-2xl p-8">
+                  <div className={`rounded-2xl p-8 ${isDark ? 'bg-[#2A2A2A] border border-[#3A3A3A]' : 'bg-[#F5EFE0] border border-[#E8DCC8]'}`}>
                     <ThemeSelector />
                   </div>
                 )}
@@ -140,19 +144,19 @@ export default function SettingsPanel({ onClose }: Props) {
                       <span><i className="ri-download-2-line"></i></span>
                       <span>导出配置（JSON）</span>
                     </button>
-                    <div className="bg-white rounded-xl p-4 border border-[#E8DCC8]">
-                      <label className="block text-text-secondary text-sm mb-2">导入配置</label>
+                    <div className={`rounded-xl p-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]'}`}>
+                      <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>导入配置</label>
                       <input
                         type="file"
                         accept=".json"
                         onChange={handleImport}
-                        className="block w-full text-sm text-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#C43A31] file:text-white hover:file:bg-[#A83028] cursor-pointer"
+                        className="block w-full text-sm cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#C43A31] file:text-white hover:file:bg-[#A83028]"
                       />
                     </div>
                     <button
                       onClick={() => {
                         if (confirm('确定要清空所有数据吗？此操作不可恢复。')) {
-                          localStorage.removeItem('bid-quotation-config');
+                          localStorage.removeItem('bidQuotationConfig');
                           window.location.reload();
                         }
                       }}
@@ -166,26 +170,26 @@ export default function SettingsPanel({ onClose }: Props) {
                 {activeTab === 'api' && (
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-text-secondary text-sm mb-2">API 端点</label>
+                      <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>API 端点</label>
                       <select
                         value={apiEndpoint}
                         onChange={(e) => setApiEndpoint(e.target.value)}
-                        className="input-field w-full"
+                        className="styled-select w-full"
                       >
                         <option value="https://api.deepseek.com/v1">DeepSeek (api.deepseek.com)</option>
                         <option value="https://api.ccswitch.com/v1">CCswitch (api.ccswitch.com)</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-text-secondary text-sm mb-2">API Key</label>
+                      <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>API Key</label>
                       <input
                         type="password"
                         value={apiKey || ''}
                         onChange={(e) => setApiKey(e.target.value)}
-                        className="input-field w-full"
+                        className={`input-field w-full ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
                         placeholder="sk-..."
                       />
-                      <p className="text-text-secondary text-xs mt-2">
+                      <p className={`text-xs mt-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
                         API Key 仅保存在浏览器 localStorage，不会上传到任何服务器
                       </p>
                     </div>
@@ -194,8 +198,8 @@ export default function SettingsPanel({ onClose }: Props) {
               </div>
 
               {/* 底部按钮栏 */}
-              <div className="bg-[#FDF5E6] rounded-xl px-8 py-5 mt-6 flex items-center justify-end gap-3">
-                <button onClick={onClose} className="px-6 py-2.5 bg-[#F5EFE0] border border-[#E0D5C0] rounded-xl text-text-secondary hover:text-text transition-colors text-sm">
+              <div className={`rounded-xl px-8 py-5 mt-6 flex items-center justify-end gap-3 ${isDark ? 'bg-[#2A2A2A] border border-[#3A3A3A]' : 'bg-[#FDF5E6]'}`}>
+                <button onClick={onClose} className={`px-6 py-2.5 rounded-xl text-sm transition-colors ${isDark ? 'bg-[#3A3A3A] text-[#A89880] hover:text-[#E8E0D0]' : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-text'}`}>
                   取消
                 </button>
                 <button onClick={onClose} className="btn-primary">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { CalcResult } from '../types';
+import { useConfigStore } from '../stores/configStore';
 
 interface Props {
   result: CalcResult;
@@ -31,44 +32,46 @@ function getScoreColor(score: number, fullScore: number): string {
 }
 
 export default function RankingTable({ result }: Props) {
+  const { theme } = useConfigStore();
+  const isDark = theme === 'dark';
   const fullScore = 60;
 
   return (
-    <div className="bg-[#F5EFE0] border border-[#E8DCC8] rounded-2xl overflow-hidden">
+    <div className={`rounded-2xl overflow-hidden border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
       <div className="p-6 pt-5">
         <div className="flex items-center gap-2">
-          <div className="w-1.5 h-4.5 bg-[#D4C4A8] rounded-[3px] flex-shrink-0" />
-          <h3 className="font-semibold text-text text-[15px]">排名结果</h3>
+          <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
+          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>排名结果</h3>
         </div>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-t border-b border-[#E8DCC8] bg-white">
-              <th className="px-6 py-3 text-left text-text-secondary font-medium">排名</th>
-              <th className="px-6 py-3 text-left text-text-secondary font-medium">单位名称</th>
-              <th className="px-6 py-3 text-right text-text-secondary font-medium">报价</th>
-              <th className="px-6 py-3 text-right text-text-secondary font-medium">偏差率</th>
-              <th className="px-6 py-3 text-right text-text-secondary font-medium">得分</th>
-              <th className="px-6 py-3 text-right text-text-secondary font-medium">与基准价差</th>
+            <tr className={`border-t border-b ${isDark ? 'border-[#3A3A3A] bg-[#1A1A1A]' : 'border-[#E8DCC8] bg-white'}`}>
+              <th className={`px-6 py-3 text-left font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>排名</th>
+              <th className={`px-6 py-3 text-left font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>单位名称</th>
+              <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>报价</th>
+              <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>偏差率</th>
+              <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>得分</th>
+              <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>与基准价差</th>
             </tr>
           </thead>
           <tbody>
             {result.rankings.map((item) => (
-              <tr key={item.unit.id} className={`border-b border-[#E8DCC8]/50 hover:bg-white/60 transition-colors ${getRankRowBg(item.rank)}`}>
+              <tr key={item.unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3A3A3A]/50 hover:bg-[#1A1A1A]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'} ${getRankRowBg(item.rank)}`}>
                 <td className="px-6 py-4">
                   <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full border text-sm font-semibold ${getRankBadgeClass(item.rank)}`}>
                     {item.rank}
                   </span>
                 </td>
-                <td className="px-6 py-4 font-medium text-text">{item.unit.name || '未命名'}</td>
-                <td className="px-6 py-4 text-right font-mono">{item.unit.price.toLocaleString()}</td>
-                <td className="px-6 py-4 text-right font-mono">{item.deviationPercent > 0 ? '+' : ''}{item.deviationPercent}%</td>
+                <td className={`px-6 py-4 font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{item.unit.name || '未命名'}</td>
+                <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
+                <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{item.deviationPercent > 0 ? '+' : ''}{item.deviationPercent}%</td>
                 <td className={`px-6 py-4 text-right font-semibold ${getScoreColor(item.score, fullScore)}`}>
                   {item.score}
                 </td>
-                <td className={`px-6 py-4 text-right font-mono ${item.priceDiff > 0 ? 'text-[#C43A31]' : item.priceDiff < 0 ? 'text-[#5B8C5A]' : 'text-text-secondary'}`}>
+                <td className={`px-6 py-4 text-right font-mono ${item.priceDiff > 0 ? 'text-[#C43A31]' : item.priceDiff < 0 ? 'text-[#5B8C5A]' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
                   {item.priceDiff > 0 ? '+' : ''}{item.priceDiff.toLocaleString()}
                 </td>
               </tr>
