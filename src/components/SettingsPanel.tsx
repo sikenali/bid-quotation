@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import ThemeSelector from './ThemeSelector';
 import CustomSelect from './CustomSelect';
+import { exportCSV, exportMarkdown } from '../utils/export';
 
 interface Props {
   onClose: () => void;
@@ -40,7 +41,7 @@ const HEADER_ICONS: Record<Tab, { icon: string; title: string; subtitle: string 
 };
 
 export default function SettingsPanel({ onClose }: Props) {
-  const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, exportConfig, importConfig, theme } = useConfigStore();
+  const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, exportConfig, importConfig, theme, calculationResult } = useConfigStore();
   const [activeTab, setActiveTab] = useState<Tab>('theme');
 
   useEffect(() => {
@@ -163,22 +164,110 @@ export default function SettingsPanel({ onClose }: Props) {
                 )}
 
                 {activeTab === 'export' && (
-                  <div className="space-y-4">
-                    <button onClick={handleExport} className="btn-primary w-full justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                      </svg>
-                      <span>导出配置（JSON）</span>
-                    </button>
-                    <div className={`rounded-xl p-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]'}`}>
-                      <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>导入配置</label>
-                      <input
-                        type="file"
-                        accept=".json"
-                        onChange={handleImport}
-                        className="block w-full text-sm cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#C43A31] file:text-white hover:file:bg-[#A83028]"
-                      />
+                  <div className="space-y-6">
+                    {/* 结果导出区 — 与 ThemeSelector 风格一致 */}
+                    {calculationResult ? (
+                      <>
+                        <div className={`rounded-xl p-5 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]'}`}>
+                          <div className="flex items-center gap-2 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#C43A31]">
+                              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                            </svg>
+                            <span className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>测算结果导出</span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            {[
+                              {
+                                id: 'csv',
+                                label: 'CSV 格式',
+                                desc: 'Excel / 表格软件可直接打开',
+                                icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                    <path d="M4 4h10l4 4v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm9 3V5.5L16.5 7H13zM5 19h6v-2H5v2zm0-4h12v-2H5v2zm0-4h12V9H5v2z"/>
+                                  </svg>
+                                ),
+                                active: true,
+                              },
+                              {
+                                id: 'md',
+                                label: 'Markdown 格式',
+                                desc: 'README / 文档友好，支持表格渲染',
+                                icon: (
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                    <path d="M3 3h18v2H3V3zm0 16h18v2H3v-2zm0-8h18v2H3v-2zm0-4h18v2H3V7zm0 8h8v2H3v-2z"/>
+                                  </svg>
+                                ),
+                                active: false,
+                              },
+                            ].map((opt) => (
+                              <button
+                                key={opt.id}
+                                onClick={() => {
+                                  if (opt.id === 'csv') exportCSV(calculationResult);
+                                  else exportMarkdown(calculationResult);
+                                }}
+                                className={`p-4 rounded-xl border-2 cursor-pointer transition-all text-left ${
+                                  isDark
+                                    ? 'border-[#3A3A3A] bg-[#1A1A1A] hover:border-[#C43A31]/60'
+                                    : 'border-[#E8DCC8] bg-[#FBF7EF] hover:border-[#C43A31]/50'
+                                }`}
+                              >
+                                <div className="flex items-center gap-3 mb-2">
+                                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                                    isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-[#FFF0ED] text-[#C43A31]'
+                                  }`}>
+                                    {opt.icon}
+                                  </div>
+                                  <div>
+                                    <div className={`font-semibold text-sm ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
+                                  </div>
+                                </div>
+                                <div className={`text-xs ml-13 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <div className={`rounded-xl p-8 border text-center ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 mx-auto mb-3 text-[#D4C4A8]">
+                          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                        <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>请先完成报价测算，测算结果将在此处导出</p>
+                      </div>
+                    )}
+
+                    {/* JSON 配置导入导出 */}
+                    <div className={`rounded-xl p-5 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]'}`}>
+                      <div className="flex items-center gap-2 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#C8A45C]">
+                          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/>
+                        </svg>
+                        <span className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>配置文件管理</span>
+                      </div>
+                      <div className="space-y-3">
+                        <button onClick={handleExport} className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-colors ${isDark ? 'border-[#3A3A3A] bg-[#1A1A1A] text-[#E8E0D0] hover:border-[#C43A31]/50' : 'border-[#E8DCC8] bg-[#FBF7EF] text-text hover:border-[#C43A31]/40'}`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#5B8C5A]">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                          </svg>
+                          <div className="text-left">
+                            <div className="text-sm font-medium">导出配置（JSON）</div>
+                            <div className={`text-xs ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>保存当前算法规则与参数</div>
+                          </div>
+                        </button>
+                        <div className={`rounded-xl p-4 border ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A]' : 'bg-[#FBF7EF] border-[#E8DCC8]'}`}>
+                          <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>导入配置</label>
+                          <input
+                            type="file"
+                            accept=".json"
+                            onChange={handleImport}
+                            className="block w-full text-sm cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#C43A31] file:text-white hover:file:bg-[#A83028]"
+                          />
+                        </div>
+                      </div>
                     </div>
+
+                    {/* 清空数据 */}
                     <button
                       onClick={() => {
                         if (confirm('确定要清空所有数据吗？此操作不可恢复。')) {
@@ -186,7 +275,11 @@ export default function SettingsPanel({ onClose }: Props) {
                           window.location.reload();
                         }
                       }}
-                      className="w-full py-3 rounded-xl border-2 border-red-300 text-red-500 hover:bg-red-50 transition-colors font-medium text-sm"
+                      className={`w-full py-3 rounded-xl border-2 font-medium text-sm transition-colors ${
+                        isDark
+                          ? 'border-red-500/30 text-red-400 hover:bg-red-500/10'
+                          : 'border-red-200 text-red-500 hover:bg-red-50'
+                      }`}
                     >
                       清空所有数据
                     </button>
