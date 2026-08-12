@@ -258,16 +258,16 @@ export default function BidInput() {
             </div>
 
             <div className={`rounded-xl overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
-              <table className="w-full text-sm table-fixed">
+              <table className="w-full text-xs table-fixed">
                 <thead>
                   <tr className={`border-b ${isDark ? 'border-[#3D3D3D] bg-[#252525]' : 'border-[#E8DCC8] bg-white'}`}>
-                    <th className="w-12 px-4 py-2.5 text-left font-medium">序号</th>
-                    <th className="px-4 py-2.5 text-left font-medium">单位名称</th>
-                    <th className="w-28 px-4 py-2.5 text-right font-medium">报价(元)</th>
-                    <th className="w-20 px-4 py-2.5 text-right font-medium">价格得分</th>
-                    <th className="w-20 px-4 py-2.5 text-right font-medium">商务得分</th>
-                    <th className="w-20 px-4 py-2.5 text-right font-medium">技术得分</th>
-                    <th className="w-20 px-4 py-2.5 text-right font-medium">合计</th>
+                    <th className="w-10 px-3 py-2 text-left font-medium whitespace-nowrap">序号</th>
+                    <th className="px-3 py-2 text-left font-medium whitespace-nowrap">单位名称</th>
+                    <th className="w-24 px-3 py-2 text-right font-medium whitespace-nowrap">报价(元)</th>
+                    <th className="w-16 px-3 py-2 text-right font-medium whitespace-nowrap">价格得分</th>
+                    <th className="w-16 px-3 py-2 text-right font-medium whitespace-nowrap">商务得分</th>
+                    <th className="w-16 px-3 py-2 text-right font-medium whitespace-nowrap">技术得分</th>
+                    <th className="w-16 px-3 py-2 text-right font-medium whitespace-nowrap">合计</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -279,19 +279,19 @@ export default function BidInput() {
                     const total = priceScore + businessScore + technicalScore;
                     return (
                       <tr key={unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3D3D3D]/50 hover:bg-[#252525]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'}`}>
-                        <td className={`px-4 py-3 text-center ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
-                          <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${index < 3 ? 'bg-[#C43A31]/10 text-[#C43A31]' : isDark ? 'bg-[#3D3D3D] text-[#C0B098]' : 'bg-[#F5EFE0] text-text-secondary'}`}>
+                        <td className="px-3 py-2 text-center whitespace-nowrap">
+                          <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-xs font-semibold ${index < 3 ? 'bg-[#C43A31]/10 text-[#C43A31]' : isDark ? 'bg-[#3D3D3D] text-[#C0B098]' : 'bg-[#F5EFE0] text-text-secondary'}`}>
                             {index + 1}
                           </span>
                         </td>
-                        <td className={`px-4 py-3 font-medium ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{unit.name}</td>
-                        <td className={`px-4 py-3 text-right font-mono ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
+                        <td className={`px-3 py-2 font-medium whitespace-nowrap ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{unit.name}</td>
+                        <td className={`px-3 py-2 text-right font-mono whitespace-nowrap ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                           {unit.price > 0 ? unit.price.toLocaleString() : '-'}
                         </td>
-                        <td className={`px-4 py-3 text-right font-mono font-semibold ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
+                        <td className={`px-3 py-2 text-right font-mono font-semibold whitespace-nowrap ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
                           {priceScore > 0 ? priceScore.toFixed(2) : '-'}
                         </td>
-                        <td className="px-4 py-3 text-right">
+                        <td className="px-3 py-2 text-right whitespace-nowrap">
                           <input
                             type="number"
                             step="0.1"
@@ -301,10 +301,10 @@ export default function BidInput() {
                               const val = parseFloat(e.target.value) || 0;
                               updateBidUnit(unit.id, { businessScore: val });
                             }}
-                            className={`input-field w-16 text-right text-sm ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
+                            className={`input-field w-14 text-right text-xs ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                           />
                         </td>
-                        <td className="px-4 py-3 text-right">
+                        <td className="px-3 py-2 text-right whitespace-nowrap">
                           <input
                             type="number"
                             step="0.1"
@@ -314,10 +314,10 @@ export default function BidInput() {
                               const val = parseFloat(e.target.value) || 0;
                               updateBidUnit(unit.id, { technicalScore: val });
                             }}
-                            className={`input-field w-16 text-right text-sm ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
+                            className={`input-field w-14 text-right text-xs ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                           />
                         </td>
-                        <td className={`px-4 py-3 text-right font-bold ${total > 0 ? 'text-[#C43A31]' : (isDark ? 'text-[#C0B098]' : 'text-text-secondary')}`}>
+                        <td className={`px-3 py-2 text-right font-bold whitespace-nowrap ${total > 0 ? 'text-[#C43A31]' : (isDark ? 'text-[#C0B098]' : 'text-text-secondary')}`}>
                           {total > 0 ? total.toFixed(2) : '-'}
                         </td>
                       </tr>
