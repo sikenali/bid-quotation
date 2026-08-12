@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { Algorithm, DeductionParams } from '../types';
 
@@ -46,7 +46,7 @@ interface DeductionFormProps {
 }
 
 export default function DeductionForm({ bidDocumentText = '' }: DeductionFormProps) {
-  const { deduction, setDeduction, algorithm, theme } = useConfigStore();
+  const { deduction, setDeduction, algorithm, theme, bidUnits } = useConfigStore();
   const [isDragging, setIsDragging] = useState(false);
   const isDark = theme === 'dark';
   const formula = ALGORITHM_FORMULA[algorithm];
@@ -56,6 +56,82 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
 
   const currentDeduct = deduction.deductPerHighPercent || 0;
   const currentDeductLow = deduction.deductPerLowPercent || 0;
+
+  // 示例计算数据
+  const exampleData = useMemo(() => {
+    if (!bidUnits || bidUnits.length === 0) return null;
+    const sorted = [...bidUnits].sort((a, b) => a.price - b.price);
+    const prices = sorted.map(u => u.price).filter(p => p > 0);
+    if (prices.length === 0) return null;
+
+    const fullScore = deduction.fullScore;
+
+    switch (algorithm) {
+      case 'low_price_priority': {
+        const basePrice = prices[0];
+        return {
+          title: '低价优先法示例',
+          basePrice,
+          rows: prices.map((price, i) => ({
+            name: `投标人${String.fromCharCode(65 + i)}`,
+            price,
+            score: parseFloat(((basePrice / price) * fullScore).toFixed(2)),
+          })),
+        };
+      }
+      case 'average_price': {
+        const avg = prices.reduce((s, p) => s + p, 0) / prices.length;
+        return {
+          title: '平均价计法示例',
+          basePrice: parseFloat(avg.toFixed(2)),
+          rows: prices.map((price, i) => {
+            const dev = Math.abs(avg - price) / avg;
+            const score = Math.max((1 - dev) * fullScore, deduction.minScore);
+            return {
+              name: `投标人${String.fromCharCode(65 + i)}`,
+              price,
+              score: parseFloat(score.toFixed(2)),
+            };
+          }),
+        };
+      }
+      case 'gradient_method': {
+        const top2Prices = prices.slice(0, 2);
+        const basePrice = top2Prices.length >= 2
+          ? (top2Prices[0] + top2Prices[1]) / 2
+          : top2Prices[0];
+        return {
+          title: '基准价梯度法示例',
+          basePrice: parseFloat(basePrice.toFixed(2)),
+          rows: prices.map((price, i) => {
+            const dev = Math.abs(basePrice - price) / basePrice;
+            const baseScore = (1 - dev) * fullScore;
+            const score = price > basePrice ? baseScore * 0.95 : baseScore;
+            return {
+              name: `投标人${String.fromCharCode(65 + i)}`,
+              price,
+              score: parseFloat(Math.max(score, deduction.minScore).toFixed(2)),
+              above: price > basePrice,
+            };
+          }),
+        };
+      }
+      case 'conventional_method': {
+        const avg = prices.reduce((s, p) => s + p, 0) / prices.length;
+        return {
+          title: '基准价常规法示例',
+          basePrice: parseFloat(avg.toFixed(2)),
+          rows: prices.map((price, i) => ({
+            name: `投标人${String.fromCharCode(65 + i)}`,
+            price,
+            score: parseFloat(((avg / price) * fullScore).toFixed(2)),
+          })),
+        };
+      }
+      default:
+        return null;
+    }
+  }, [algorithm, bidUnits, deduction]);
 
   return (
     <div className="space-y-6">
@@ -120,7 +196,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
           </div>
         </div>
 
-        {/* 算法评分步骤 + 公式说明 */}
+        {/* 算法评分步骤 + 示例 */}
         <div className={`rounded-lg px-4 py-3 text-xs space-y-1 ${isDark ? 'bg-[#1A1A1A] text-[#A89880]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
           {formula && formula.steps.map((step, i) => (
             <p key={i} className="flex items-start gap-2">
@@ -128,23 +204,24 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
               <span>{step}</span>
             </p>
           ))}
-          {formula && (
-            <p className="mt-2">
-              <span className={`font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{formula.title}评分：</span>
-              得分 = 满分 − |报价 − 基准价|/基准价 × 100% × 扣分值
-            </p>
-          )}
-          <p>
-            高于基准价：每高 1% 扣 {currentDeduct} 分
-            {' · '}
-            低于基准价：每低 1% 扣 {currentDeductLow} 分
-            {' · '}
-            得分不低于 {deduction.minScore} 分
-          </p>
-          {algorithm === 'gradient_method' && (
-            <p className="text-[#C43A31] font-medium mt-1">
-              梯度法附加规则：报价高于基准价时，最终得分 × 0.95（打九五折）
-            </p>
+          {exampleData && (
+            <div className="mt-3 pt-3 border-t border-[#3A3A3A]/30">
+              <p className={`font-medium mb-2 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+                {exampleData.title} · 基准价 = {exampleData.basePrice}
+              </p>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                {exampleData.rows.map((row) => (
+                  <p key={row.name} className={`flex items-center gap-2 ${row.above ? 'text-[#C43A31]' : ''}`}>
+                    <span className="w-2 h-2 rounded-full flex-shrink-0 bg-current opacity-60" />
+                    <span className="w-20 shrink-0">{row.name}</span>
+                    <span>报价 {row.price}</span>
+                    <span className="text-text-secondary">→</span>
+                    <span className="font-semibold">{row.score} 分</span>
+                    {row.above && <span className="text-[#C43A31]/70">(×0.95)</span>}
+                  </p>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       </div>
