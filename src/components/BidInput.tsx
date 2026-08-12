@@ -174,7 +174,7 @@ export default function BidInput() {
           }`}
         >
           <i className="ri-file-search-line"></i>
-          报价解析
+          总价计算
         </button>
         <button
           onClick={clearBidUnits}
@@ -188,8 +188,16 @@ export default function BidInput() {
       {/* 随机厂商弹窗 */}
       {showRandomModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowRandomModal(false)}>
-          <div className={`rounded-xl p-6 w-96 ${isDark ? 'bg-[#2A2A2A]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
-            <h3 className={`font-semibold mb-4 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>随机厂商</h3>
+          <div className={`rounded-xl p-6 w-96 max-h-[80vh] overflow-y-auto ${isDark ? 'bg-[#2A2A2A]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className={`font-semibold text-lg ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>随机厂商</span>
+                <p className={`text-xs mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>自动生成投标单位数据</p>
+              </div>
+              <button onClick={() => setShowRandomModal(false)} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                <i className="ri-close-line text-xl"></i>
+              </button>
+            </div>
             <div className="space-y-3">
               <div>
                 <label className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>投标家数</label>
@@ -219,13 +227,16 @@ export default function BidInput() {
                 />
               </div>
             </div>
-            <div className="flex justify-end gap-3 mt-6">
-              <button onClick={() => setShowRandomModal(false)} className={`btn-secondary ${isDark ? 'bg-[#3A3A3A] text-[#A89880] hover:bg-[#2A2A2A]' : ''}`}>取消</button>
+            <div className="flex justify-end gap-3 mt-4">
+              <button onClick={() => setShowRandomModal(false)} className={`px-5 py-2 rounded-lg text-sm transition-colors ${isDark ? 'bg-[#3A3A3A] text-[#A89880] hover:text-[#E8E0D0]' : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-text'}`}>
+                取消
+              </button>
               <button
                 onClick={() => { randomFill(randomCount, randomCenter, randomFluctuation); setShowRandomModal(false); }}
-                className="btn-primary"
+                className="btn-primary py-2"
               >
-                生成
+                <i className="ri-magic-line"></i>
+                <span>生成</span>
               </button>
             </div>
           </div>
@@ -322,7 +333,7 @@ export default function BidInput() {
               </button>
               <button onClick={handleSaveScores} className="btn-primary py-2">
                 <i className="ri-save-line"></i>
-                <span>保存得分</span>
+                <span>得分</span>
               </button>
             </div>
           </div>

@@ -94,12 +94,12 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
                   </td>
                   <td className={`px-6 py-4 font-medium flex items-center gap-2 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
                     {item.unit.name || '未命名'}
-                    {item.rank === 1 && (
-                      <span className="ml-3 relative inline-flex items-center justify-center w-14 h-14 rounded-full border-2 border-[#C43A31] text-[#C43A31] text-[10px] font-bold leading-none text-center select-none opacity-80 shadow-sm" style={{ transform: 'rotate(-12deg)' }}>
-                        <i className="ri-target-line text-base absolute top-1 left-1/2 -translate-x-1/2"></i>
-                        <span className="pt-4">中<br/>回<br/>旋<br/>标</span>
-                      </span>
-                    )}
+                     {item.rank === 1 && (
+                       <span className="ml-3 relative inline-flex items-center justify-center w-14 h-14 rounded-full border-2 border-[#C43A31] text-[#C43A31] text-[10px] font-bold leading-none text-center select-none opacity-80 shadow-sm" style={{ transform: 'rotate(-12deg)' }}>
+                         <i className="ri-target-line text-base" style={{ position: 'absolute', top: '2px', left: '50%', transform: 'translateX(-50%)' }}></i>
+                         <span style={{ marginTop: '16px' }}>中<br/>回<br/>旋<br/>标</span>
+                       </span>
+                     )}
                   </td>
                   <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
                   <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{item.deviationPercent > 0 ? '+' : ''}{item.deviationPercent}%</td>
