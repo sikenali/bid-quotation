@@ -1,6 +1,7 @@
 import React from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { ValidRule } from '../types';
+import { generateId } from '../utils/id';
 
 function DiceDots({ count }: { count: number }) {
   const dots = count >= 6 ? 6 : count;
@@ -46,7 +47,7 @@ export default function RuleManager() {
 
   const addNewRule = () => {
     const newRule: ValidRule = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       minCount: nextMin,
       maxCount: nextMin >= 7 ? 10 : -1,
       action: 'trim_percent',

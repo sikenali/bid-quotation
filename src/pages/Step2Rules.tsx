@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import RuleManager from '../components/RuleManager';
+import { generateId } from '../utils/id';
 
 export default function Step2Rules() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ export default function Step2Rules() {
       }
     }
     const newRule = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       minCount: nextMin,
       maxCount: nextMin >= 7 ? 10 : -1,
       action: 'trim_percent' as const,

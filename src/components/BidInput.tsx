@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { BidUnit, UnitScore } from '../types';
+import { generateId } from '../utils/id';
 
 export default function BidInput() {
   const { bidUnits, addBidUnit, updateBidUnit, removeBidUnit, clearBidUnits, randomFill, theme, calculate, unitScores, setUnitScores } = useConfigStore();
@@ -60,7 +61,7 @@ export default function BidInput() {
       const ranking = result.rankings.find(r => r.unit.id === unit.id);
       const priceScore = ranking ? ranking.score : 0;
       return {
-        id: crypto.randomUUID(),
+        id: generateId(),
         unitId: unit.id,
         priceScore,
         businessScore: unit.businessScore ?? 0,

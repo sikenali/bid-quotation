@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import type { Algorithm, BidConfig, BidUnit, CalcResult, DeductionParams, ValidRule, UnitScore } from '../types';
 import { createDefaultConfig, PRESET_TEMPLATES } from '../utils/templates';
 import { calculateResult } from '../utils/algorithms';
+import { generateId } from '../utils/id';
 
 interface ConfigState extends BidConfig {
   calculationResult: CalcResult | null;
@@ -100,7 +101,7 @@ export const useConfigStore = create<ConfigState>()(
       setDeduction: (deduction) => set({ deduction }),
       addBidUnit: (name, price) =>
         set((s) => ({
-          bidUnits: [...s.bidUnits, { id: crypto.randomUUID(), name, price, isValid: true }],
+          bidUnits: [...s.bidUnits, { id: generateId(), name, price, isValid: true }],
         })),
       updateBidUnit: (id, updates) =>
         set((s) => ({
@@ -120,14 +121,14 @@ export const useConfigStore = create<ConfigState>()(
           const f = (Math.random() - 0.5) * 2 * fluctuationPercent;
           if (i < names.length) {
             units.push({
-              id: crypto.randomUUID(),
+              id: generateId(),
               name: names[i],
               price: parseFloat((centerPrice * (1 + f / 100)).toFixed(2)),
               isValid: true,
             });
           } else {
             units.push({
-              id: crypto.randomUUID(),
+              id: generateId(),
               name: `武汉锶氪钠锂科技有限公司${i - names.length + 1}`,
               price: parseFloat((centerPrice * (1 + f / 100)).toFixed(2)),
               isValid: true,
@@ -144,7 +145,7 @@ export const useConfigStore = create<ConfigState>()(
           .filter((s) => /^\d+(\.\d+)?$/.test(s))
           .map((s) => parseFloat(s));
         const units: BidUnit[] = prices.map((price, i) => ({
-          id: crypto.randomUUID(),
+          id: generateId(),
           name: `单位${String.fromCharCode(65 + i)}`,
           price,
           isValid: true,
@@ -209,7 +210,7 @@ export const useConfigStore = create<ConfigState>()(
             // Find existing saved scores
             const existing = s.unitScores.find(us => us.unitId === unit.id);
             return {
-              id: crypto.randomUUID(),
+              id: generateId(),
               unitId: unit.id,
               priceScore,
               businessScore: existing?.businessScore ?? 0,
