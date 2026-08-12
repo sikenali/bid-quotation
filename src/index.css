@@ -30,6 +30,9 @@
   .dark body {
     @apply bg-dark-bg text-dark-text;
   }
+  *, *::before, *::after {
+    border-style: solid;
+  }
 }
 
 @layer components {
@@ -41,34 +44,66 @@
   .btn-secondary {
     @apply bg-card text-text px-6 py-2.5 rounded-xl font-medium
            hover:bg-border-light transition-colors duration-200
-           border border-border text-sm;
+           text-sm;
+    border: 1px solid #E8DCC8;
+  }
+  .btn-secondary:hover {
+    border-color: #D4C4A8;
   }
   .dark .btn-secondary {
-    @apply bg-dark-card text-dark-text hover:bg-dark-border border-dark-border;
+    @apply bg-dark-card text-dark-text;
+    border: 1px solid #3D3D3D;
+  }
+  .dark .btn-secondary:hover {
+    border-color: #C43A31;
   }
   .input-field {
-    @apply bg-white border border-border rounded-lg px-4 py-2
-           focus:outline-none focus:ring-2 focus:ring-primary/30
-           focus:border-primary transition-all text-text;
+    background-color: white;
+    color: #3D2B1F;
+    border: 1px solid #E8DCC8;
+    border-radius: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     padding-top: 8px;
     padding-bottom: 8px;
+    transition: all;
+    outline: none;
+  }
+  .input-field:focus {
+    border-color: #C43A31;
+    box-shadow: 0 0 0 3px rgba(196, 58, 49, 0.3);
   }
   .dark .input-field {
-    @apply bg-dark-card border-dark-border text-dark-text focus:ring-primary/50;
+    background-color: #2D2D2D;
+    color: #F2EDE4;
+    border: 1px solid #3D3D3D;
+  }
+  .dark .input-field:focus {
+    box-shadow: 0 0 0 3px rgba(196, 58, 49, 0.5);
   }
   .styled-select {
-    @apply border rounded-lg px-3 py-2
-           focus:outline-none focus:ring-2 focus:ring-primary/30
-           focus:border-primary transition-all appearance-none
-           cursor-pointer text-sm;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath fill='%238B7355' d='M0 0l5 7 5-7z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    padding-right: 30px;
+    border: 1px solid #E8DCC8;
+    border-radius: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    transition: all;
+    appearance: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    outline: none;
+  }
+  .styled-select:focus {
+    border-color: #C43A31;
+    box-shadow: 0 0 0 3px rgba(196, 58, 49, 0.3);
   }
   .dark .styled-select {
-    @apply border-dark-border text-dark-text focus:ring-primary/50;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath fill='%23A89880' d='M0 0l5 7 5-7z'/%3E%3C/svg%3E");
+    border: 1px solid #3D3D3D;
+    color: #F2EDE4;
+  }
+  .dark .styled-select:focus {
+    box-shadow: 0 0 0 3px rgba(196, 58, 49, 0.5);
   }
   .select-default {
     background-color: transparent;
@@ -89,10 +124,12 @@
     color: #F2EDE4;
   }
   .card {
-    @apply bg-card border border-border rounded-xl p-6;
+    @apply bg-card rounded-xl p-6;
+    border: 1px solid #E8DCC8;
   }
   .dark .card {
-    @apply bg-dark-card border-dark-border;
+    @apply bg-dark-card;
+    border: 1px solid #3D3D3D;
   }
 }
 
