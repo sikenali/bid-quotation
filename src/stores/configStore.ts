@@ -63,7 +63,12 @@ export const useConfigStore = create<ConfigState>()(
       customBasePrice: defaultConfig.customBasePrice,
       validRules: defaultConfig.validRules,
       deduction: defaultConfig.deduction,
-      bidUnits: [],
+      bidUnits: [
+        { id: 'default-1', name: '单位A', price: 0, isValid: true },
+        { id: 'default-2', name: '单位B', price: 0, isValid: true },
+        { id: 'default-3', name: '单位C', price: 0, isValid: true },
+        { id: 'default-4', name: '单位D', price: 0, isValid: true },
+      ],
       theme: 'light' as const,
       exportFormat: 'csv' as const,
       currentStep: 1,
@@ -224,7 +229,12 @@ export const useConfigStore = create<ConfigState>()(
           customBasePrice: d.customBasePrice,
           validRules: d.validRules,
           deduction: d.deduction,
-          bidUnits: [],
+          bidUnits: [
+            { id: 'default-1', name: '单位A', price: 0, isValid: true },
+            { id: 'default-2', name: '单位B', price: 0, isValid: true },
+            { id: 'default-3', name: '单位C', price: 0, isValid: true },
+            { id: 'default-4', name: '单位D', price: 0, isValid: true },
+          ],
           currentStep: 1,
           calculationResult: null,
         });

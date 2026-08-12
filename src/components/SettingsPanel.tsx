@@ -164,54 +164,54 @@ export default function SettingsPanel({ onClose }: Props) {
                 )}
 
                 {activeTab === 'export' && (
-                  <div className="space-y-4">
-                    {[
-                      {
-                        id: 'csv' as const,
-                        label: 'CSV 格式',
-                        desc: 'Excel 表格直接打开，支持中文',
-                        icon: 'ri-file-text-line',
-                      },
-                      {
-                        id: 'md' as const,
-                        label: 'Markdown 格式',
-                        desc: '表格渲染友好，适合文档嵌入',
-                        icon: 'ri-markdown-line',
-                      },
-                    ].map((opt) => (
-                      <div
-                        key={opt.id}
-                        className={`p-8 rounded-xl border-2 cursor-pointer transition-all ${
-                          exportFormat === opt.id
-                            ? isDark
-                              ? 'border-[#C43A31] bg-[#2A2A2A]'
-                              : 'border-[#C43A31] bg-white'
-                            : isDark
-                              ? 'border-[#E8DCC8] bg-[#FBF7EF]'
-                              : 'border-[#E8DCC8] bg-[#FBF7EF]'
-                        }`}
-                        onClick={() => setExportFormat(opt.id)}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                  <div className={`rounded-2xl p-8 ${isDark ? 'bg-[#2A2A2A] border border-[#3A3A3A]' : 'bg-[#F5EFE0] border border-[#E8DCC8]'}`}>
+                    <div className="space-y-4">
+                      {[
+                        {
+                          id: 'csv' as const,
+                          label: 'CSV 格式',
+                          desc: 'Excel 表格直接打开，支持中文',
+                          icon: 'ri-file-text-line',
+                          iconColor: 'text-[#D97706]',
+                        },
+                        {
+                          id: 'md' as const,
+                          label: 'Markdown 格式',
+                          desc: '表格渲染友好，适合文档嵌入',
+                          icon: 'ri-markdown-line',
+                          iconColor: 'text-[#C43A31]',
+                        },
+                      ].map((opt) => (
+                        <div
+                          key={opt.id}
+                          className={`p-8 rounded-xl border-2 cursor-pointer transition-all ${
                             exportFormat === opt.id
-                              ? 'bg-[#C43A31] text-white'
-                              : isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-white border border-[#E8DCC8] text-[#C43A31]'
-                          }`}>
-                            <i className={`text-xl ${opt.icon}`}></i>
-                          </div>
-                          <div>
-                            <div className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
-                            <div className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
-                          </div>
-                          {exportFormat === opt.id && (
-                            <div className="ml-auto w-5 h-5 rounded-full bg-[#C43A31] flex items-center justify-center">
-                              <i className="ri-check-line text-white text-sm"></i>
+                              ? isDark
+                                ? 'border-[#C43A31] bg-[#2A2A2A]'
+                                : 'border-[#C43A31] bg-white'
+                              : isDark
+                                ? 'border-[#E8DCC8] bg-[#FBF7EF]'
+                                : 'border-[#E8DCC8] bg-[#FBF7EF]'
+                          }`}
+                          onClick={() => setExportFormat(opt.id)}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-white border border-[#E8DCC8] flex items-center justify-center">
+                              <i className={`${opt.icon} text-xl ${opt.iconColor}`}></i>
                             </div>
-                          )}
+                            <div>
+                              <div className={`font-semibold ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
+                              <div className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
+                            </div>
+                            {exportFormat === opt.id && (
+                              <div className="ml-auto w-5 h-5 rounded-full bg-[#C43A31] flex items-center justify-center">
+                                <i className="ri-check-line text-white text-sm"></i>
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 )}
 
