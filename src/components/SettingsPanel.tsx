@@ -43,7 +43,7 @@ export default function SettingsPanel({ onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50" />
-      <div className={`relative ml-auto w-full max-w-4xl flex flex-col ${isDark ? 'bg-[#2D2D2D]' : 'bg-[#FBF7EF]'}`} onClick={(e) => e.stopPropagation()}>
+      <div className={`relative ml-auto w-full max-w-4xl flex flex-col mobile-modal ${isDark ? 'bg-[#2D2D2D]' : 'bg-[#FBF7EF]'}`} onClick={(e) => e.stopPropagation()}>
         {/* 顶部导航栏 */}
         <div className={`flex items-center justify-between px-8 py-5 border-b ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#FBF7EF] border-[#E8DCC8]'}`}>
           <div className="flex items-center gap-3">

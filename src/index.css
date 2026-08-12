@@ -79,17 +79,52 @@
   }
   .dark .select-default {
     background-color: transparent;
-    border-color: #3A3A3A;
-    color: #A89880;
+    border-color: #3D3D3D;
+    color: #C0B098;
   }
   .dark .select-default:hover {
     border-color: #C43A31;
-    color: #E8E0D0;
+    color: #F2EDE4;
   }
   .card {
     @apply bg-card border border-border rounded-xl p-6;
   }
   .dark .card {
     @apply bg-dark-card border-dark-border;
+  }
+}
+
+/* 移动端优化 */
+@media (max-width: 640px) {
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .mobile-padding {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .mobile-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .mobile-stack {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  .mobile-scroll-table {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-modal {
+    max-width: 100vw !important;
+    width: 100% !important;
+    border-radius: 16px 16px 0 0 !important;
+    margin-top: auto !important;
+    max-height: 90vh !important;
   }
 }
