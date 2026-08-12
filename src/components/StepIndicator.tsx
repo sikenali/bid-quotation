@@ -13,7 +13,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
   const isDark = theme === 'dark';
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1 md:gap-2" style={{ minWidth: '280px' }}>
       {steps.slice(0, totalSteps).map((label, index) => {
         const stepNum = index + 1;
         const isActive = stepNum === currentStep;
@@ -53,7 +53,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
             </div>
             {index < totalSteps - 1 && (
               <div
-                className={`w-6 h-0.5 rounded-full mt-3 ${
+                className={`w-4 h-0.5 rounded-full mt-3 md:w-6 ${
                   stepNum < currentStep ? 'bg-[#5B8C5A]' : isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'
                 }`}
               />

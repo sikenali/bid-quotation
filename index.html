@@ -5,6 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>文价猩-标书智能报价平台</title>
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('bidQuotationConfig');
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.state && parsed.state.theme === 'dark') {
+              document.documentElement.classList.add('dark');
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="stylesheet" href="/remixicon.css">
   </head>
   <body>
