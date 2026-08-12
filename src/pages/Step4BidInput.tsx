@@ -30,8 +30,8 @@ export default function Step4BidInput() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h2 className="text-[28px] font-semibold text-text">投标报价</h2>
-        <p className="text-text-secondary text-[14px]">录入各投标单位名称与报价金额</p>
+        <h2 className="text-[22px] sm:text-[28px] font-semibold text-text">投标报价</h2>
+        <p className="text-text-secondary text-[12px] sm:text-[14px]">录入各投标单位名称与报价金额</p>
       </div>
 
       <BidInput />

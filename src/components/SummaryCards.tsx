@@ -37,7 +37,7 @@ export default function SummaryCards({ result, includeTotalScores = false }: Pro
           </div>
           <div>
             <div className={`text-[12px] ${isDark ? 'text-[#C0B098]' : 'text-[#8B7355]'}`}>{card.label}</div>
-            <div className={`font-bold text-[22px] ${card.color}`}>
+            <div className={`font-bold text-[18px] sm:text-[22px] ${card.color}`}>
               {card.key === 'algorithmName' ? result[card.key]
                 : card.key === 'totalCount' ? bidUnits.length
                 : card.key === 'totalPrice' ? totalPriceScore.toFixed(2)

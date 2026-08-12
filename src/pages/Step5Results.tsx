@@ -30,8 +30,8 @@ export default function Step5Results({ includeTotalScores = false }: Props) {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h2 className="text-[28px] font-semibold text-text">测算结果</h2>
-        <p className="text-text-secondary text-[14px]">基准价计算完成，以下为各投标单位排名和得分</p>
+        <h2 className="text-[22px] sm:text-[28px] font-semibold text-text">测算结果</h2>
+        <p className="text-text-secondary text-[12px] sm:text-[14px]">基准价计算完成，以下为各投标单位排名和得分</p>
       </div>
 
       {/* 基准价摘要区 */}

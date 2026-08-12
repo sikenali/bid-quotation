@@ -92,11 +92,12 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
                       </span>
                     </div>
                   </td>
-                  <td className={`px-6 py-4 font-medium flex items-center gap-2 ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
-                    {item.unit.name || '未命名'}
-                     {item.rank === 1 && (
-                       <div className="ml-3 flex flex-col items-center">
-                         <div className="w-10 h-10 relative" style={{ transform: 'rotate(-12deg)' }}>
+                  <td className={`px-6 py-4 font-medium ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="truncate max-w-[120px] sm:max-w-[200px] inline-block align-middle">{item.unit.name || '未命名'}</span>
+                      {item.rank === 1 && (
+                        <div className="inline-flex flex-col items-center flex-shrink-0">
+                          <div className="w-10 h-10 relative" style={{ transform: 'rotate(-12deg)' }}>
                            <svg viewBox="0 0 48 48" className="w-full h-full">
                              <circle cx="24" cy="24" r="24" fill="#C43A31" opacity="0.85"/>
                              <circle cx="24" cy="24" r="16" fill="white"/>
@@ -111,8 +112,9 @@ export default function RankingTable({ result, includeTotalScores = false }: Pro
                          </div>
                          <span className="mt-1 text-[10px] font-bold text-[#C43A31] opacity-80 whitespace-nowrap">中回旋标</span>
                        </div>
-                     )}
-                  </td>
+)}
+                    </span>
+                    </td>
                   <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
                   <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>{item.deviationPercent > 0 ? '+' : ''}{item.deviationPercent}%</td>
                   <td className={`px-6 py-4 text-right font-semibold ${getScoreColor(item.score, fullScore)}`}>

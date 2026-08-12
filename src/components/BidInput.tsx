@@ -76,7 +76,7 @@ export default function BidInput() {
               <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${
                 unit.id === activeUnitId ? 'border-white bg-white' : isDark ? 'border-[#A89880] bg-transparent' : 'border-[#8B7355] bg-transparent'
               }`} />
-              <span className={`text-[14px] font-medium ${unit.id === activeUnitId ? 'text-white' : isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
+              <span className={`text-[14px] font-medium truncate max-w-[100px] ${unit.id === activeUnitId ? 'text-white' : isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                 {unit.name || '未命名'}
               </span>
             </div>
@@ -289,7 +289,7 @@ export default function BidInput() {
                             {index + 1}
                           </span>
                         </td>
-                        <td className={`px-3 py-2 font-medium whitespace-nowrap ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{unit.name}</td>
+                        <td className={`px-3 py-2 font-medium truncate max-w-[80px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`} title={unit.name}>{unit.name}</td>
                         <td className={`px-3 py-2 text-right font-mono whitespace-nowrap ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                           {unit.price > 0 ? unit.price.toLocaleString() : '-'}
                         </td>

@@ -13,7 +13,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
   const isDark = theme === 'dark';
 
   return (
-    <div className="flex items-center gap-1 md:gap-2" style={{ minWidth: '280px' }}>
+    <div className="flex items-center gap-1 md:gap-2 whitespace-nowrap">
       {steps.slice(0, totalSteps).map((label, index) => {
         const stepNum = index + 1;
         const isActive = stepNum === currentStep;

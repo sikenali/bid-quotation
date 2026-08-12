@@ -40,7 +40,11 @@ export default function Layout({ children }: Props) {
 
             {/* 右侧操作区 */}
             <div className="flex items-center gap-2">
-              {!isResultPage && <StepIndicator currentStep={currentStep} />}
+              {!isResultPage && (
+                <div className="overflow-x-auto max-w-[160px] sm:max-w-none">
+                  <StepIndicator currentStep={currentStep} />
+                </div>
+              )}
 
               <button
                 onClick={() => setShowSettings(true)}
