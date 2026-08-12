@@ -89,7 +89,7 @@ export default function RuleManager() {
                 </div>
                 <div className="flex flex-col">
                   <span className={`font-semibold text-[15px] ${isActive ? 'text-[#C43A31]' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
-                    投标人{index + 1}
+                    投标人
                   </span>
                   <span className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
                     {isCappedRule ? `≥${rule.minCount}家` : isFixedRange ? `${rule.minCount}~${rule.maxCount}家` : rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}

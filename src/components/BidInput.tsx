@@ -14,16 +14,8 @@ export default function BidInput() {
 
   const isDark = theme === 'dark';
 
-  // 根据激活规则决定显示哪些单位：规则覆盖3家时随机打乱取前3家
-  const displayUnits = useMemo(() => {
-    const activeRule = validRules.find(r => r.id === activeRuleId);
-    if (!activeRule) return bidUnits;
-    if (activeRule.minCount <= 3 && activeRule.maxCount >= 3 && bidUnits.length >= 3) {
-      const shuffled = [...bidUnits].sort(() => Math.random() - 0.5);
-      return shuffled.slice(0, 3);
-    }
-    return bidUnits;
-  }, [bidUnits, activeRuleId, validRules]);
+  // 显示所有投标单位，不裁剪、不随机打乱
+  const displayUnits = bidUnits;
 
   const handleAdd = () => {
     addBidUnit('', 0);
