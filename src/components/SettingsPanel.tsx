@@ -168,7 +168,6 @@ export default function SettingsPanel({ onClose }: Props) {
                     {/* 测算结果导出 — 与 ThemeSelector 卡片风格一致 */}
                     {calculationResult ? (
                       <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
-                        <h3 className={`font-semibold text-[15px] mb-4 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>测算结果导出</h3>
                         <div className="space-y-3">
                           {[
                             {
@@ -176,7 +175,7 @@ export default function SettingsPanel({ onClose }: Props) {
                               label: 'CSV 格式',
                               desc: 'Excel 表格直接打开，支持中文',
                               icon: (
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                   <path d="M4 4h10l4 4v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm9 3V5.5L16.5 7H13z"/>
                                 </svg>
                               ),
@@ -187,35 +186,37 @@ export default function SettingsPanel({ onClose }: Props) {
                               label: 'Markdown 格式',
                               desc: '表格渲染友好，适合文档嵌入',
                               icon: (
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                   <path d="M3 3h18v2H3V3zm0 8h18v2H3v-2zm0 4h18v2H3v-2zm0-8h2v8H3v-8z"/>
                                 </svg>
                               ),
                               fn: () => exportMarkdown(calculationResult),
                             },
                           ].map((opt) => (
-                            <button
+                            <div
                               key={opt.id}
-                              onClick={opt.fn}
-                              className={`w-full flex items-center gap-4 p-5 rounded-xl border-2 cursor-pointer transition-all ${
+                              className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${
                                 isDark
                                   ? 'border-[#3A3A3A] bg-[#1A1A1A] hover:border-[#C43A31]/50'
                                   : 'border-[#E8DCC8] bg-white hover:border-[#C43A31]/50'
                               }`}
+                              onClick={opt.fn}
                             >
-                              <div className={`w-11 h-11 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                                isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-[#FFF0ED] text-[#C43A31]'
-                              }`}>
-                                {opt.icon}
+                              <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                  isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-[#FFF0ED] text-[#C43A31]'
+                                }`}>
+                                  {opt.icon}
+                                </div>
+                                <div className="flex-1">
+                                  <div className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
+                                  <div className={`text-sm mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#C43A31] flex-shrink-0">
+                                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                                </svg>
                               </div>
-                              <div className="flex-1 text-left">
-                                <div className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
-                                <div className={`text-sm mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
-                              </div>
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#C43A31] flex-shrink-0">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
-                              </svg>
-                            </button>
+                            </div>
                           ))}
                         </div>
                       </div>
@@ -227,46 +228,6 @@ export default function SettingsPanel({ onClose }: Props) {
                         <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>请先完成报价测算，测算结果将在此处导出</p>
                       </div>
                     )}
-
-                    {/* JSON 配置文件管理 */}
-                    <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
-                      <h3 className={`font-semibold text-[15px] mb-4 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>配置文件管理</h3>
-                      <div className="space-y-3">
-                        <button onClick={handleExport} className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all ${isDark ? 'border-[#3A3A3A] bg-[#1A1A1A] text-[#E8E0D0] hover:border-[#C43A31]/50' : 'border-[#E8DCC8] bg-white hover:border-[#C43A31]/40'}`}>
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#5B8C5A]">
-                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                          </svg>
-                          <div className="text-left">
-                            <div className="font-medium text-sm">导出配置（JSON）</div>
-                            <div className={`text-xs ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>保存算法规则与参数到本地文件</div>
-                          </div>
-                        </button>
-                        <div className={`rounded-xl p-4 border ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]'}`}>
-                          <label className={`block text-sm mb-2 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>导入配置</label>
-                          <input
-                            type="file"
-                            accept=".json"
-                            onChange={handleImport}
-                            className="block w-full text-sm cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#C43A31] file:text-white hover:file:bg-[#A83028]"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 清空数据 */}
-                    <button
-                      onClick={() => {
-                        if (confirm('确定要清空所有数据吗？此操作不可恢复。')) {
-                          localStorage.removeItem('bidQuotationConfig');
-                          window.location.reload();
-                        }
-                      }}
-                      className={`w-full py-3 rounded-xl border-2 font-medium text-sm transition-colors ${
-                        isDark ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-red-200 text-red-500 hover:bg-red-50'
-                      }`}
-                    >
-                      清空所有数据
-                    </button>
                   </div>
                 )}
 
