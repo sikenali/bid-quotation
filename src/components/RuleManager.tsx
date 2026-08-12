@@ -146,6 +146,7 @@ export default function RuleManager() {
 
 function RuleRow({
   rule,
+  index,
   isActive,
   isLocked,
   isDark,
