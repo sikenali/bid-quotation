@@ -174,7 +174,7 @@ export default function SettingsPanel({ onClose }: Props) {
                       <select
                         value={apiEndpoint}
                         onChange={(e) => setApiEndpoint(e.target.value)}
-                        className="styled-select w-full"
+                        className="styled-select select-default w-full"
                       >
                         <option value="https://api.deepseek.com/v1">DeepSeek (api.deepseek.com)</option>
                         <option value="https://api.ccswitch.com/v1">CCswitch (api.ccswitch.com)</option>
