@@ -41,7 +41,7 @@ const HEADER_ICONS: Record<Tab, { icon: string; title: string; subtitle: string 
 };
 
 export default function SettingsPanel({ onClose }: Props) {
-  const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, exportConfig, importConfig, theme, calculationResult } = useConfigStore();
+  const { apiKey, apiEndpoint, setApiKey, setApiEndpoint, exportConfig, importConfig, theme, calculationResult, exportFormat, setExportFormat } = useConfigStore();
   const [activeTab, setActiveTab] = useState<Tab>('theme');
 
   useEffect(() => {
@@ -165,69 +165,71 @@ export default function SettingsPanel({ onClose }: Props) {
 
                 {activeTab === 'export' && (
                   <div className="space-y-6">
-                    {/* 测算结果导出 — 与 ThemeSelector 卡片风格一致 */}
-                    {calculationResult ? (
-                      <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
-                        <div className="space-y-3">
-                          {[
-                            {
-                              id: 'csv',
-                              label: 'CSV 格式',
-                              desc: 'Excel 表格直接打开，支持中文',
-                              icon: (
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                  <path d="M4 4h10l4 4v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm9 3V5.5L16.5 7H13z"/>
-                                </svg>
-                              ),
-                              fn: () => exportCSV(calculationResult),
-                            },
-                            {
-                              id: 'md',
-                              label: 'Markdown 格式',
-                              desc: '表格渲染友好，适合文档嵌入',
-                              icon: (
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                  <path d="M3 3h18v2H3V3zm0 8h18v2H3v-2zm0 4h18v2H3v-2zm0-8h2v8H3v-8z"/>
-                                </svg>
-                              ),
-                              fn: () => exportMarkdown(calculationResult),
-                            },
-                          ].map((opt) => (
-                            <div
-                              key={opt.id}
-                              className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${
-                                isDark
+                    {/* 测算结果导出格式选择 — 始终显示 */}
+                    <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+                      <div className="space-y-3">
+                        {[
+                          {
+                            id: 'csv' as const,
+                            label: 'CSV 格式',
+                            desc: 'Excel 表格直接打开，支持中文',
+                            icon: (
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                <path d="M4 4h10l4 4v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm9 3V5.5L16.5 7H13z"/>
+                              </svg>
+                            ),
+                          },
+                          {
+                            id: 'md' as const,
+                            label: 'Markdown 格式',
+                            desc: '表格渲染友好，适合文档嵌入',
+                            icon: (
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                <path d="M3 3h18v2H3V3zm0 8h18v2H3v-2zm0 4h18v2H3v-2zm0-8h2v8H3v-8z"/>
+                              </svg>
+                            ),
+                          },
+                        ].map((opt) => (
+                          <div
+                            key={opt.id}
+                            className={`p-5 rounded-xl border-2 cursor-pointer transition-all ${
+                              exportFormat === opt.id
+                                ? isDark
+                                  ? 'border-[#C43A31] bg-[#C43A31]/10'
+                                  : 'border-[#C43A31] bg-[#FFF0ED]'
+                                : isDark
                                   ? 'border-[#3A3A3A] bg-[#1A1A1A] hover:border-[#C43A31]/50'
                                   : 'border-[#E8DCC8] bg-white hover:border-[#C43A31]/50'
-                              }`}
-                              onClick={opt.fn}
-                            >
-                              <div className="flex items-center gap-4">
-                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                                  isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-[#FFF0ED] text-[#C43A31]'
-                                }`}>
-                                  {opt.icon}
-                                </div>
-                                <div className="flex-1">
-                                  <div className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
-                                  <div className={`text-sm mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
-                                </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-[#C43A31] flex-shrink-0">
-                                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
-                                </svg>
+                            }`}
+                            onClick={() => setExportFormat(opt.id)}
+                          >
+                            <div className="flex items-center gap-4">
+                              <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                                exportFormat === opt.id
+                                  ? 'bg-[#C43A31] text-white'
+                                  : isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-[#FFF0ED] text-[#C43A31]'
+                              }`}>
+                                {opt.icon}
                               </div>
+                              <div className="flex-1">
+                                <div className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{opt.label}</div>
+                                <div className={`text-sm mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{opt.desc}</div>
+                              </div>
+                              {exportFormat === opt.id && (
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#C43A31] flex-shrink-0">
+                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                              )}
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        ))}
                       </div>
-                    ) : (
-                      <div className={`rounded-2xl p-8 border text-center ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 mx-auto mb-3 text-[#D4C4A8]">
-                          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                        </svg>
-                        <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>请先完成报价测算，测算结果将在此处导出</p>
-                      </div>
-                    )}
+                      {!calculationResult && (
+                        <p className={`mt-4 text-xs text-center ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                          完成测算后将按所选格式自动导出
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )}
 

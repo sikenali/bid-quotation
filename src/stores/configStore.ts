@@ -33,6 +33,7 @@ interface ConfigState extends BidConfig {
   randomFill: (count: number, centerPrice: number, fluctuationPercent: number) => void;
   parsePrices: (text: string) => void;
   setTheme: (theme: 'light' | 'dark') => void;
+  setExportFormat: (format: 'csv' | 'md') => void;
   setApiKey: (key: string) => void;
   setApiEndpoint: (endpoint: string) => void;
   loadTemplate: (templateId: string) => void;
@@ -63,6 +64,7 @@ export const useConfigStore = create<ConfigState>()(
       deduction: defaultConfig.deduction,
       bidUnits: [],
       theme: 'light' as const,
+      exportFormat: 'csv' as const,
       currentStep: 1,
       calculationResult: null,
       apiKey: undefined,
@@ -128,6 +130,7 @@ export const useConfigStore = create<ConfigState>()(
         set({ bidUnits: units });
       },
       setTheme: (theme) => set({ theme }),
+      setExportFormat: (exportFormat) => set({ exportFormat }),
       setApiKey: (apiKey) => set({ apiKey }),
       setApiEndpoint: (apiEndpoint) => set({ apiEndpoint }),
       loadTemplate: (templateId) => {
@@ -244,6 +247,7 @@ export const useConfigStore = create<ConfigState>()(
         validRules: s.validRules,
         deduction: s.deduction,
         theme: s.theme,
+        exportFormat: s.exportFormat,
         apiKey: s.apiKey,
         apiEndpoint: s.apiEndpoint,
       }),

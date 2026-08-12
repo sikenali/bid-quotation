@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import SummaryCards from '../components/SummaryCards';
 import RankingTable from '../components/RankingTable';
-import { exportCSV } from '../utils/export';
+import { exportCSV, exportMarkdown } from '../utils/export';
 
 export default function Step5Results() {
   const navigate = useNavigate();
-  const { calculationResult, setCurrentStep } = useConfigStore();
+  const { calculationResult, setCurrentStep, exportFormat } = useConfigStore();
 
   if (!calculationResult) {
     return (
@@ -20,7 +20,7 @@ export default function Step5Results() {
     );
   }
 
-  const handleExport = () => exportCSV(calculationResult);
+  const handleExport = () => exportFormat === 'md' ? exportMarkdown(calculationResult) : exportCSV(calculationResult);
   const handlePrev = () => { setCurrentStep(4); navigate('/step-4'); };
 
   return (

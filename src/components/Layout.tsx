@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import { StepIndicator } from './StepIndicator';
 import SettingsPanel from './SettingsPanel';
-import { exportCSV } from '../utils/export';
+import { exportCSV, exportMarkdown } from '../utils/export';
 
 interface Props {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   const navigate = useNavigate();
-  const { currentStep, theme } = useConfigStore();
+  const { currentStep, theme, exportFormat } = useConfigStore();
   const [showSettings, setShowSettings] = useState(false);
   const isDark = theme === 'dark';
 
@@ -50,12 +50,13 @@ export default function Layout({ children }: Props) {
                   <button
                     onClick={() => {
                       const { calculationResult } = useConfigStore.getState();
-                      if (calculationResult) exportCSV(calculationResult);
+                      if (!calculationResult) return;
+                      exportFormat === 'md' ? exportMarkdown(calculationResult) : exportCSV(calculationResult);
                     }}
                     className="flex items-center gap-2 px-4 py-2 bg-[#5B8C5A] rounded-lg text-white hover:bg-[#4A7A49] transition-colors text-sm"
                   >
                     <i className="ri-download-line text-[16px]"></i>
-                    <span>导出CSV</span>
+                    <span>导出{exportFormat === 'md' ? 'Markdown' : 'CSV'}</span>
                   </button>
                 </>
               )}
