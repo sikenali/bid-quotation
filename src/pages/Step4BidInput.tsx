@@ -4,10 +4,26 @@ import { useConfigStore } from '../stores/configStore';
 import BidInput from '../components/BidInput';
 import Step5Results from '../pages/Step5Results';
 
+const DEFAULT_NAMES = [
+  '武汉锂钠氪锶科技有限公司',
+  '武汉懒猫微服科技有限公司',
+  '武汉铀锂氪锶科技合伙企业（有限合伙）',
+  '广西锂钠氪锶软件科技有限公司',
+];
+
 export default function Step4BidInput() {
   const navigate = useNavigate();
-  const { setCurrentStep, calculate, unitScores, calculationResult } = useConfigStore();
+  const { setCurrentStep, calculate, unitScores, calculationResult, addBidUnit } = useConfigStore();
   const [isCalculating, setIsCalculating] = useState(false);
+
+  const handleAddUnit = () => {
+    const units = useConfigStore.getState().bidUnits;
+    const count = units.length;
+    const name = count < DEFAULT_NAMES.length
+      ? DEFAULT_NAMES[count]
+      : `武汉锶氪钠锂科技有限公司${count - DEFAULT_NAMES.length + 1}`;
+    addBidUnit(name, 0);
+  };
 
   const handlePrev = () => { setCurrentStep(3); navigate('/deduction'); };
   const handlePriceCalc = () => {
@@ -44,7 +60,16 @@ export default function Step4BidInput() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h2 className="text-[22px] sm:text-[28px] font-semibold text-text">投标报价</h2>
+        <div className="flex items-center gap-2 sm:gap-0">
+          <h2 className="text-[22px] sm:text-[28px] font-semibold text-text">投标报价</h2>
+          <button
+            onClick={handleAddUnit}
+            className="sm:hidden border-2 border-dashed rounded-lg flex items-center justify-center gap-0.5 px-2 py-1 text-[11px] text-text-secondary border-[#D4C4A8] hover:border-[#C43A31] hover:text-[#C43A31]"
+          >
+            <i className="ri-add-line text-sm"></i>
+            添加单位
+          </button>
+        </div>
         <p className="text-text-secondary text-[12px] sm:text-[14px]">录入各投标单位名称与报价金额</p>
       </div>
 

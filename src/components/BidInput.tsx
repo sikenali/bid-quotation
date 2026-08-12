@@ -101,7 +101,7 @@ export default function BidInput() {
         ))}
         <button
           onClick={handleAdd}
-          className={`w-[90px] sm:w-[120px] h-[50px] sm:h-[60px] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-0.5 sm:gap-1 cursor-pointer transition-colors ${
+          className={`hidden sm:flex w-[90px] sm:w-[120px] h-[50px] sm:h-[60px] border-2 border-dashed rounded-xl flex-col items-center justify-center gap-0.5 sm:gap-1 cursor-pointer transition-colors ${
             isDark
               ? 'border-[#3D3D3D] text-[#C0B098] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#252525]'
               : 'bg-[#FBF7EF] border-[#D4C4A8] text-text-secondary hover:border-[#C43A31] hover:text-[#C43A31]'
@@ -276,8 +276,8 @@ export default function BidInput() {
               </button>
             </div>
 
-            <div className={`rounded-xl overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
-              <table className="w-full text-xs table-fixed">
+            <div className={`rounded-xl overflow-x-auto sm:overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
+              <table className="w-full text-xs table-fixed min-w-[600px] sm:min-w-0">
                 <thead>
                   <tr className={`border-b ${isDark ? 'border-[#3D3D3D] bg-[#252525]' : 'border-[#E8DCC8] bg-white'}`}>
                     <th className="w-10 px-3 py-2 text-left font-medium whitespace-nowrap">序号</th>
@@ -305,7 +305,7 @@ export default function BidInput() {
                         </td>
                         <td className={`px-3 py-2 font-medium truncate max-w-[80px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`} title={unit.name}>{unit.name}</td>
                         <td className={`px-3 py-2 text-right font-mono whitespace-nowrap ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
-                          {unit.price > 0 ? unit.price.toLocaleString() : '-'}
+                          {unit.price > 0 ? '¥' + unit.price.toLocaleString() : '-'}
                         </td>
                         <td className={`px-3 py-2 text-right font-mono font-semibold whitespace-nowrap ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
                           {priceScore > 0 ? priceScore.toFixed(2) : '-'}
