@@ -32,7 +32,7 @@ export default function Step1Algorithm() {
 
       <AlgorithmParams />
 
-      <div className="flex justify-end pt-4">
+      <div className="flex justify-center sm:justify-end pt-4">
         <button
           onClick={handleNext}
           className="btn-primary"

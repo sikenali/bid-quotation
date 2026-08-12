@@ -50,7 +50,7 @@ export default function Step4BidInput() {
 
       <BidInput />
 
-      <div className="flex items-start justify-between pt-4 flex-col sm:flex-row gap-3 sm:gap-0">
+      <div className="flex items-center justify-center sm:justify-between pt-4 flex-col sm:flex-row gap-3 sm:gap-0">
         <button onClick={handlePrev} className="btn-secondary w-full sm:w-auto">
           <i className="ri-arrow-left-line"></i>
           <span>上一步</span>

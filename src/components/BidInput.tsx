@@ -101,14 +101,14 @@ export default function BidInput() {
         ))}
         <button
           onClick={handleAdd}
-          className={`w-[120px] h-[60px] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors ${
+          className={`w-[90px] sm:w-[120px] h-[50px] sm:h-[60px] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-0.5 sm:gap-1 cursor-pointer transition-colors ${
             isDark
               ? 'border-[#3D3D3D] text-[#C0B098] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#252525]'
               : 'bg-[#FBF7EF] border-[#D4C4A8] text-text-secondary hover:border-[#C43A31] hover:text-[#C43A31]'
           }`}
         >
-          <i className="ri-add-line text-xl"></i>
-          <span className="text-[13px]">添加单位</span>
+          <i className="ri-add-line text-base sm:text-xl"></i>
+          <span className="text-[11px] sm:text-[13px]">添加单位</span>
         </button>
       </div>
 
@@ -172,10 +172,10 @@ export default function BidInput() {
       </div>
 
       {/* 快捷操作区 */}
-      <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap">
+      <div className="flex items-center gap-2 sm:gap-3 flex-nowrap">
         <button
           onClick={() => setShowRandomModal(true)}
-          className={`px-5 py-3 sm:py-2 rounded-lg text-sm flex items-center gap-2 min-h-[44px] transition-colors ${
+          className={`px-2.5 py-2 sm:px-5 sm:py-2 rounded-lg text-[11px] sm:text-sm flex items-center gap-1 sm:gap-2 min-h-[36px] sm:min-h-[44px] transition-colors flex-1 sm:flex-none justify-center ${
             isDark
               ? 'bg-[#2D2D2D] border border-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4] hover:border-[#C43A31]/50'
               : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-[#C43A31] hover:border-[#C43A31]'
@@ -186,7 +186,7 @@ export default function BidInput() {
         </button>
         <button
           onClick={() => openScoreModal()}
-          className={`px-5 py-3 sm:py-2 rounded-lg text-sm flex items-center gap-2 min-h-[44px] transition-colors ${
+          className={`px-2.5 py-2 sm:px-5 sm:py-2 rounded-lg text-[11px] sm:text-sm flex items-center gap-1 sm:gap-2 min-h-[36px] sm:min-h-[44px] transition-colors flex-1 sm:flex-none justify-center ${
             isDark
               ? 'bg-[#2D2D2D] border border-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4] hover:border-[#C43A31]/50'
               : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-[#C43A31] hover:border-[#C43A31]'
@@ -197,7 +197,7 @@ export default function BidInput() {
         </button>
         <button
           onClick={clearBidUnits}
-          className="px-5 py-3 sm:py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm hover:bg-[#FFE0DC] transition-colors flex items-center gap-2 min-h-[44px]"
+          className="px-2.5 py-2 sm:px-5 sm:py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-[11px] sm:text-sm hover:bg-[#FFE0DC] transition-colors flex items-center gap-1 sm:gap-2 min-h-[36px] sm:min-h-[44px] flex-1 sm:flex-none justify-center"
         >
           <i className="ri-delete-bin-line"></i>
           清空所有

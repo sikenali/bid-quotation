@@ -102,7 +102,7 @@ export default function RuleManager() {
         {!isCappedRange && !isFixedRange && (
           <button
             onClick={addNewRule}
-            className={`min-w-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
+            className={`hidden sm:flex min-w-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
               isDark
                 ? 'border-[#3D3D3D] text-[#C0B098] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#252525]'
                 : 'bg-white border-[#D4C4A8] hover:border-[#C43A31]/60 hover:bg-[#FFF8F5] text-text-secondary'
@@ -115,11 +115,24 @@ export default function RuleManager() {
       </div>
 
       <div className={`rounded-2xl p-6 space-y-4 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-3 sm:gap-5">
           <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#C0B098]' : 'bg-[#D4C4A8]'}`} />
           <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
             {validRules.length > 0 ? `投标人${validRules.length} · 参数配置` : '投标人参数配置'}
           </h3>
+          {!isCappedRange && !isFixedRange && (
+            <button
+              onClick={addNewRule}
+              className={`sm:hidden border-2 border-dashed rounded-lg flex items-center justify-center gap-0.5 cursor-pointer transition-all px-2 py-1 text-[11px] ${
+                isDark
+                  ? 'border-[#3D3D3D] text-[#C0B098] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#252525]'
+                  : 'bg-white border-[#D4C4A8] hover:border-[#C43A31]/60 hover:bg-[#FFF8F5] text-text-secondary'
+              }`}
+            >
+              <i className="ri-add-line text-sm"></i>
+              <span>添加规则</span>
+            </button>
+          )}
         </div>
 
         {validRules.length === 0 ? (
@@ -167,49 +180,58 @@ function RuleRow({
   const isFixedRange = rule.minCount >= 7 && rule.maxCount === 10;
   const showCappedBadge = isCapped || isFixedRange;
   return (
-    <div className={`rounded-xl border transition-all ${
+    <div className={`relative rounded-xl border transition-all ${
       isActive
         ? isDark ? 'bg-[#252525] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20' : 'bg-white border-[#C43A31]/40 ring-1 ring-[#C43A31]/10'
         : isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]/50'
     }`}>
-      <div className="flex items-center gap-4 px-4 py-3 flex-wrap md:flex-nowrap">
+      <div className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-3 flex-nowrap">
         <button
           onClick={onSelect}
           className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${
             isActive ? 'border-[#C43A31] bg-[#C43A31]' : isDark ? 'border-[#3D3D3D] bg-transparent' : 'border-[#D4C4A8] bg-transparent'
           }`}
         />
-        <div className="flex items-center gap-2">
-          <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>投标人数量</span>
+        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+          <span className={`text-sm sm:text-sm text-[11px] sm:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>投标人数量</span>
           <input
             type="number"
             value={rule.minCount}
             disabled={isLocked}
             onChange={(e) => onUpdate({ minCount: parseInt(e.target.value) || 0 })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
+            className={`input-field w-12 sm:w-16 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
           />
           <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>~</span>
           <input
             type="number"
             value={isCapped ? 10 : (rule.maxCount === -1 ? '' : rule.maxCount)}
             onChange={(e) => onUpdate({ maxCount: e.target.value ? parseInt(e.target.value) : -1 })}
-            className={`input-field w-20 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
+            className={`input-field w-12 sm:w-20 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
             placeholder={isCapped ? '10' : '无限'}
             disabled={isLocked}
           />
           <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>家时</span>
-          {isLocked && index > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
-          {showCappedBadge && <span className={`text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
+          {isLocked && index > 0 && <span className="hidden sm:inline text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
+          {showCappedBadge && <span className={`hidden sm:inline text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto sm:ml-0 sm:hidden">
           <button
             onClick={onRemove}
-            className={`p-2 rounded-lg transition-colors ${isDark ? 'text-[#C0B098] hover:text-[#C43A31] hover:bg-[#2D2D2D]' : 'text-text-secondary hover:text-[#C43A31] hover:bg-[#FFF0ED]'}`}
+            className={`p-1.5 rounded-lg transition-colors ${isDark ? 'text-[#C0B098] hover:text-[#C43A31] hover:bg-[#2D2D2D]' : 'text-text-secondary hover:text-[#C43A31] hover:bg-[#FFF0ED]'}`}
             aria-label="删除规则"
           >
             <i className="ri-close-line text-base"></i>
           </button>
         </div>
+      </div>
+      <div className="hidden sm:block absolute top-2 right-2">
+        <button
+          onClick={onRemove}
+          className={`p-2 rounded-lg transition-colors ${isDark ? 'text-[#C0B098] hover:text-[#C43A31] hover:bg-[#2D2D2D]' : 'text-text-secondary hover:text-[#C43A31] hover:bg-[#FFF0ED]'}`}
+          aria-label="删除规则"
+        >
+          <i className="ri-close-line text-base"></i>
+        </button>
       </div>
     </div>
   );
