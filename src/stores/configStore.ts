@@ -47,10 +47,10 @@ interface ConfigState extends BidConfig {
 const defaultConfig = createDefaultConfig();
 
 const defaultBidUnits = [
-  { id: 'default-1', name: '单位A', price: 0, isValid: true },
-  { id: 'default-2', name: '单位B', price: 0, isValid: true },
-  { id: 'default-3', name: '单位C', price: 0, isValid: true },
-  { id: 'default-4', name: '单位D', price: 0, isValid: true },
+  { id: 'default-1', name: '武汉锂钠氪锶科技有限公司', price: 0, isValid: true },
+  { id: 'default-2', name: '武汉懒猫微服科技有限公司', price: 0, isValid: true },
+  { id: 'default-3', name: '武汉铀锂氪锶科技合伙企业（有限合伙）', price: 0, isValid: true },
+  { id: 'default-4', name: '广西锂钠氪锶软件科技有限公司', price: 0, isValid: true },
 ];
 
 const defaultValidRules = [
@@ -76,12 +76,12 @@ export const useConfigStore = create<ConfigState>()(
       customBasePrice: defaultConfig.customBasePrice,
       validRules: defaultConfig.validRules,
       deduction: defaultConfig.deduction,
-      bidUnits: [
-        { id: 'default-1', name: '单位A', price: 0, isValid: true },
-        { id: 'default-2', name: '单位B', price: 0, isValid: true },
-        { id: 'default-3', name: '单位C', price: 0, isValid: true },
-        { id: 'default-4', name: '单位D', price: 0, isValid: true },
-      ],
+           bidUnits: [
+             { id: 'default-1', name: '武汉锂钠氪锶科技有限公司', price: 0, isValid: true },
+             { id: 'default-2', name: '武汉懒猫微服科技有限公司', price: 0, isValid: true },
+             { id: 'default-3', name: '武汉铀锂氪锶科技合伙企业（有限合伙）', price: 0, isValid: true },
+             { id: 'default-4', name: '广西锂钠氪锶软件科技有限公司', price: 0, isValid: true },
+           ],
       theme: 'light' as const,
       exportFormat: 'csv' as const,
       currentStep: 1,
@@ -121,12 +121,18 @@ export const useConfigStore = create<ConfigState>()(
       removeBidUnit: (id) => set((s) => ({ bidUnits: s.bidUnits.filter((u) => u.id !== id) })),
       clearBidUnits: () => set({ bidUnits: [] }),
       randomFill: (count, centerPrice, fluctuationPercent) => {
+        const names = [
+          '武汉锂钠氪锶科技有限公司',
+          '武汉懒猫微服科技有限公司',
+          '武汉铀锂氪锶科技合伙企业（有限合伙）',
+          '广西锂钠氪锶软件科技有限公司',
+        ];
         const units: BidUnit[] = [];
         for (let i = 0; i < count; i++) {
           const f = (Math.random() - 0.5) * 2 * fluctuationPercent;
           units.push({
             id: crypto.randomUUID(),
-            name: `单位${String.fromCharCode(65 + i)}`,
+            name: names[i % names.length],
             price: parseFloat((centerPrice * (1 + f / 100)).toFixed(2)),
             isValid: true,
           });
