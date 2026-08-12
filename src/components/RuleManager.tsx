@@ -120,19 +120,6 @@ export default function RuleManager() {
           <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
             {validRules.length > 0 ? `投标人${validRules.length} · 参数配置` : '投标人参数配置'}
           </h3>
-          {!isCappedRange && !isFixedRange && (
-            <button
-              onClick={addNewRule}
-              className={`sm:hidden border-2 border-dashed rounded-lg flex items-center justify-center gap-0.5 cursor-pointer transition-all px-2 py-1 text-[11px] ${
-                isDark
-                  ? 'border-[#3D3D3D] text-[#C0B098] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#252525]'
-                  : 'bg-white border-[#D4C4A8] hover:border-[#C43A31]/60 hover:bg-[#FFF8F5] text-text-secondary'
-              }`}
-            >
-              <i className="ri-add-line text-sm"></i>
-              <span>添加规则</span>
-            </button>
-          )}
         </div>
 
         {validRules.length === 0 ? (
