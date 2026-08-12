@@ -7,6 +7,7 @@ import { calculateResult } from '../utils/algorithms';
 interface ConfigState extends BidConfig {
   calculationResult: CalcResult | null;
   currentStep: number;
+  exportFormat: 'csv' | 'md';
 
   setCurrentStep: (step: number) => void;
   setAlgorithm: (algorithm: Algorithm) => void;
