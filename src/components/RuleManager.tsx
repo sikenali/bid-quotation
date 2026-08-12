@@ -180,7 +180,7 @@ function RuleRow({
           }`}
         />
         <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-          <span className={`text-sm sm:text-sm text-[11px] sm:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>投标人数量</span>
+          <span className={`text-[11px] sm:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>投标人数量</span>
           <input
             type="number"
             value={rule.minCount}
@@ -197,7 +197,7 @@ function RuleRow({
             placeholder={isCapped ? '10' : '无限'}
             disabled={isLocked}
           />
-          <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>家时</span>
+          <span className={`text-[11px] sm:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>家时</span>
           {isLocked && index > 0 && <span className="hidden sm:inline text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
           {showCappedBadge && <span className={`hidden sm:inline text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
         </div>
