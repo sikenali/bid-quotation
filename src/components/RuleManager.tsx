@@ -1,18 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useConfigStore } from '../stores/configStore';
-import { ValidRule, TrimAction } from '../types';
-
-const ACTIONS: { value: TrimAction; label: string }[] = [
-  { value: 'trim_percent', label: '去极值' },
-  { value: 'remove_highest_n', label: '去最高N家' },
-  { value: 'remove_lowest_n', label: '去最低N家' },
-  { value: 'nth_lowest', label: '第N低' },
-  { value: 'direct', label: '全部参与' },
-];
+import { ValidRule } from '../types';
 
 export default function RuleManager() {
   const { validRules, addValidRule, removeValidRule, updateValidRule, theme } = useConfigStore();
   const isDark = theme === 'dark';
+  const [activeRuleId, setActiveRuleId] = useState<string | null>(validRules[0]?.id || null);
 
   const addNewRule = () => {
     const { validRules } = useConfigStore.getState();
@@ -29,6 +22,7 @@ export default function RuleManager() {
       params: { trimPercent: 20 },
     };
     addValidRule(newRule);
+    setActiveRuleId(newRule.id);
   };
 
   return (
@@ -37,7 +31,10 @@ export default function RuleManager() {
         {validRules.map((rule, index) => (
           <div
             key={rule.id}
-            className="flex flex-col items-center justify-center px-5 py-3 bg-[#C43A31] rounded-xl gap-1 min-w-[100px]"
+            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl gap-1 min-w-[100px] transition-all cursor-pointer ${
+              rule.id === activeRuleId ? 'bg-[#C43A31]' : 'bg-[#C43A31]/60'
+            }`}
+            onClick={() => setActiveRuleId(rule.id)}
           >
             <span className="text-white text-[14px] font-medium">规则{index + 1}</span>
             <span className="text-white/70 text-[11px]">
@@ -73,9 +70,11 @@ export default function RuleManager() {
             <RuleRow
               key={rule.id}
               rule={rule}
+              isActive={rule.id === activeRuleId}
               isDark={isDark}
+              onSelect={() => setActiveRuleId(rule.id)}
               onUpdate={(updates) => updateValidRule(rule.id, updates)}
-              onRemove={() => removeValidRule(rule.id)}
+              onRemove={() => { removeValidRule(rule.id); if (activeRuleId === rule.id) setActiveRuleId(validRules.find(r => r.id !== rule.id)?.id || null); }}
             />
           ))
         )}
@@ -86,19 +85,32 @@ export default function RuleManager() {
 
 function RuleRow({
   rule,
+  isActive,
   isDark,
+  onSelect,
   onUpdate,
   onRemove,
 }: {
   rule: ValidRule;
+  isActive: boolean;
   isDark: boolean;
+  onSelect: () => void;
   onUpdate: (updates: Partial<ValidRule>) => void;
   onRemove: () => void;
 }) {
   return (
-    <div className={`rounded-xl border ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]/50'}`}>
-      {/* 第一行：家数区间 + 动作选择 */}
-      <div className="flex items-center gap-4 px-4 py-3 flex-wrap">
+    <div className={`rounded-xl border transition-all ${
+      isActive
+        ? isDark ? 'bg-[#1A1A1A] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20' : 'bg-white border-[#C43A31]/40 ring-1 ring-[#C43A31]/10'
+        : isDark ? 'bg-[#1A1A1A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]/50'
+    }`}>
+      <div className="flex items-center gap-4 px-4 py-3">
+        <button
+          onClick={onSelect}
+          className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${
+            isActive ? 'border-[#C43A31] bg-[#C43A31]' : isDark ? 'border-[#3A3A3A] bg-transparent' : 'border-[#D4C4A8] bg-transparent'
+          }`}
+        />
         <div className="flex items-center gap-2">
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>当投标家数</span>
           <input
@@ -120,33 +132,33 @@ function RuleRow({
 
         <div className={`h-5 w-px ${isDark ? 'bg-[#3A3A3A]' : 'bg-[#E8DCC8]'}`} />
 
-        <div className="flex items-center gap-1">
-          {ACTIONS.map((a) => (
-            <button
-              key={a.value}
-              onClick={() => {
-                const baseParams: Record<string, Record<string, number>> = {
-                  trim_percent: { trimPercent: 20 },
-                  remove_highest_n: { removeN: 1 },
-                  remove_lowest_n: { removeN: 1 },
-                  nth_lowest: { nth: 2 },
-                };
-                onUpdate({
-                  action: a.value,
-                  params: rule.action === a.value ? rule.params : (baseParams[a.value] ?? {}),
-                });
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                rule.action === a.value
-                  ? 'bg-[#C43A31] text-white'
-                  : isDark
-                    ? 'bg-[#2A2A2A] text-[#A89880] hover:text-white'
-                    : 'bg-[#F5EFE0] text-text-secondary hover:text-text'
-              }`}
-            >
-              {a.label}
-            </button>
-          ))}
+        <div className="flex items-center gap-2">
+          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>执行</span>
+          <select
+            value={rule.action}
+            onChange={(e) => {
+              const v = e.target.value as ValidRule['action'];
+              const baseParams: Record<string, Record<string, number>> = {
+                trim_percent: { trimPercent: 20 },
+                remove_highest_n: { removeN: 1 },
+                remove_lowest_n: { removeN: 1 },
+                nth_lowest: { nth: 2 },
+                direct: {},
+              };
+              onUpdate({ action: v, params: rule.action === v ? rule.params : (baseParams[v] ?? {}) });
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
+              isDark
+                ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]'
+                : 'bg-white border-[#E8DCC8] text-text'
+            }`}
+          >
+            <option value="trim_percent">去极值</option>
+            <option value="remove_highest_n">去最高N家</option>
+            <option value="remove_lowest_n">去最低N家</option>
+            <option value="nth_lowest">第N低</option>
+            <option value="direct">全部参与</option>
+          </select>
         </div>
 
         <div className="ml-auto">
@@ -160,7 +172,6 @@ function RuleRow({
         </div>
       </div>
 
-      {/* 第二行：动作参数 */}
       {rule.action === 'trim_percent' && (
         <div className={`flex items-center gap-2 px-4 py-2.5 border-t ${isDark ? 'border-[#3A3A3A] bg-[#2A2A2A]/50' : 'border-[#F5EFE0] bg-[#FBF7EF]'}`}>
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>各去</span>

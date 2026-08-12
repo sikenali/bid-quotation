@@ -32,17 +32,22 @@ export default function BidInput() {
           <button
             key={unit.id}
             onClick={() => setActiveUnitId(unit.id === activeUnitId ? null : unit.id)}
-            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl min-w-[140px] transition-all ${
+            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl min-w-[140px] transition-all border-2 ${
               unit.id === activeUnitId
-                ? 'bg-[#C43A31] text-white shadow-sm'
+                ? 'bg-[#C43A31] text-white border-[#C43A31] shadow-sm'
                 : isDark
-                  ? 'bg-[#2A2A2A] border border-[#3A3A3A] text-[#E8E0D0] hover:border-[#C43A31]/50'
-                  : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text hover:border-[#C43A31]/40'
+                  ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0] hover:border-[#C43A31]/50'
+                  : 'bg-[#F5EFE0] border-[#E0D5C0] text-text hover:border-[#C43A31]/40'
             }`}
           >
-            <span className={`text-[14px] font-medium ${unit.id === activeUnitId ? 'text-white' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
-              {unit.name || '未命名'}
-            </span>
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${
+                unit.id === activeUnitId ? 'border-white bg-white' : isDark ? 'border-[#A89880] bg-transparent' : 'border-[#8B7355] bg-transparent'
+              }`} />
+              <span className={`text-[14px] font-medium ${unit.id === activeUnitId ? 'text-white' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+                {unit.name || '未命名'}
+              </span>
+            </div>
             <span className={`text-[11px] ${unit.id === activeUnitId ? 'text-white/70' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
               ¥ {unit.price.toLocaleString()}
             </span>
