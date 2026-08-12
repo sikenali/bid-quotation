@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import BidInput from '../components/BidInput';
@@ -13,8 +13,30 @@ const DEFAULT_NAMES = [
 
 export default function Step4BidInput() {
   const navigate = useNavigate();
-  const { setCurrentStep, calculate, unitScores, calculationResult, addBidUnit } = useConfigStore();
+  const { setCurrentStep, calculate, unitScores, calculationResult, addBidUnit, bidUnits } = useConfigStore();
   const [isCalculating, setIsCalculating] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setHydrated(true), 0);
+    return () => clearTimeout(t);
+  }, []);
+
+  // URL 参数模式下，刷新后若已有 bidUnits 但无 calculationResult，自动重算
+  useEffect(() => {
+    if (!hydrated) return;
+    const params = new URLSearchParams(window.location.search);
+    const showTotal = params.get('total') === '1';
+    const showCalc = params.get('calc') === '1';
+    if ((showTotal || showCalc) && !calculationResult && bidUnits.length > 0 && bidUnits.some((b) => b.price > 0)) {
+      setIsCalculating(true);
+      setTimeout(() => {
+        calculate();
+        setIsCalculating(false);
+        setCurrentStep(5);
+      }, 100);
+    }
+  }, [hydrated, calculationResult, bidUnits, calculate, setCurrentStep]);
 
   const handleAddUnit = () => {
     const units = useConfigStore.getState().bidUnits;
@@ -44,17 +66,54 @@ export default function Step4BidInput() {
     }, 100);
   };
 
-  // Check if we should show total scores (from URL)
-  const showTotal = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('total') === '1';
-  const showCalc = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('calc') === '1';
+  if (!hydrated) {
+    return <div className="py-20" />;
+  }
 
-  if ((showTotal || showCalc) && unitScores.length > 0 && calculationResult) {
+  const searchParams = new URLSearchParams(window.location.search);
+  const showTotal = searchParams.get('total') === '1';
+  const showCalc = searchParams.get('calc') === '1';
+
+  // 没有结果且不在计算中（没有 bidUnits 数据）→ 跳转回输入页
+  useEffect(() => {
+    if (!hydrated) return;
+    const params = new URLSearchParams(window.location.search);
+    const showTotal = params.get('total') === '1';
+    const showCalc = params.get('calc') === '1';
+    if ((showTotal || showCalc) && !calculationResult && !isCalculating) {
+      if (bidUnits.length === 0 || !bidUnits.some((b) => b.price > 0)) {
+        navigate('/bids', { replace: true });
+      }
+    }
+  }, [hydrated, calculationResult, isCalculating, bidUnits, navigate]);
+
+  if ((showTotal || showCalc) && calculationResult) {
     return <Step5Results includeTotalScores={showTotal} />;
   }
 
+  if ((showTotal || showCalc) && isCalculating) {
+    return (
+      <div className="text-center py-20">
+        <div className="inline-block">
+          <i className="ri-loader-2-line animate-spin text-4xl text-primary"></i>
+        </div>
+        <p className="text-text-secondary text-lg mt-4">正在恢复测算结果...</p>
+      </div>
+    );
+  }
+
   if (showTotal || showCalc) {
-    navigate('/bids');
-    return null;
+    return (
+      <div className="text-center py-20">
+        <div className="w-16 h-16 rounded-full bg-[#C43A31]/10 flex items-center justify-center mx-auto mb-4">
+          <i className="ri-alert-line text-3xl text-[#C43A31]"></i>
+        </div>
+        <p className="text-text-secondary text-lg">暂无测算数据</p>
+        <button onClick={() => navigate('/bids', { replace: true })} className="btn-primary mt-6">
+          前往录入报价
+        </button>
+      </div>
+    );
   }
 
   return (

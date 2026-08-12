@@ -247,6 +247,10 @@ export const useConfigStore = create<ConfigState>()(
         apiKey: s.apiKey,
         apiEndpoint: s.apiEndpoint,
         unitScores: s.unitScores,
+        bidUnits: s.bidUnits,
+        calculationResult: s.calculationResult,
+        activeRuleId: s.activeRuleId,
+        currentStep: s.currentStep,
       }),
       onRehydrateStorage: () => (state: ConfigState | undefined) => {
         if (!state) return;
@@ -257,6 +261,23 @@ export const useConfigStore = create<ConfigState>()(
         }
         if (!Array.isArray(state.validRules) || state.validRules.length < 2) {
           (state as any).validRules = [...defaultValidRules];
+          (state as any).activeRuleId = 'r2';
+        } else if (!state.activeRuleId || !state.validRules.some((r) => r.id === state.activeRuleId)) {
+          (state as any).activeRuleId = state.validRules[0]?.id || 'r2';
+        }
+        if (state.calculationResult && state.bidUnits.length > 0) {
+          const needRecalc = !state.calculationResult.rankings ||
+            state.calculationResult.rankings.length !== state.bidUnits.filter((b) => b.isValid).length;
+          if (needRecalc) {
+            try {
+              const result = calculateResult(state as unknown as BidConfig);
+              if (result) {
+                (state as any).calculationResult = result;
+              }
+            } catch {
+              // ignore
+            }
+          }
         }
       },
     }
