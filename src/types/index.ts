@@ -40,6 +40,14 @@ export interface BidUnit {
   technicalScore?: number;
 }
 
+export interface UnitScore {
+  id: string;
+  unitId: string;
+  priceScore: number;
+  businessScore: number;
+  technicalScore: number;
+}
+
 export interface BidConfig {
   algorithm: Algorithm;
   validRules: ValidRule[];
