@@ -65,7 +65,7 @@ export default function BidInput() {
               unit.id === activeUnitId
                 ? 'bg-[#C43A31] text-white border-[#C43A31] shadow-sm'
                 : isDark
-                  ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0] hover:border-[#C43A31]/50'
+                  ? 'bg-[#2D2D2D] border-[#3D3D3D] text-[#F2EDE4] hover:border-[#C43A31]/50'
                   : 'bg-[#F5EFE0] border-[#E0D5C0] text-text hover:border-[#C43A31]/40'
             }`}
           >
@@ -73,11 +73,11 @@ export default function BidInput() {
               <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${
                 unit.id === activeUnitId ? 'border-white bg-white' : isDark ? 'border-[#A89880] bg-transparent' : 'border-[#8B7355] bg-transparent'
               }`} />
-              <span className={`text-[14px] font-medium ${unit.id === activeUnitId ? 'text-white' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+              <span className={`text-[14px] font-medium ${unit.id === activeUnitId ? 'text-white' : isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                 {unit.name || '未命名'}
               </span>
             </div>
-            <span className={`text-[11px] ${unit.id === activeUnitId ? 'text-white/70' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+            <span className={`text-[11px] ${unit.id === activeUnitId ? 'text-white/70' : isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
               ¥ {unit.price.toLocaleString()}
             </span>
           </button>
@@ -86,7 +86,7 @@ export default function BidInput() {
           onClick={handleAdd}
           className={`w-[120px] h-[60px] border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors ${
             isDark
-              ? 'border-[#3A3A3A] text-[#A89880] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#1A1A1A]'
+              ? 'border-[#3D3D3D] text-[#C0B098] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#252525]'
               : 'bg-[#FBF7EF] border-[#D4C4A8] text-text-secondary hover:border-[#C43A31] hover:text-[#C43A31]'
           }`}
         >
@@ -96,10 +96,10 @@ export default function BidInput() {
       </div>
 
       {/* 单位编辑区 */}
-      <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+      <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
         <div className="flex items-center gap-5 mb-4">
-          <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
-          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+          <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#C0B098]' : 'bg-[#D4C4A8]'}`} />
+          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
             {bidUnits.length > 0
               ? `${activeUnitId ? (bidUnits.find(u => u.id === activeUnitId)?.name || '单位') : '全部'} · 编辑`
               : '投标单位列表'}
@@ -107,7 +107,7 @@ export default function BidInput() {
         </div>
 
         {bidUnits.length === 0 ? (
-          <p className={`text-center py-8 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>暂无投标单位，点击上方的「添加单位」按钮开始录入</p>
+          <p className={`text-center py-8 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>暂无投标单位，点击上方的「添加单位」按钮开始录入</p>
         ) : (
           <div className="space-y-3">
             {bidUnits.map((unit) => (
@@ -116,10 +116,10 @@ export default function BidInput() {
                 className={`flex items-center gap-3 p-4 rounded-xl border transition-colors ${
                   unit.id === activeUnitId
                     ? isDark
-                      ? 'bg-[#1A1A1A] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20'
+                      ? 'bg-[#252525] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20'
                       : 'bg-white border-[#C43A31]/40 ring-1 ring-[#C43A31]/10'
                     : isDark
-                      ? 'bg-[#1A1A1A] border-[#3A3A3A]'
+                      ? 'bg-[#252525] border-[#3D3D3D]'
                       : 'bg-white border-[#E8DCC8]/50'
                 }`}
               >
@@ -128,16 +128,16 @@ export default function BidInput() {
                   value={unit.name}
                   onChange={(e) => handleChange(unit.id, 'name', e.target.value)}
                   placeholder="单位名称"
-                  className={`input-field flex-1 ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                  className={`input-field flex-1 ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                 />
                 <input
                   type="number"
                   value={unit.price}
                   onChange={(e) => handleChange(unit.id, 'price', parseFloat(e.target.value) || 0)}
                   placeholder="报价金额"
-                  className={`input-field w-[200px] text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                  className={`input-field w-[200px] text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                 />
-                <span className={`text-sm font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>元</span>
+                <span className={`text-sm font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>元</span>
                 <button
                   onClick={() => removeBidUnit(unit.id)}
                   className="px-4 py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm font-medium hover:bg-[#FFE0DC] transition-colors flex items-center gap-1"
@@ -158,7 +158,7 @@ export default function BidInput() {
           onClick={() => setShowRandomModal(true)}
           className={`px-5 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${
             isDark
-              ? 'bg-[#2A2A2A] border border-[#3A3A3A] text-[#A89880] hover:text-[#E8E0D0] hover:border-[#C43A31]/50'
+              ? 'bg-[#2D2D2D] border border-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4] hover:border-[#C43A31]/50'
               : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-[#C43A31] hover:border-[#C43A31]'
           }`}
         >
@@ -169,7 +169,7 @@ export default function BidInput() {
           onClick={() => setShowScoreModal(true)}
           className={`px-5 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${
             isDark
-              ? 'bg-[#2A2A2A] border border-[#3A3A3A] text-[#A89880] hover:text-[#E8E0D0] hover:border-[#C43A31]/50'
+              ? 'bg-[#2D2D2D] border border-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4] hover:border-[#C43A31]/50'
               : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-[#C43A31] hover:border-[#C43A31]'
           }`}
         >
@@ -188,47 +188,47 @@ export default function BidInput() {
       {/* 随机厂商弹窗 */}
       {showRandomModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowRandomModal(false)}>
-          <div className={`rounded-xl p-6 w-96 max-h-[80vh] overflow-y-auto ${isDark ? 'bg-[#2A2A2A]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
+          <div className={`rounded-xl p-6 w-96 max-h-[80vh] overflow-y-auto ${isDark ? 'bg-[#2D2D2D]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <span className={`font-semibold text-lg ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>随机厂商</span>
-                <p className={`text-xs mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>自动生成投标单位数据</p>
+                <span className={`font-semibold text-lg ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>随机厂商</span>
+                <p className={`text-xs mt-0.5 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>自动生成投标单位数据</p>
               </div>
-              <button onClick={() => setShowRandomModal(false)} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+              <button onClick={() => setShowRandomModal(false)} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
                 <i className="ri-close-line text-xl"></i>
               </button>
             </div>
             <div className="space-y-3">
               <div>
-                <label className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>投标家数</label>
+                <label className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>投标家数</label>
                 <input
                   type="number"
                   value={randomCount}
                   onChange={(e) => setRandomCount(parseInt(e.target.value) || 0)}
-                  className={`input-field w-full mt-1 ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                  className={`input-field w-full mt-1 ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                 />
               </div>
               <div>
-                <label className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>基准价中值</label>
+                <label className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>基准价中值</label>
                 <input
                   type="number"
                   value={randomCenter}
                   onChange={(e) => setRandomCenter(parseFloat(e.target.value) || 0)}
-                  className={`input-field w-full mt-1 ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                  className={`input-field w-full mt-1 ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                 />
               </div>
               <div>
-                <label className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>波动 ±%</label>
+                <label className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>波动 ±%</label>
                 <input
                   type="number"
                   value={randomFluctuation}
                   onChange={(e) => setRandomFluctuation(parseFloat(e.target.value) || 0)}
-                  className={`input-field w-full mt-1 ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                  className={`input-field w-full mt-1 ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                 />
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-4">
-              <button onClick={() => setShowRandomModal(false)} className={`px-5 py-2 rounded-lg text-sm transition-colors ${isDark ? 'bg-[#3A3A3A] text-[#A89880] hover:text-[#E8E0D0]' : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-text'}`}>
+              <button onClick={() => setShowRandomModal(false)} className={`px-5 py-2 rounded-lg text-sm transition-colors ${isDark ? 'bg-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4]' : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-text'}`}>
                 取消
               </button>
               <button
@@ -246,28 +246,28 @@ export default function BidInput() {
       {/* 报价解析 / 测算得分弹窗 */}
       {showScoreModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowScoreModal(false)}>
-          <div className={`rounded-xl p-6 w-[720px] max-h-[80vh] overflow-y-auto ${isDark ? 'bg-[#2A2A2A]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
+          <div className={`rounded-xl p-6 w-[720px] max-h-[80vh] overflow-y-auto ${isDark ? 'bg-[#2D2D2D]' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <span className={`font-semibold text-lg ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>报价解析</span>
-                <p className={`text-xs mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>价格得分自动计算，商务/技术得分可手动调整</p>
+                <span className={`font-semibold text-lg ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>报价解析</span>
+                <p className={`text-xs mt-0.5 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>价格得分自动计算，商务/技术得分可手动调整</p>
               </div>
-              <button onClick={() => setShowScoreModal(false)} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+              <button onClick={() => setShowScoreModal(false)} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
                 <i className="ri-close-line text-xl"></i>
               </button>
             </div>
 
-            <div className={`rounded-xl overflow-hidden border ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]'}`}>
+            <div className={`rounded-xl overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className={`border-b ${isDark ? 'border-[#3A3A3A] bg-[#1A1A1A]' : 'border-[#E8DCC8] bg-white'}`}>
-                    <th className={`px-4 py-2.5 text-left font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>序号</th>
-                    <th className={`px-4 py-2.5 text-left font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>单位名称</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>报价(元)</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>价格得分</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>商务得分</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>技术得分</th>
-                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>合计</th>
+                  <tr className={`border-b ${isDark ? 'border-[#3D3D3D] bg-[#252525]' : 'border-[#E8DCC8] bg-white'}`}>
+                    <th className={`px-4 py-2.5 text-left font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>序号</th>
+                    <th className={`px-4 py-2.5 text-left font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>单位名称</th>
+                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>报价(元)</th>
+                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>价格得分</th>
+                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>商务得分</th>
+                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>技术得分</th>
+                    <th className={`px-4 py-2.5 text-right font-medium ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>合计</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -278,17 +278,17 @@ export default function BidInput() {
                     const technicalScore = unit.technicalScore ?? existingScore?.technicalScore ?? 0;
                     const total = priceScore + businessScore + technicalScore;
                     return (
-                      <tr key={unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3A3A3A]/50 hover:bg-[#1A1A1A]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'}`}>
-                        <td className={`px-4 py-3 text-center ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-                          <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${index < 3 ? 'bg-[#C43A31]/10 text-[#C43A31]' : isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-[#F5EFE0] text-text-secondary'}`}>
+                      <tr key={unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3D3D3D]/50 hover:bg-[#252525]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'}`}>
+                        <td className={`px-4 py-3 text-center ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
+                          <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${index < 3 ? 'bg-[#C43A31]/10 text-[#C43A31]' : isDark ? 'bg-[#3D3D3D] text-[#C0B098]' : 'bg-[#F5EFE0] text-text-secondary'}`}>
                             {index + 1}
                           </span>
                         </td>
-                        <td className={`px-4 py-3 font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{unit.name}</td>
-                        <td className={`px-4 py-3 text-right font-mono ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+                        <td className={`px-4 py-3 font-medium ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>{unit.name}</td>
+                        <td className={`px-4 py-3 text-right font-mono ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                           {unit.price > 0 ? unit.price.toLocaleString() : '-'}
                         </td>
-                        <td className={`px-4 py-3 text-right font-mono font-semibold ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                        <td className={`px-4 py-3 text-right font-mono font-semibold ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
                           {priceScore > 0 ? priceScore.toFixed(2) : '-'}
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -301,7 +301,7 @@ export default function BidInput() {
                               const val = parseFloat(e.target.value) || 0;
                               updateBidUnit(unit.id, { businessScore: val });
                             }}
-                            className={`input-field w-16 text-right text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                            className={`input-field w-16 text-right text-sm ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                           />
                         </td>
                         <td className="px-4 py-3 text-right">
@@ -314,10 +314,10 @@ export default function BidInput() {
                               const val = parseFloat(e.target.value) || 0;
                               updateBidUnit(unit.id, { technicalScore: val });
                             }}
-                            className={`input-field w-16 text-right text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                            className={`input-field w-16 text-right text-sm ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
                           />
                         </td>
-                        <td className={`px-4 py-3 text-right font-bold ${total > 0 ? 'text-[#C43A31]' : (isDark ? 'text-[#A89880]' : 'text-text-secondary')}`}>
+                        <td className={`px-4 py-3 text-right font-bold ${total > 0 ? 'text-[#C43A31]' : (isDark ? 'text-[#C0B098]' : 'text-text-secondary')}`}>
                           {total > 0 ? total.toFixed(2) : '-'}
                         </td>
                       </tr>
@@ -328,7 +328,7 @@ export default function BidInput() {
             </div>
 
             <div className="flex justify-end gap-3 mt-4">
-              <button onClick={() => setShowScoreModal(false)} className={`px-5 py-2 rounded-lg text-sm transition-colors ${isDark ? 'bg-[#3A3A3A] text-[#A89880] hover:text-[#E8E0D0]' : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-text'}`}>
+              <button onClick={() => setShowScoreModal(false)} className={`px-5 py-2 rounded-lg text-sm transition-colors ${isDark ? 'bg-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4]' : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-text'}`}>
                 取消
               </button>
               <button onClick={handleSaveScores} className="btn-primary py-2">

@@ -138,77 +138,77 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
   return (
     <div className="space-y-6">
       {/* 扣分参数区 */}
-      <div className={`rounded-2xl p-6 space-y-5 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+      <div className={`rounded-2xl p-6 space-y-5 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
         <div className="flex items-center gap-5">
-          <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
-          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>得分扣减规则</h3>
+          <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#C0B098]' : 'bg-[#D4C4A8]'}`} />
+          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>得分扣减规则</h3>
         </div>
 
-        <div className={`flex items-stretch gap-0 rounded-xl overflow-hidden border ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]'}`}>
+        <div className={`flex items-stretch gap-0 rounded-xl overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
           {/* 满分 */}
-          <div className={`flex-1 p-4 flex flex-col gap-1.5 ${isDark ? 'border-r border-[#3A3A3A]' : 'border-r border-[#E8DCC8]'}`}>
-            <label className={`text-xs ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>满分 (分)</label>
+          <div className={`flex-1 p-4 flex flex-col gap-1.5 ${isDark ? 'border-r border-[#3D3D3D]' : 'border-r border-[#E8DCC8]'}`}>
+            <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>满分 (分)</label>
             <input
               type="number"
               step="1"
               min="0"
               value={deduction.fullScore}
               onChange={(e) => update({ fullScore: parseFloat(e.target.value) || 0 })}
-              className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+              className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
             />
           </div>
-          <div className={`w-px flex-shrink-0 ${isDark ? 'bg-[#3A3A3A]' : 'bg-[#D4C4A8]'}`} />
+          <div className={`w-px flex-shrink-0 ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
           {/* 每高 1% 扣 */}
-          <div className={`flex-1 p-4 flex flex-col gap-1.5 ${isDark ? 'border-r border-[#3A3A3A]' : 'border-r border-[#E8DCC8]'}`}>
-            <label className={`text-xs ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>每高 1% 扣 (分)</label>
+          <div className={`flex-1 p-4 flex flex-col gap-1.5 ${isDark ? 'border-r border-[#3D3D3D]' : 'border-r border-[#E8DCC8]'}`}>
+            <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>每高 1% 扣 (分)</label>
             <input
               type="number"
               step="0.1"
               min="0"
               value={currentDeduct}
               onChange={(e) => update({ deductPerHighPercent: parseFloat(e.target.value) || 0 })}
-              className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+              className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
             />
           </div>
-          <div className={`w-px flex-shrink-0 ${isDark ? 'bg-[#3A3A3A]' : 'bg-[#D4C4A8]'}`} />
+          <div className={`w-px flex-shrink-0 ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
           {/* 每低 1% 扣 */}
-          <div className={`flex-1 p-4 flex flex-col gap-1.5 ${isDark ? 'border-r border-[#3A3A3A]' : 'border-r border-[#E8DCC8]'}`}>
-            <label className={`text-xs ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>每低 1% 扣 (分)</label>
+          <div className={`flex-1 p-4 flex flex-col gap-1.5 ${isDark ? 'border-r border-[#3D3D3D]' : 'border-r border-[#E8DCC8]'}`}>
+            <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>每低 1% 扣 (分)</label>
             <input
               type="number"
               step="0.1"
               min="0"
               value={currentDeductLow}
               onChange={(e) => update({ deductPerLowPercent: parseFloat(e.target.value) || 0 })}
-              className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+              className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
             />
           </div>
-          <div className={`w-px flex-shrink-0 ${isDark ? 'bg-[#3A3A3A]' : 'bg-[#D4C4A8]'}`} />
+          <div className={`w-px flex-shrink-0 ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
           {/* 最低得分 */}
           <div className="flex-1 p-4 flex flex-col gap-1.5">
-            <label className={`text-xs ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>最低得分 (分)</label>
+            <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>最低得分 (分)</label>
             <input
               type="number"
               step="1"
               min="0"
               value={deduction.minScore}
               onChange={(e) => update({ minScore: parseFloat(e.target.value) || 0 })}
-              className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+              className={`input-field w-full text-sm text-center ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
             />
           </div>
         </div>
 
         {/* 算法评分步骤 + 示例 */}
-        <div className={`rounded-lg px-4 py-3 text-xs space-y-1 ${isDark ? 'bg-[#1A1A1A] text-[#A89880]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
+        <div className={`rounded-lg px-4 py-3 text-xs space-y-1 ${isDark ? 'bg-[#252525] text-[#C0B098]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
           {formula && formula.steps.map((step, i) => (
             <p key={i} className="flex items-start gap-2">
-              <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-white text-[#8B7355]'}`}>{i + 1}</span>
+              <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${isDark ? 'bg-[#3D3D3D] text-[#C0B098]' : 'bg-white text-[#8B7355]'}`}>{i + 1}</span>
               <span>{step}</span>
             </p>
           ))}
           {exampleData && (
-            <div className="mt-3 pt-3 border-t border-[#3A3A3A]/30">
-              <p className={`font-medium mb-2 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+            <div className="mt-3 pt-3 border-t border-[#3D3D3D]/30">
+              <p className={`font-medium mb-2 ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                 {exampleData.title} · 基准价 = {exampleData.basePrice}
               </p>
               <div className="grid grid-cols-2 gap-x-4 gap-y-1">
@@ -229,10 +229,10 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
       </div>
 
       {/* 招标文件规则原文对照 */}
-      <div className={`rounded-2xl p-6 space-y-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+      <div className={`rounded-2xl p-6 space-y-4 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
         <div className="flex items-center gap-5">
           <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#C8A45C]' : 'bg-[#C8A45C]'}`} />
-          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>招标文件规则原文对照</h3>
+          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>招标文件规则原文对照</h3>
         </div>
 
         <div
@@ -246,14 +246,14 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
             isDragging
               ? 'border-[#C43A31] bg-[#FFF0ED]'
               : isDark
-                ? 'border-[#3A3A3A] bg-[#1A1A1A]'
+                ? 'border-[#3D3D3D] bg-[#252525]'
                 : 'border-[#D4C4A8] bg-white'
           }`}
         >
           <div className="text-center py-4">
-            <i className={`ri-upload-cloud-2-line text-3xl mb-2 ${isDark ? 'text-[#A89880]' : 'text-[#D4C4A8]'}`}></i>
-            <p className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>拖拽文件到此处，或点击下方按钮上传</p>
-            <p className={`text-xs mt-1 ${isDark ? 'text-[#A89880]/60' : 'text-text-secondary/60'}`}>支持 .txt .pdf .doc 格式</p>
+            <i className={`ri-upload-cloud-2-line text-3xl mb-2 ${isDark ? 'text-[#C0B098]' : 'text-[#D4C4A8]'}`}></i>
+            <p className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>拖拽文件到此处，或点击下方按钮上传</p>
+            <p className={`text-xs mt-1 ${isDark ? 'text-[#C0B098]/60' : 'text-text-secondary/60'}`}>支持 .txt .pdf .doc 格式</p>
           </div>
           <div className="mt-3 flex justify-center">
             <label className="px-4 py-2 bg-[#C43A31] text-white rounded-lg text-sm font-medium hover:bg-[#A83028] transition-colors cursor-pointer flex items-center gap-2">

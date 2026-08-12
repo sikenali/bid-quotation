@@ -13,11 +13,11 @@
   --color-text-secondary: #8B7355;
   --color-text-secondary-dim: #B8A890;
   --color-step-inactive: #F0E8D5;
-  --color-dark-bg: #1A1A1A;
-  --color-dark-card: #2A2A2A;
-  --color-dark-border: #3A3A3A;
-  --color-dark-text: #E8E0D0;
-  --color-dark-text-secondary: #A89880;
+  --color-dark-bg: #222222;
+  --color-dark-card: #2D2D2D;
+  --color-dark-border: #3D3D3D;
+  --color-dark-text: #F2EDE4;
+  --color-dark-text-secondary: #C0B098;
   --font-sans: 'Inter', system-ui, sans-serif;
 }
 

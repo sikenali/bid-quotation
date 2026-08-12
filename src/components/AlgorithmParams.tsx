@@ -59,11 +59,11 @@ export function AlgorithmParams() {
   const desc = ALGORITHM_DESCRIPTIONS[algorithm] || '';
 
   return (
-    <div className={`rounded-2xl p-6 space-y-5 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+    <div className={`rounded-2xl p-6 space-y-5 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
       {/* 标题栏 + 折叠说明按钮 */}
       <div className="flex items-center gap-4">
-        <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
-        <h3 className={`font-semibold text-[15px] flex-1 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+        <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#C0B098]' : 'bg-[#D4C4A8]'}`} />
+        <h3 className={`font-semibold text-[15px] flex-1 ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
           价格评分配置
         </h3>
         <button
@@ -71,7 +71,7 @@ export function AlgorithmParams() {
           className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
             showAlgorithmDesc
               ? 'bg-[#C43A31] text-white'
-              : isDark ? 'bg-[#3A3A3A] text-[#A89880] hover:text-white' : 'bg-[#F0E8D5] text-text-secondary hover:text-text'
+              : isDark ? 'bg-[#3D3D3D] text-[#C0B098] hover:text-white' : 'bg-[#F0E8D5] text-text-secondary hover:text-text'
           }`}
           title={showAlgorithmDesc ? '收起说明' : '展开说明'}
         >
@@ -81,14 +81,14 @@ export function AlgorithmParams() {
 
       {/* 算法说明（可折叠） */}
       {showAlgorithmDesc && desc && (
-        <div className={`rounded-xl px-4 py-3 text-sm ${isDark ? 'bg-[#1A1A1A] text-[#A89880]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
+        <div className={`rounded-xl px-4 py-3 text-sm ${isDark ? 'bg-[#252525] text-[#C0B098]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
           {desc}
         </div>
       )}
 
       {/* 价格满分设置 */}
       <div>
-        <label className={`block text-xs mb-1 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+        <label className={`block text-xs mb-1 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
           价格满分 (分)
         </label>
         <input
@@ -97,20 +97,20 @@ export function AlgorithmParams() {
           min="0"
           value={deduction.fullScore}
           onChange={(e) => setDeduction({ ...deduction, fullScore: parseFloat(e.target.value) || 0 })}
-          className={`input-field w-full text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+          className={`input-field w-full text-sm ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
         />
       </div>
 
       {/* AI 解析 */}
       {algorithm === 'ai_parse' && (
         <div>
-          <label className={`block text-xs mb-1 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>粘贴招标文件或规则原文</label>
+          <label className={`block text-xs mb-1 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>粘贴招标文件或规则原文</label>
           <textarea
             value={parseText}
             onChange={(e) => setParseText(e.target.value)}
             rows={4}
             placeholder="请粘贴招标文件中的报价计算方法描述，AI 将自动解析并配置参数..."
-            className={`input-field w-full text-sm resize-none ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+            className={`input-field w-full text-sm resize-none ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
           />
           <button
             onClick={handleParse}
@@ -138,7 +138,7 @@ export function AlgorithmParams() {
           {parseError && (
             <p className={`mt-2 text-sm ${isDark ? 'text-red-400' : 'text-[#C43A31]'}`}>{parseError}</p>
           )}
-          <p className={`mt-1 text-xs ${isDark ? 'text-[#A89880]/60' : 'text-text-secondary/60'}`}>
+          <p className={`mt-1 text-xs ${isDark ? 'text-[#C0B098]/60' : 'text-text-secondary/60'}`}>
             解析后自动填充评分参数
           </p>
         </div>

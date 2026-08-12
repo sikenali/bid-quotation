@@ -31,12 +31,12 @@ export default function SummaryCards({ result, includeTotalScores = false }: Pro
   return (
     <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${allCards.length}, minmax(0, 1fr))` }}>
       {allCards.map((card) => (
-        <div key={card.key} className={`rounded-xl p-5 flex items-center gap-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+        <div key={card.key} className={`rounded-xl p-5 flex items-center gap-4 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
           <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${card.bg}`}>
             <i className={`text-2xl ${card.iconFill} ${card.icon}`}></i>
           </div>
           <div>
-            <div className={`text-[12px] ${isDark ? 'text-[#A89880]' : 'text-[#8B7355]'}`}>{card.label}</div>
+            <div className={`text-[12px] ${isDark ? 'text-[#C0B098]' : 'text-[#8B7355]'}`}>{card.label}</div>
             <div className={`font-bold text-[22px] ${card.color}`}>
               {card.key === 'algorithmName' ? result[card.key]
                 : card.key === 'totalCount' ? bidUnits.length

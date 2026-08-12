@@ -72,7 +72,7 @@ export default function RuleManager() {
                 isActive
                   ? 'border-[#C43A31] bg-white shadow-sm'
                   : isDark
-                    ? 'border-[#3A3A3A] bg-[#2A2A2A] hover:border-[#C43A31]/40'
+                    ? 'border-[#3D3D3D] bg-[#2D2D2D] hover:border-[#C43A31]/40'
                     : 'border-[#E8DCC8] bg-[#FBF7EF] hover:border-[#C43A31]/40'
               }`}
             >
@@ -83,15 +83,15 @@ export default function RuleManager() {
               )}
               <div className="flex items-center gap-3 mb-2">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                  isActive ? 'bg-[#FFF0ED]' : isDark ? 'bg-[#3A3A3A]' : 'bg-[#F0E8D5]'
+                  isActive ? 'bg-[#FFF0ED]' : isDark ? 'bg-[#3D3D3D]' : 'bg-[#F0E8D5]'
                 }`}>
                   <DiceDots count={displayCount} />
                 </div>
                 <div className="flex flex-col">
-                  <span className={`font-semibold text-[15px] ${isActive ? 'text-[#C43A31]' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+                  <span className={`font-semibold text-[15px] ${isActive ? 'text-[#C43A31]' : isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
                     投标人
                   </span>
-                  <span className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                  <span className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
                     {isCappedRule ? `≥${rule.minCount}家` : isFixedRange ? `${rule.minCount}~${rule.maxCount}家` : rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
                   </span>
                 </div>
@@ -104,7 +104,7 @@ export default function RuleManager() {
             onClick={addNewRule}
             className={`min-w-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
               isDark
-                ? 'border-[#3A3A3A] text-[#A89880] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#1A1A1A]'
+                ? 'border-[#3D3D3D] text-[#C0B098] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#252525]'
                 : 'bg-white border-[#D4C4A8] hover:border-[#C43A31]/60 hover:bg-[#FFF8F5] text-text-secondary'
             }`}
           >
@@ -114,16 +114,16 @@ export default function RuleManager() {
         )}
       </div>
 
-      <div className={`rounded-2xl p-6 space-y-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+      <div className={`rounded-2xl p-6 space-y-4 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
         <div className="flex items-center gap-5">
-          <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
-          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+          <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#C0B098]' : 'bg-[#D4C4A8]'}`} />
+          <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
             {validRules.length > 0 ? `投标人${validRules.length} · 参数配置` : '投标人参数配置'}
           </h3>
         </div>
 
         {validRules.length === 0 ? (
-          <p className={`text-center py-8 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>暂无规则，点击上方按钮添加</p>
+          <p className={`text-center py-8 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>暂无规则，点击上方按钮添加</p>
         ) : (
           validRules.map((rule, index) => (
             <RuleRow
@@ -169,42 +169,42 @@ function RuleRow({
   return (
     <div className={`rounded-xl border transition-all ${
       isActive
-        ? isDark ? 'bg-[#1A1A1A] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20' : 'bg-white border-[#C43A31]/40 ring-1 ring-[#C43A31]/10'
-        : isDark ? 'bg-[#1A1A1A] border-[#3A3A3A]' : 'bg-white border-[#E8DCC8]/50'
+        ? isDark ? 'bg-[#252525] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20' : 'bg-white border-[#C43A31]/40 ring-1 ring-[#C43A31]/10'
+        : isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]/50'
     }`}>
       <div className="flex items-center gap-4 px-4 py-3">
         <button
           onClick={onSelect}
           className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${
-            isActive ? 'border-[#C43A31] bg-[#C43A31]' : isDark ? 'border-[#3A3A3A] bg-transparent' : 'border-[#D4C4A8] bg-transparent'
+            isActive ? 'border-[#C43A31] bg-[#C43A31]' : isDark ? 'border-[#3D3D3D] bg-transparent' : 'border-[#D4C4A8] bg-transparent'
           }`}
         />
         <div className="flex items-center gap-2">
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>投标人数量</span>
+          <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>投标人数量</span>
           <input
             type="number"
             value={rule.minCount}
             disabled={isLocked}
             onChange={(e) => onUpdate({ minCount: parseInt(e.target.value) || 0 })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
+            className={`input-field w-16 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
           />
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>~</span>
+          <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>~</span>
           <input
             type="number"
             value={isCapped ? 10 : (rule.maxCount === -1 ? '' : rule.maxCount)}
             onChange={(e) => onUpdate({ maxCount: e.target.value ? parseInt(e.target.value) : -1 })}
-            className={`input-field w-20 text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
+            className={`input-field w-20 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
             placeholder={isCapped ? '10' : '无限'}
             disabled={isLocked}
           />
-          <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>家时</span>
+          <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>家时</span>
           {isLocked && index > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
           {showCappedBadge && <span className={`text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
         </div>
         <div className="ml-auto">
           <button
             onClick={onRemove}
-            className={`p-2 rounded-lg transition-colors ${isDark ? 'text-[#A89880] hover:text-[#C43A31] hover:bg-[#2A2A2A]' : 'text-text-secondary hover:text-[#C43A31] hover:bg-[#FFF0ED]'}`}
+            className={`p-2 rounded-lg transition-colors ${isDark ? 'text-[#C0B098] hover:text-[#C43A31] hover:bg-[#2D2D2D]' : 'text-text-secondary hover:text-[#C43A31] hover:bg-[#FFF0ED]'}`}
             aria-label="删除规则"
           >
             <i className="ri-close-line text-base"></i>

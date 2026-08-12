@@ -37,7 +37,7 @@ export default function CustomSelect({ options, value, onChange, className = '',
         className={`styled-select select-default w-full flex items-center justify-between pr-8 ${isDark ? 'dark' : ''}`}
         style={{ backgroundColor: isDark ? 'transparent' : 'transparent' }}
       >
-        <span className={isDark ? 'text-[#E8E0D0]' : ''}>{selected?.label || ''}</span>
+        <span className={isDark ? 'text-[#F2EDE4]' : ''}>{selected?.label || ''}</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="10"
@@ -54,7 +54,7 @@ export default function CustomSelect({ options, value, onChange, className = '',
         <div
           className={`absolute z-50 top-full left-0 right-0 mt-1 rounded-xl border overflow-hidden shadow-lg ${
             isDark
-              ? 'bg-[#2A2A2A] border-[#3A3A3A]'
+              ? 'bg-[#2D2D2D] border-[#3D3D3D]'
               : 'bg-white border-[#E8DCC8]'
           }`}
           style={{ maxHeight: '240px', overflowY: 'auto' }}
@@ -69,7 +69,7 @@ export default function CustomSelect({ options, value, onChange, className = '',
                     ? 'bg-[#C43A31]/20 text-[#C43A31]'
                     : 'bg-[#FFF0ED] text-[#C43A31]'
                   : isDark
-                    ? 'text-[#E8E0D0] hover:bg-[#3A3A3A]'
+                    ? 'text-[#F2EDE4] hover:bg-[#3D3D3D]'
                     : 'text-text hover:bg-[#F5EFE0]'
               }`}
             >

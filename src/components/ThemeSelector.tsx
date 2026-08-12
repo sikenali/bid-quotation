@@ -28,7 +28,7 @@ export default function ThemeSelector() {
 
       <div
         className={`p-8 rounded-xl border-2 cursor-pointer transition-all ${
-          theme === 'dark' ? 'border-[#C43A31] bg-[#2A2A2A]' : 'border-[#E8DCC8] bg-[#FBF7EF]'
+          theme === 'dark' ? 'border-[#C43A31] bg-[#2D2D2D]' : 'border-[#E8DCC8] bg-[#FBF7EF]'
         }`}
         onClick={() => setTheme('dark')}
       >

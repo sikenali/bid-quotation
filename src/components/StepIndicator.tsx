@@ -29,7 +29,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
                     : isDone
                     ? 'bg-[#5B8C5A]'
                     : isDark
-                      ? 'bg-[#3A3A3A]'
+                      ? 'bg-[#3D3D3D]'
                       : 'bg-[#F0E8D5]'
                 }`}
               >
@@ -37,7 +37,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
                   <i className="ri-check-line text-white text-[16px]"></i>
                 ) : (
                   <span className={`text-sm font-medium ${
-                    isActive ? 'text-white' : isDark ? 'text-[#A89880]' : 'text-text-secondary'
+                    isActive ? 'text-white' : isDark ? 'text-[#C0B098]' : 'text-text-secondary'
                   }`}>
                     {stepNum}
                   </span>
@@ -46,7 +46,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
               <span className={`absolute -bottom-5 left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap ${
                 isActive
                   ? 'text-[#C43A31] font-medium'
-                  : isDark ? 'text-[#A89880]' : 'text-text-secondary'
+                  : isDark ? 'text-[#C0B098]' : 'text-text-secondary'
               }`}>
                 {label}
               </span>
@@ -54,7 +54,7 @@ export function StepIndicator({ currentStep, totalSteps = 4 }: Props) {
             {index < totalSteps - 1 && (
               <div
                 className={`w-6 h-0.5 rounded-full mt-3 ${
-                  stepNum < currentStep ? 'bg-[#5B8C5A]' : isDark ? 'bg-[#3A3A3A]' : 'bg-[#D4C4A8]'
+                  stepNum < currentStep ? 'bg-[#5B8C5A]' : isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'
                 }`}
               />
             )}

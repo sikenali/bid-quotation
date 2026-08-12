@@ -16,7 +16,7 @@ export function AlgorithmCard({ option, isSelected, onSelect, isDark = false }: 
         isSelected
           ? 'border-[#C43A31] bg-white shadow-sm'
           : isDark
-            ? 'border-[#3A3A3A] bg-[#2A2A2A] hover:border-[#C43A31]/40'
+            ? 'border-[#3D3D3D] bg-[#2D2D2D] hover:border-[#C43A31]/40'
             : 'border-[#E8DCC8] bg-[#FBF7EF] hover:border-[#C43A31]/40'
       }`}
     >
@@ -27,15 +27,15 @@ export function AlgorithmCard({ option, isSelected, onSelect, isDark = false }: 
       )}
       <div className="flex items-center gap-3 mb-2">
         <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-          isSelected ? 'bg-[#FFF0ED]' : isDark ? 'bg-[#3A3A3A]' : 'bg-[#F0E8D5]'
+          isSelected ? 'bg-[#FFF0ED]' : isDark ? 'bg-[#3D3D3D]' : 'bg-[#F0E8D5]'
         }`}>
-          <i className={`${option.icon} text-[20px] ${isSelected ? 'text-[#C43A31]' : isDark ? 'text-[#A89880]' : 'text-[#5C4033]'}`}></i>
+          <i className={`${option.icon} text-[20px] ${isSelected ? 'text-[#C43A31]' : isDark ? 'text-[#C0B098]' : 'text-[#5C4033]'}`}></i>
         </div>
         <div className="flex flex-col">
-          <div className={`font-semibold text-[15px] ${isSelected ? 'text-[#C43A31]' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+          <div className={`font-semibold text-[15px] ${isSelected ? 'text-[#C43A31]' : isDark ? 'text-[#F2EDE4]' : 'text-text'}`}>
             {option.name}
           </div>
-          <div className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+          <div className={`text-[11px] leading-tight mt-0.5 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
             {option.shortDesc || option.description}
           </div>
         </div>
