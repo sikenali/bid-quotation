@@ -57,7 +57,8 @@ export default function BidInput() {
     if (!result) return;
 
     const scores: UnitScore[] = bidUnits.map((unit) => {
-      const priceScore = priceScores[unit.id] ?? 0;
+      const ranking = result.rankings.find(r => r.unit.id === unit.id);
+      const priceScore = ranking ? ranking.score : 0;
       return {
         id: crypto.randomUUID(),
         unitId: unit.id,
