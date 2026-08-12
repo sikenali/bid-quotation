@@ -195,7 +195,7 @@ function RuleRow({
             disabled={isLocked}
           />
           <span className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>家时</span>
-          {isLocked && <span className="text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
+          {isLocked && index > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
           {showCappedBadge && <span className={`text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
         </div>
         <div className="ml-auto">
