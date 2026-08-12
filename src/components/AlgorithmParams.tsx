@@ -13,20 +13,21 @@ export function AlgorithmParams() {
     setRemoveHighestN, setNthLowest,
     setQ1Weight, setK1, setK2, setMaxPrice, setCustomBasePrice,
     setDeduction, setValidRules,
-    theme,
+    theme, apiKey, apiEndpoint,
   } = useConfigStore();
+  const [parseText, setParseText] = useState('');
   const [isParsing, setIsParsing] = useState(false);
   const [parseError, setParseError] = useState('');
   const isDark = theme === 'dark';
 
   const handleParse = async () => {
-    const textarea = document.querySelector('textarea') as HTMLTextAreaElement | null;
-    const text = textarea?.value || '';
-    if (!text) return;
-
-    const { apiKey, apiEndpoint } = useConfigStore.getState();
+    const text = parseText.trim();
+    if (!text) {
+      setParseError('请先粘贴招标文件内容');
+      return;
+    }
     if (!apiKey) {
-      setParseError('请先在设置中配置 API Key');
+      setParseError('请先在设置（右上角⚙️）中配置 API Key');
       return;
     }
     if (!apiEndpoint) {
@@ -248,32 +249,43 @@ export function AlgorithmParams() {
       {/* AI 解析 */}
       {algorithm === 'ai_parse' && (
         <div>
-          <label className="block text-text-secondary text-xs mb-1">上传招标文件或粘贴文本</label>
+          <label className={`block text-xs mb-1 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>粘贴招标文件或规则原文</label>
           <textarea
+            value={parseText}
+            onChange={(e) => setParseText(e.target.value)}
             rows={4}
             placeholder="请粘贴招标文件中的报价计算方法描述，AI 将自动解析并配置参数..."
-            className="input-field w-full text-sm resize-none"
+            className={`input-field w-full text-sm resize-none ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
           />
           <button
             onClick={handleParse}
             disabled={isParsing}
-            className="mt-2 flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-sm font-medium hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`mt-2 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+              isDark ? 'bg-primary hover:bg-primary-hover text-white' : 'bg-[#C43A31] hover:bg-[#A83028] text-white'
+            }`}
           >
             {isParsing ? (
               <>
-                <i className="ri-loader-4-line animate-spin w-4 h-4"></i>
-                解析中...
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 animate-spin">
+                  <path d="M12 2a10 10 0 0 1 10 10h-3l4 4-4 4v-3a7 7 0 1 0-7 7v-3l4 4 4-4-4-4v3a10 10 0 1 1-10-10z"/>
+                </svg>
+                AI 解析中...
               </>
             ) : (
               <>
-                <i className="ri-file-text-line"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                  <path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/>
+                </svg>
                 AI 智能解析
               </>
             )}
           </button>
           {parseError && (
-            <p className="mt-2 text-sm text-red-500">{parseError}</p>
+            <p className={`mt-2 text-sm ${isDark ? 'text-red-400' : 'text-[#C43A31]'}`}>{parseError}</p>
           )}
+          <p className={`mt-1 text-xs ${isDark ? 'text-[#A89880]/60' : 'text-text-secondary/60'}`}>
+            解析后自动填充算法参数，请在右侧预览确认
+          </p>
         </div>
       )}
     </div>
