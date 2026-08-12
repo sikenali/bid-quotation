@@ -142,11 +142,7 @@ export default function SettingsPanel({ onClose }: Props) {
               <div className={`rounded-xl px-8 py-5 mb-6 ${isDark ? 'bg-[#2A2A2A] border border-[#3A3A3A]' : 'bg-[#FDF5E6]'}`}>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-[#C43A31] flex items-center justify-center text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-white">
-                      {activeTab === 'theme' && <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>}
-                      {activeTab === 'export' && <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>}
-                      {activeTab === 'api' && <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>}
-                    </svg>
+                    <i className={`text-xl ${HEADER_ICONS[activeTab].icon}`}></i>
                   </div>
                   <div>
                     <h2 className={`font-semibold text-[18px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{HEADER_ICONS[activeTab].title}</h2>
