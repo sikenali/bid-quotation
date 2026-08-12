@@ -23,9 +23,12 @@ export default function Layout({ children }: Props) {
         <header className="sticky top-0 z-40 bg-bg dark:bg-dark-bg border-b border-border/50">
           <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
             {/* 左侧品牌 */}
-            <div className="flex items-center gap-3">
+            <div
+              className="flex items-center gap-3 cursor-pointer select-none"
+              onClick={() => { setCurrentStep(1); navigate('/step-1'); }}
+            >
               <div className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center">
-                <i className="ri-file-text-line text-white text-xl"></i>
+                <i className="ri-auction-line text-white text-xl"></i>
               </div>
               <div>
                 <h1 className="text-text font-semibold text-[20px] leading-tight dark:text-dark-text">文价猩</h1>
