@@ -118,12 +118,21 @@ export const useConfigStore = create<ConfigState>()(
         const units: BidUnit[] = [];
         for (let i = 0; i < count; i++) {
           const f = (Math.random() - 0.5) * 2 * fluctuationPercent;
-          units.push({
-            id: crypto.randomUUID(),
-            name: names[i % names.length],
-            price: parseFloat((centerPrice * (1 + f / 100)).toFixed(2)),
-            isValid: true,
-          });
+          if (i < names.length) {
+            units.push({
+              id: crypto.randomUUID(),
+              name: names[i],
+              price: parseFloat((centerPrice * (1 + f / 100)).toFixed(2)),
+              isValid: true,
+            });
+          } else {
+            units.push({
+              id: crypto.randomUUID(),
+              name: `武汉锶氪钠锂科技有限公司${i - names.length + 1}`,
+              price: parseFloat((centerPrice * (1 + f / 100)).toFixed(2)),
+              isValid: true,
+            });
+          }
         }
         set({ bidUnits: units });
       },

@@ -32,11 +32,7 @@ export default function Step4BidInput() {
 
       <BidInput />
 
-      <div className="flex items-center gap-3 pt-4">
-        <button onClick={handlePrev} className="btn-secondary">
-          <i className="ri-arrow-left-line"></i>
-          <span>上一步</span>
-        </button>
+      <div className="flex justify-end pt-4 gap-3">
         <button
           onClick={handleTotalCalculate}
           className="px-6 py-2.5 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
