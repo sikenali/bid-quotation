@@ -65,7 +65,14 @@ export default function RankingTable({ result }: Props) {
                     {item.rank}
                   </span>
                 </td>
-                <td className={`px-6 py-4 font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{item.unit.name || '未命名'}</td>
+                <td className={`px-6 py-4 font-medium flex items-center gap-2 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+                  {item.unit.name || '未命名'}
+                  {item.rank === 1 && (
+                    <span className="relative inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#C43A31] text-white text-xs font-bold border-2 border-[#FFF] shadow-sm" title="第一名">
+                      <i className="ri-trophy-line text-sm"></i>
+                    </span>
+                  )}
+                </td>
                 <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
                 <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{item.deviationPercent > 0 ? '+' : ''}{item.deviationPercent}%</td>
                 <td className={`px-6 py-4 text-right font-semibold ${getScoreColor(item.score, fullScore)}`}>
