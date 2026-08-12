@@ -16,9 +16,15 @@ export default function RuleManager() {
   const isDark = theme === 'dark';
 
   const addNewRule = (action: TrimAction) => {
+    const { validRules } = useConfigStore.getState();
+    let nextMin = 5;
+    for (const r of validRules) {
+      if (r.maxCount === -1 || r.maxCount >= nextMin) continue;
+      if (r.minCount >= nextMin) nextMin = r.minCount + 1;
+    }
     const newRule: ValidRule = {
       id: crypto.randomUUID(),
-      minCount: 1,
+      minCount: nextMin,
       maxCount: -1,
       action,
       params: action === 'trim_percent' ? { trimPercent: 20 } :
