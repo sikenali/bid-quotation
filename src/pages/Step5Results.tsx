@@ -54,11 +54,11 @@ export default function Step5Results({ includeTotalScores = false }: Props) {
             <span>导出报价</span>
           </button>
           <button
-            onClick={() => { setCurrentStep(1); navigate('/step-1'); }}
+            onClick={() => { setCurrentStep(4); navigate('/step-4'); }}
             className="btn-primary"
           >
-            <i className="ri-bar-chart-grouped-line"></i>
-            <span>报价测算</span>
+            <i className="ri-arrow-left-right-line"></i>
+            <span>重新测算</span>
           </button>
         </div>
       </div>
