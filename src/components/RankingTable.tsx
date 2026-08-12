@@ -69,7 +69,7 @@ export default function RankingTable({ result }: Props) {
                   {item.unit.name || '未命名'}
                   {item.rank === 1 && (
                     <span className="relative inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#C43A31] text-white text-xs font-bold border-2 border-[#FFF] shadow-sm" title="第一名">
-                      <i className="ri-trophy-line text-sm"></i>
+                      <i className="ri-verified-badge-line text-sm"></i>
                     </span>
                   )}
                 </td>
