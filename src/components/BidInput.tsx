@@ -111,6 +111,7 @@ export default function BidInput() {
                   placeholder="报价金额"
                   className={`input-field w-[200px] text-center ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
                 />
+                <span className={`text-sm font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>元</span>
                 <button
                   onClick={() => removeBidUnit(unit.id)}
                   className="px-4 py-2 bg-[#FFF0ED] border border-[#F5C6C0] rounded-lg text-[#C43A31] text-sm font-medium hover:bg-[#FFE0DC] transition-colors flex items-center gap-1"
