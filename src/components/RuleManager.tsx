@@ -28,6 +28,7 @@ export default function RuleManager() {
 
   const lastRule = validRules[validRules.length - 1];
   const isCappedRange = lastRule ? lastRule.maxCount === -1 && lastRule.minCount >= 7 : false;
+  const isFixedRange = lastRule ? lastRule.minCount >= 7 && lastRule.maxCount === 10 : false;
 
   const addNewRule = () => {
     const { validRules } = useConfigStore.getState();
