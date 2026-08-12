@@ -2,6 +2,26 @@ import React, { useState } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { ValidRule } from '../types';
 
+function DiceDots({ count }: { count: number }) {
+  const dots = count >= 6 ? 6 : count;
+  const grid: Record<number, [number, number][]> = {
+    1: [[1, 1]],
+    2: [[0, 0], [2, 2]],
+    3: [[0, 0], [1, 1], [2, 2]],
+    4: [[0, 0], [0, 2], [2, 0], [2, 2]],
+    5: [[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]],
+    6: [[0, 0], [0, 1], [0, 2], [2, 0], [2, 1], [2, 2]],
+  };
+  const cells = grid[dots] || grid[1];
+  return (
+    <div className="grid grid-cols-3 gap-0.5 w-7 h-7 flex-shrink-0">
+      {Array.from({ length: 9 }).map((_, i) => (
+        <div key={i} className={`w-1.5 h-1.5 rounded-full ${cells.some(([r, c]) => r === Math.floor(i / 3) && c === i % 3) ? 'bg-current' : 'bg-transparent'}`} />
+      ))}
+    </div>
+  );
+}
+
 export default function RuleManager() {
   const { validRules, addValidRule, removeValidRule, updateValidRule, theme } = useConfigStore();
   const isDark = theme === 'dark';
@@ -33,29 +53,44 @@ export default function RuleManager() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-3">
-        {validRules.map((rule, index) => (
-          <button
-            key={rule.id}
-            onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
-            className={`flex flex-col items-center justify-center px-5 py-3 rounded-xl min-w-[140px] transition-all border-2 ${
-              rule.id === activeRuleId
-                ? 'bg-[#C43A31] text-white border-[#C43A31] shadow-sm'
-                : isDark
-                  ? 'bg-[#2A2A2A] border-[#3A3A3A] text-[#E8E0D0] hover:border-[#C43A31]/50'
-                  : 'bg-[#F5EFE0] border-[#E0D5C0] text-text hover:border-[#C43A31]/40'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${
-                rule.id === activeRuleId ? 'border-white bg-white' : isDark ? 'border-[#A89880] bg-transparent' : 'border-[#8B7355] bg-transparent'
-              }`} />
-              <span className="text-[14px] font-medium">规则{index + 1}</span>
-            </div>
-            <span className={`text-[11px] ${rule.id === activeRuleId ? 'text-white/70' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
-              {rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
-            </span>
-          </button>
-        ))}
+        {validRules.map((rule, index) => {
+          const isActive = rule.id === activeRuleId;
+          const displayCount = rule.maxCount === -1 ? 6 : Math.min(rule.minCount, 6);
+          return (
+            <button
+              key={rule.id}
+              onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
+              className={`relative p-4 rounded-xl border-2 text-left transition-all duration-200 min-w-[140px] ${
+                isActive
+                  ? 'border-[#C43A31] bg-white shadow-sm'
+                  : isDark
+                    ? 'border-[#3A3A3A] bg-[#2A2A2A] hover:border-[#C43A31]/50'
+                    : 'border-[#E0D5C0] bg-[#F5EFE0] hover:border-[#C43A31]/40'
+              }`}
+            >
+              {isActive && (
+                <div className="absolute top-3 right-3 w-5 h-5 bg-[#C43A31] rounded-full flex items-center justify-center">
+                  <i className="ri-check-line text-white text-sm"></i>
+                </div>
+              )}
+              <div className="flex items-center gap-3 mb-2">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  isActive ? 'bg-[#FFF0ED] text-[#C43A31]' : isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-white text-text-secondary'
+                }`}>
+                  <DiceDots count={displayCount} />
+                </div>
+                <div className="flex flex-col">
+                  <span className={`font-semibold text-[15px] ${isActive ? 'text-[#C43A31]' : isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+                    规则{index + 1}
+                  </span>
+                  <span className={`text-[11px] leading-tight mt-0.5 ${isActive ? 'text-[#C43A31]/70' : 'text-text-secondary'}`}>
+                    {rule.maxCount === -1 ? `≥${rule.minCount}家` : `${rule.minCount}~${rule.maxCount}家`}
+                  </span>
+                </div>
+              </div>
+            </button>
+          );
+        })}
         <button
           onClick={addNewRule}
           className={`min-w-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
