@@ -34,7 +34,11 @@ export default function RuleManager() {
     const { validRules } = useConfigStore.getState();
     let nextMin = 5;
     for (const r of validRules) {
-      if (r.maxCount === -1 || r.maxCount >= nextMin) continue;
+      if (r.maxCount === -1) {
+        nextMin = Math.max(nextMin, r.minCount + 1);
+        continue;
+      }
+      if (r.maxCount >= nextMin) continue;
       if (r.minCount >= nextMin) nextMin = r.minCount + 1;
     }
     const newRule: ValidRule = {
