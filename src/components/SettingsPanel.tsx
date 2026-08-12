@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import ThemeSelector from './ThemeSelector';
 
-import { exportCSV, exportMarkdown } from '../utils/export';
-
 interface Props {
   onClose: () => void;
 }
