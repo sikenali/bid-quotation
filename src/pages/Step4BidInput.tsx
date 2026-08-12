@@ -1,27 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfigStore } from '../stores/configStore';
 import BidInput from '../components/BidInput';
-import ScoreInput from '../components/ScoreInput';
+import Step5Results from '../pages/Step5Results';
 
 export default function Step4BidInput() {
   const navigate = useNavigate();
-  const { setCurrentStep, calculate, unitScores, bidUnits } = useConfigStore();
-  const [showScoreInput, setShowScoreInput] = useState(false);
+  const { setCurrentStep, calculate, unitScores } = useConfigStore();
 
   const handlePrev = () => { setCurrentStep(3); navigate('/step-3'); };
-  const handleNext = () => {
-    setCurrentStep(5);
+  const handlePriceCalc = () => {
     calculate();
+    setCurrentStep(5);
     navigate('/step-5');
   };
-  const handleTotalCalculate = () => {
+  const handleTotalCalc = () => {
     calculate();
-    setShowScoreInput(true);
+    // Navigate with total scores flag
+    const url = '/step-5?total=1';
+    setCurrentStep(5);
+    navigate(url);
   };
 
-  // Total score from saved unitScores
-  const totalPrice = unitScores.reduce((sum, us) => sum + us.priceScore + us.businessScore + us.technicalScore, 0);
+  // Check if we should show total scores (from URL)
+  const showTotal = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('total') === '1';
+
+  if (showTotal && unitScores.length > 0) {
+    return <Step5Results includeTotalScores={true} />;
+  }
 
   return (
     <div className="space-y-6">
@@ -34,20 +40,18 @@ export default function Step4BidInput() {
 
       <div className="flex justify-end pt-4 gap-3">
         <button
-          onClick={handleTotalCalculate}
+          onClick={handleTotalCalc}
           className="px-6 py-2.5 bg-[#059669] hover:bg-[#047857] text-white rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
         >
           <i className="ri-calculator-line"></i>
           <span>总价测算</span>
         </button>
-        <button onClick={handleNext} className="btn-primary">
+        <button onClick={handlePriceCalc} className="btn-primary">
           <i className="ri-bar-chart-grouped-line"></i>
           <span>报价测算</span>
         </button>
       </div>
       <p className="text-center text-xs text-text-secondary pt-6">© 2026 Powered by LightOS</p>
-
-      {showScoreInput && <ScoreInput onClose={() => setShowScoreInput(false)} />}
     </div>
   );
 }

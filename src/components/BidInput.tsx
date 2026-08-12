@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useConfigStore } from '../stores/configStore';
-import { BidUnit } from '../types';
+import { BidUnit, UnitScore } from '../types';
 
 export default function BidInput() {
-  const { bidUnits, addBidUnit, updateBidUnit, removeBidUnit, clearBidUnits, randomFill, parsePrices, theme } = useConfigStore();
+  const { bidUnits, addBidUnit, updateBidUnit, removeBidUnit, clearBidUnits, randomFill, parsePrices, theme, calculate, unitScores, setUnitScores } = useConfigStore();
   const [showRandomModal, setShowRandomModal] = useState(false);
-  const [showParseModal, setShowParseModal] = useState(false);
+  const [showScoreModal, setShowScoreModal] = useState(false);
   const [randomCount, setRandomCount] = useState(5);
   const [randomCenter, setRandomCenter] = useState(100);
   const [randomFluctuation, setRandomFluctuation] = useState(10);
-  const [parseText, setParseText] = useState('');
   const [activeUnitId, setActiveUnitId] = useState<string | null>(null);
-
   const isDark = theme === 'dark';
 
-  // 显示所有投标单位，不裁剪、不随机打乱
-  const displayUnits = bidUnits;
+  // Pre-compute price scores when opening score modal
+  const priceScores = useMemo(() => {
+    calculate();
+    const state = useConfigStore.getState();
+    const result = state.calculationResult;
+    if (!result) return {};
+    const map: Record<string, number> = {};
+    result.rankings.forEach(r => { map[r.unit.id] = r.score; });
+    return map;
+  }, []);
 
   const handleAdd = () => {
     addBidUnit('', 0);
@@ -27,11 +33,31 @@ export default function BidInput() {
     updateBidUnit(id, { [field]: value });
   };
 
+  const handleSaveScores = () => {
+    calculate();
+    const state = useConfigStore.getState();
+    const result = state.calculationResult;
+    if (!result) return;
+
+    const scores: UnitScore[] = bidUnits.map((unit) => {
+      const priceScore = priceScores[unit.id] ?? 0;
+      return {
+        id: crypto.randomUUID(),
+        unitId: unit.id,
+        priceScore,
+        businessScore: unit.businessScore ?? 0,
+        technicalScore: unit.technicalScore ?? 0,
+      };
+    });
+    setUnitScores(scores);
+    setShowScoreModal(false);
+  };
+
   return (
     <div className="space-y-6">
       {/* 投标单位标签横排 */}
       <div className="flex flex-wrap gap-3">
-        {displayUnits.map((unit) => (
+        {bidUnits.map((unit) => (
           <button
             key={unit.id}
             onClick={() => setActiveUnitId(unit.id === activeUnitId ? null : unit.id)}
@@ -74,17 +100,17 @@ export default function BidInput() {
         <div className="flex items-center gap-5 mb-4">
           <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
           <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
-            {displayUnits.length > 0
+            {bidUnits.length > 0
               ? `${activeUnitId ? (bidUnits.find(u => u.id === activeUnitId)?.name || '单位') : '全部'} · 编辑`
               : '投标单位列表'}
           </h3>
         </div>
 
-        {displayUnits.length === 0 ? (
+        {bidUnits.length === 0 ? (
           <p className={`text-center py-8 ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>暂无投标单位，点击上方的「添加单位」按钮开始录入</p>
         ) : (
           <div className="space-y-3">
-            {displayUnits.map((unit) => (
+            {bidUnits.map((unit) => (
               <div
                 key={unit.id}
                 className={`flex items-center gap-3 p-4 rounded-xl border transition-colors ${
@@ -137,10 +163,10 @@ export default function BidInput() {
           }`}
         >
           <i className="ri-dice-line"></i>
-随机厂商
+          随机厂商
         </button>
         <button
-          onClick={() => setShowParseModal(true)}
+          onClick={() => setShowScoreModal(true)}
           className={`px-5 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${
             isDark
               ? 'bg-[#2A2A2A] border border-[#3A3A3A] text-[#A89880] hover:text-[#E8E0D0] hover:border-[#C43A31]/50'
@@ -159,10 +185,11 @@ export default function BidInput() {
         </button>
       </div>
 
+      {/* 随机厂商弹窗 */}
       {showRandomModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowRandomModal(false)}>
           <div className={`rounded-xl p-6 w-96 ${isDark ? 'bg-[#2A2A2A]' : 'bg-white'}`}>
-            <h3 className={`font-semibold mb-4 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>随机填充</h3>
+            <h3 className={`font-semibold mb-4 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>随机厂商</h3>
             <div className="space-y-3">
               <div>
                 <label className={`text-sm ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>投标家数</label>
@@ -205,23 +232,129 @@ export default function BidInput() {
         </div>
       )}
 
-      {showParseModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={() => setShowParseModal(false)}>
-          <div className={`rounded-xl p-6 w-[500px] ${isDark ? 'bg-[#2A2A2A]' : 'bg-white'}`}>
-            <h3 className={`font-semibold mb-4 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>报价解析</h3>
-            <textarea
-              value={parseText}
-              onChange={(e) => setParseText(e.target.value)}
-              className={`input-field w-full h-32 resize-none ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
-              placeholder="输入报价，支持逗号、全角逗号分隔，如：100,110,120 或 100，110，120"
-            />
-            <div className="flex justify-end gap-3 mt-4">
-              <button onClick={() => setShowParseModal(false)} className={`btn-secondary ${isDark ? 'bg-[#3A3A3A] text-[#A89880] hover:bg-[#2A2A2A]' : ''}`}>取消</button>
-              <button
-                onClick={() => { parsePrices(parseText); setShowParseModal(false); }}
-                className="btn-primary"
-              >
-                解析填入
+      {/* 报价解析 / 测算得分弹窗（整合版） */}
+      {showScoreModal && (
+        <div className="fixed inset-0 z-50 flex" onClick={() => setShowScoreModal(false)}>
+          <div className="absolute inset-0 bg-black/50" />
+          <div
+            className={`relative ml-auto w-full max-w-4xl flex flex-col ${isDark ? 'bg-[#2A2A2A]' : 'bg-[#FBF7EF]'}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className={`flex items-center justify-between px-8 py-5 border-b ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#FBF7EF] border-[#E8DCC8]'}`}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-[#C43A31] flex items-center justify-center">
+                  <i className="ri-file-list-3-line text-white text-xl"></i>
+                </div>
+                <div>
+                  <span className={`font-semibold text-lg ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>报价解析</span>
+                  <p className={`text-xs ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>价格得分自动计算，商务/技术得分可手动调整</p>
+                </div>
+              </div>
+              <button onClick={() => setShowScoreModal(false)} className={`hover:text-[#C43A31] transition-colors ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                <i className="ri-close-line text-xl"></i>
+              </button>
+            </div>
+
+            {/* Table */}
+            <div className={`flex-1 overflow-y-auto p-6 ${isDark ? 'bg-[#1A1A1A]' : 'bg-[#EAE5D9]'}`}>
+              <div className={`rounded-2xl overflow-hidden border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className={`border-b ${isDark ? 'border-[#3A3A3A] bg-[#1A1A1A]' : 'border-[#E8DCC8] bg-white'}`}>
+                      <th className={`px-6 py-3 text-left font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>序号</th>
+                      <th className={`px-6 py-3 text-left font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>单位名称</th>
+                      <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>报价 (元)</th>
+                      <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>价格得分</th>
+                      <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>商务得分</th>
+                      <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>技术得分</th>
+                      <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>合计</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bidUnits.map((unit, index) => {
+                      const existingScore = unitScores.find(us => us.unitId === unit.id);
+                      const priceScore = priceScores[unit.id] ?? (existingScore?.priceScore ?? 0);
+                      const businessScore = unit.businessScore ?? existingScore?.businessScore ?? 0;
+                      const technicalScore = unit.technicalScore ?? existingScore?.technicalScore ?? 0;
+                      const total = priceScore + businessScore + technicalScore;
+                      return (
+                        <tr key={unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3A3A3A]/50 hover:bg-[#1A1A1A]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'}`}>
+                          <td className={`px-6 py-4 text-center ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                            <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-semibold ${index < 3 ? 'bg-[#C43A31]/10 text-[#C43A31]' : isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-[#F5EFE0] text-text-secondary'}`}>
+                              {index + 1}
+                            </span>
+                          </td>
+                          <td className={`px-6 py-4 font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{unit.name}</td>
+                          <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
+                            {unit.price > 0 ? unit.price.toLocaleString() : '-'}
+                          </td>
+                          <td className={`px-6 py-4 text-right font-mono font-semibold ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                            {priceScore > 0 ? priceScore.toFixed(2) : '-'}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <input
+                              type="number"
+                              step="0.1"
+                              min="0"
+                              value={businessScore}
+                              onChange={(e) => {
+                                const val = parseFloat(e.target.value) || 0;
+                                updateBidUnit(unit.id, { businessScore: val });
+                              }}
+                              className={`input-field w-20 text-right text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                            />
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <input
+                              type="number"
+                              step="0.1"
+                              min="0"
+                              value={technicalScore}
+                              onChange={(e) => {
+                                const val = parseFloat(e.target.value) || 0;
+                                updateBidUnit(unit.id, { technicalScore: val });
+                              }}
+                              className={`input-field w-20 text-right text-sm ${isDark ? 'bg-[#1A1A1A] border-[#3A3A3A] text-[#E8E0D0]' : ''}`}
+                            />
+                          </td>
+                          <td className={`px-6 py-4 text-right font-bold ${total > 0 ? 'text-[#C43A31]' : (isDark ? 'text-[#A89880]' : 'text-text-secondary')}`}>
+                            {total > 0 ? total.toFixed(2) : '-'}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                  <tfoot>
+                    <tr className={`border-t font-semibold ${isDark ? 'border-[#3A3A3A] bg-[#1A1A1A]' : 'border-[#E8DCC8] bg-white'}`}>
+                      <td className="px-6 py-3" colSpan={3}></td>
+                      <td className={`px-6 py-3 text-right ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>-</td>
+                      <td className={`px-6 py-3 text-right ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                        {bidUnits.reduce((s, u) => s + (u.businessScore ?? 0), 0).toFixed(2)}
+                      </td>
+                      <td className={`px-6 py-3 text-right ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
+                        {bidUnits.reduce((s, u) => s + (u.technicalScore ?? 0), 0).toFixed(2)}
+                      </td>
+                      <td className={`px-6 py-3 text-right ${isDark ? 'text-[#C43A31]' : 'text-[#C43A31]'}`}>
+                        {bidUnits.reduce((s, u) => {
+                          const ps = priceScores[u.id] ?? 0;
+                          return s + ps + (u.businessScore ?? 0) + (u.technicalScore ?? 0);
+                        }, 0).toFixed(2)}
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            {/* Footer buttons */}
+            <div className={`px-8 py-5 border-t flex items-center justify-end gap-3 ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#FDF5E6]'}`}>
+              <button onClick={() => setShowScoreModal(false)} className={`px-6 py-2.5 rounded-xl text-sm transition-colors ${isDark ? 'bg-[#3A3A3A] text-[#A89880] hover:text-[#E8E0D0]' : 'bg-[#F5EFE0] border border-[#E0D5C0] text-text-secondary hover:text-text'}`}>
+                取消
+              </button>
+              <button onClick={handleSaveScores} className="btn-primary">
+                <i className="ri-save-line"></i>
+                <span>保存得分</span>
               </button>
             </div>
           </div>

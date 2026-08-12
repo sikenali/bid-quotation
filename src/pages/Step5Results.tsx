@@ -5,7 +5,11 @@ import SummaryCards from '../components/SummaryCards';
 import RankingTable from '../components/RankingTable';
 import { exportCSV, exportMarkdown } from '../utils/export';
 
-export default function Step5Results() {
+interface Props {
+  includeTotalScores?: boolean;
+}
+
+export default function Step5Results({ includeTotalScores = false }: Props) {
   const navigate = useNavigate();
   const { calculationResult, setCurrentStep, exportFormat } = useConfigStore();
 
@@ -31,10 +35,10 @@ export default function Step5Results() {
       </div>
 
       {/* 基准价摘要区 */}
-      <SummaryCards result={calculationResult} />
+      <SummaryCards result={calculationResult} includeTotalScores={includeTotalScores} />
 
       {/* 排名表格区 */}
-      <RankingTable result={calculationResult} />
+      <RankingTable result={calculationResult} includeTotalScores={includeTotalScores} />
 
       <div className="flex items-center justify-between pt-4">
         <button onClick={handlePrev} className="btn-secondary">
@@ -58,6 +62,7 @@ export default function Step5Results() {
           </button>
         </div>
       </div>
+      <p className="text-center text-xs text-text-secondary pt-6">© 2026 Powered by LightOS</p>
     </div>
   );
 }

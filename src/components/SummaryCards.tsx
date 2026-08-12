@@ -4,6 +4,7 @@ import { useConfigStore } from '../stores/configStore';
 
 interface Props {
   result: CalcResult;
+  includeTotalScores?: boolean;
 }
 
 const cards = [
@@ -13,13 +14,23 @@ const cards = [
   { label: '算法', key: 'algorithmName' as const, color: 'text-[#6B8CAE]', icon: 'ri-bar-chart-grouped-line', bg: 'bg-[#E8F0F5]', iconFill: 'text-[#6B8CAE]' },
 ];
 
-export default function SummaryCards({ result }: Props) {
-  const { theme, bidUnits } = useConfigStore();
+export default function SummaryCards({ result, includeTotalScores = false }: Props) {
+  const { theme, bidUnits, unitScores } = useConfigStore();
   const isDark = theme === 'dark';
 
+  const totalPriceScore = includeTotalScores
+    ? unitScores.reduce((sum, us) => sum + us.priceScore + us.businessScore + us.technicalScore, 0)
+    : 0;
+
+  const extraCards = includeTotalScores ? [
+    { label: '价格总分', key: 'totalPrice' as const, color: 'text-[#C43A31]', icon: 'ri-trophy-line', bg: 'bg-[#FFF0ED]', iconFill: 'text-[#C43A31]' },
+  ] : [];
+
+  const allCards = [...cards, ...extraCards];
+
   return (
-    <div className="grid grid-cols-4 gap-4">
-      {cards.map((card) => (
+    <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${allCards.length}, minmax(0, 1fr))` }}>
+      {allCards.map((card) => (
         <div key={card.key} className={`rounded-xl p-5 flex items-center gap-4 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
           <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${card.bg}`}>
             <i className={`text-2xl ${card.iconFill} ${card.icon}`}></i>
@@ -29,6 +40,7 @@ export default function SummaryCards({ result }: Props) {
             <div className={`font-bold text-[22px] ${card.color}`}>
               {card.key === 'algorithmName' ? result[card.key]
                 : card.key === 'totalCount' ? bidUnits.length
+                : card.key === 'totalPrice' ? totalPriceScore.toFixed(2)
                 : result[card.key]?.toLocaleString('zh-CN', { maximumFractionDigits: 2 })}
             </div>
           </div>

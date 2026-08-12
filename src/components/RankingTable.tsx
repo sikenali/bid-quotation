@@ -1,9 +1,10 @@
 import React from 'react';
-import { CalcResult } from '../types';
+import { CalcResult, UnitScore } from '../types';
 import { useConfigStore } from '../stores/configStore';
 
 interface Props {
   result: CalcResult;
+  includeTotalScores?: boolean;
 }
 
 function getRankBadgeClass(rank: number): string {
@@ -49,10 +50,12 @@ function getScoreColor(score: number, fullScore: number): string {
   return 'text-[#C43A31]';
 }
 
-export default function RankingTable({ result }: Props) {
-  const { theme } = useConfigStore();
+export default function RankingTable({ result, includeTotalScores = false }: Props) {
+  const { theme, unitScores } = useConfigStore();
   const isDark = theme === 'dark';
   const fullScore = 60;
+
+  const getUnitScore = (unitId: string) => unitScores.find(us => us.unitId === unitId);
 
   return (
     <div className={`rounded-2xl overflow-hidden border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
@@ -72,6 +75,13 @@ export default function RankingTable({ result }: Props) {
               <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>报价</th>
               <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>偏差率</th>
               <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>得分</th>
+              {includeTotalScores && (
+                <>
+                  <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>商务分</th>
+                  <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>技术分</th>
+                  <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>总分</th>
+                </>
+              )}
               <th className={`px-6 py-3 text-right font-medium ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>与基准价差</th>
             </tr>
           </thead>
@@ -79,6 +89,8 @@ export default function RankingTable({ result }: Props) {
             {result.rankings.map((item) => {
               const medalIcon = getRankMedalIcon(item.rank);
               const medalColor = getRankMedalColor(item.rank);
+              const us = includeTotalScores ? getUnitScore(item.unit.id) : null;
+              const totalScore = us ? us.priceScore + us.businessScore + us.technicalScore : item.score;
               return (
                 <tr key={item.unit.id} className={`border-b transition-colors ${isDark ? 'border-[#3A3A3A]/50 hover:bg-[#1A1A1A]/50' : 'border-[#E8DCC8]/50 hover:bg-white/60'} ${getRankRowBg(item.rank)}`}>
                   <td className="px-6 py-4">
@@ -101,8 +113,15 @@ export default function RankingTable({ result }: Props) {
                   <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{item.unit.price.toLocaleString()}</td>
                   <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{item.deviationPercent > 0 ? '+' : ''}{item.deviationPercent}%</td>
                   <td className={`px-6 py-4 text-right font-semibold ${getScoreColor(item.score, fullScore)}`}>
-                    {item.score}
+                    {includeTotalScores && us ? us.priceScore.toFixed(2) : item.score}
                   </td>
+                  {includeTotalScores && us && (
+                    <>
+                      <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{us.businessScore.toFixed(2)}</td>
+                      <td className={`px-6 py-4 text-right font-mono ${isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>{us.technicalScore.toFixed(2)}</td>
+                      <td className={`px-6 py-4 text-right font-bold text-[#C43A31]`}>{totalScore.toFixed(2)}</td>
+                    </>
+                  )}
                   <td className={`px-6 py-4 text-right font-mono ${item.priceDiff > 0 ? 'text-[#C43A31]' : item.priceDiff < 0 ? 'text-[#5B8C5A]' : isDark ? 'text-[#A89880]' : 'text-text-secondary'}`}>
                     {item.priceDiff > 0 ? '+' : ''}{item.priceDiff.toLocaleString()}
                   </td>
