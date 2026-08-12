@@ -59,26 +59,6 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
 
   return (
     <div className="space-y-6">
-      {/* 算法说明区 */}
-      {formula && (
-        <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
-          <div className="flex items-center gap-5 mb-4">
-            <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#A89880]' : 'bg-[#D4C4A8]'}`} />
-            <h3 className={`font-semibold text-[15px] ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
-              {formula.title} · 评分规则
-            </h3>
-          </div>
-          <div className={`rounded-xl px-4 py-3 space-y-1.5 text-sm ${isDark ? 'bg-[#1A1A1A] text-[#A89880]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
-            {formula.steps.map((step, i) => (
-              <p key={i} className="flex items-start gap-2">
-                <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-white text-[#8B7355]'}`}>{i + 1}</span>
-                <span>{step}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* 扣分参数区 */}
       <div className={`rounded-2xl p-6 space-y-5 border ${isDark ? 'bg-[#2A2A2A] border-[#3A3A3A]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
         <div className="flex items-center gap-5">
@@ -140,12 +120,20 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
           </div>
         </div>
 
-        {/* 公式说明 */}
+        {/* 算法评分步骤 + 公式说明 */}
         <div className={`rounded-lg px-4 py-3 text-xs space-y-1 ${isDark ? 'bg-[#1A1A1A] text-[#A89880]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
-          <p>
-            <span className={`font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>通用得分公式：</span>
-            得分 = 满分 − |报价 − 基准价|/基准价 × 100% × 扣分值
-          </p>
+          {formula && formula.steps.map((step, i) => (
+            <p key={i} className="flex items-start gap-2">
+              <span className={`flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${isDark ? 'bg-[#3A3A3A] text-[#A89880]' : 'bg-white text-[#8B7355]'}`}>{i + 1}</span>
+              <span>{step}</span>
+            </p>
+          ))}
+          {formula && (
+            <p className="mt-2">
+              <span className={`font-medium ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>{formula.title}评分：</span>
+              得分 = 满分 − |报价 − 基准价|/基准价 × 100% × 扣分值
+            </p>
+          )}
           <p>
             高于基准价：每高 1% 扣 {currentDeduct} 分
             {' · '}
