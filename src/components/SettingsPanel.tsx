@@ -200,42 +200,44 @@ export default function SettingsPanel({ onClose }: Props) {
                 )}
 
                 {activeTab === 'api' && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className={`block text-sm mb-2 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>API 端点</label>
-                      <div className="flex gap-2">
-                        {[
-                          { value: 'https://api.deepseek.com/v1', label: 'DeepSeek' },
-                          { value: 'https://api.ccswitch.com/v1', label: 'CCswitch' },
-                        ].map((opt) => (
-                          <button
-                            key={opt.value}
-                            onClick={() => setApiEndpoint(opt.value)}
-                            className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all border-2 ${
-                              apiEndpoint === opt.value
-                                ? 'border-[#C43A31] bg-[#FFF0ED] text-[#C43A31]'
-                                : isDark
-                                  ? 'border-[#3D3D3D] bg-[#2D2D2D] text-[#C0B098] hover:border-[#C43A31]/50'
-                                  : 'border-[#E8DCC8] bg-white text-text-secondary hover:border-[#C43A31]/40'
-                            }`}
-                          >
-                            {opt.label}
-                          </button>
-                        ))}
+                  <div className={`rounded-2xl p-6 border ${isDark ? 'bg-[#2D2D2D] border border-[#3D3D3D]' : 'bg-[#F5EFE0] border border-[#E8DCC8]'}`}>
+                    <div className="space-y-4">
+                      <div>
+                        <label className={`block text-sm mb-2 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>API 端点</label>
+                        <div className="flex gap-2">
+                          {[
+                            { value: 'https://api.deepseek.com/v1', label: 'DeepSeek' },
+                            { value: 'https://api.ccswitch.com/v1', label: 'CCswitch' },
+                          ].map((opt) => (
+                            <button
+                              key={opt.value}
+                              onClick={() => setApiEndpoint(opt.value)}
+                              className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all border-2 ${
+                                apiEndpoint === opt.value
+                                  ? 'border-[#C43A31] bg-[#FFF0ED] text-[#C43A31]'
+                                  : isDark
+                                    ? 'border-[#3D3D3D] bg-[#2D2D2D] text-[#C0B098] hover:border-[#C43A31]/50'
+                                    : 'border-[#E8DCC8] bg-white text-text-secondary hover:border-[#C43A31]/40'
+                              }`}
+                            >
+                              {opt.label}
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <label className={`block text-sm mb-2 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>API Key</label>
-                      <input
-                        type="password"
-                        value={apiKey || ''}
-                        onChange={(e) => setApiKey(e.target.value)}
-                        className={`input-field w-full ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
-                        placeholder="sk-..."
-                      />
-                      <p className={`text-xs mt-2 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
-                        API Key 仅保存在浏览器 localStorage，不会上传到任何服务器
-                      </p>
+                      <div>
+                        <label className={`block text-sm mb-2 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>API Key</label>
+                        <input
+                          type="password"
+                          value={apiKey || ''}
+                          onChange={(e) => setApiKey(e.target.value)}
+                          className={`input-field w-full ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D] text-[#F2EDE4]' : ''}`}
+                          placeholder="sk-..."
+                        />
+                        <p className={`text-xs mt-2 ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>
+                          API Key 仅保存在浏览器 localStorage，不会上传到任何服务器
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}
