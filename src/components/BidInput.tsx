@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { BidUnit, UnitScore } from '../types';
 
@@ -10,18 +10,21 @@ export default function BidInput() {
   const [randomCenter, setRandomCenter] = useState(100);
   const [randomFluctuation, setRandomFluctuation] = useState(10);
   const [activeUnitId, setActiveUnitId] = useState<string | null>(null);
+  const [priceScores, setPriceScores] = useState<Record<string, number>>({});
   const isDark = theme === 'dark';
 
-  // Pre-compute price scores when opening score modal
-  const priceScores = useMemo(() => {
+  // 打开弹窗时重新计算价格得分
+  const openScoreModal = () => {
     calculate();
     const state = useConfigStore.getState();
     const result = state.calculationResult;
-    if (!result) return {};
-    const map: Record<string, number> = {};
-    result.rankings.forEach(r => { map[r.unit.id] = r.score; });
-    return map;
-  }, []);
+    if (result) {
+      const map: Record<string, number> = {};
+      result.rankings.forEach(r => { map[r.unit.id] = r.score; });
+      setPriceScores(map);
+    }
+    setShowScoreModal(true);
+  };
 
   const handleAdd = () => {
     addBidUnit('', 0);
@@ -166,7 +169,7 @@ export default function BidInput() {
           随机厂商
         </button>
         <button
-          onClick={() => setShowScoreModal(true)}
+          onClick={() => openScoreModal()}
           className={`px-5 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${
             isDark
               ? 'bg-[#2D2D2D] border border-[#3D3D3D] text-[#C0B098] hover:text-[#F2EDE4] hover:border-[#C43A31]/50'
