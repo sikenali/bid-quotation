@@ -59,7 +59,7 @@ export default function RuleManager() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {validRules.map((rule, _index) => {
           const isActive = rule.id === activeRuleId;
           const isCappedRule = rule.maxCount === -1 && rule.minCount >= 7;
@@ -69,7 +69,7 @@ export default function RuleManager() {
             <button
               key={rule.id}
               onClick={() => setActiveRuleId(rule.id === activeRuleId ? null : rule.id)}
-              className={`relative p-5 rounded-xl border-2 text-left transition-all duration-200 w-full min-h-[120px] ${
+              className={`relative p-5 rounded-xl border-2 text-left transition-all duration-200 ${
                 isActive
                   ? 'border-[#C43A31] bg-white shadow-sm'
                   : isDark
@@ -103,7 +103,7 @@ export default function RuleManager() {
         {!isCappedRange && !isFixedRange && (
           <button
             onClick={addNewRule}
-            className={`hidden sm:flex min-h-[120px] py-3 px-4 border-2 border-dashed rounded-xl flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
+            className={`hidden sm:flex py-3 px-4 border-2 border-dashed rounded-xl flex-col items-center justify-center gap-1 cursor-pointer transition-all ${
               isDark
                 ? 'border-[#3D3D3D] text-[#C0B098] hover:border-[#C43A31] hover:text-[#C43A31] bg-[#252525]'
                 : 'bg-white border-[#D4C4A8] hover:border-[#C43A31]/60 hover:bg-[#FFF8F5] text-text-secondary'
@@ -181,7 +181,7 @@ function RuleRow({
           }`}
         />
         <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-          <span className={`text-[11px] sm:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>投标人数量</span>
+          <span className={`text-[11px] sm:text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>当投标人数量为</span>
           <input
             type="number"
             value={rule.minCount}

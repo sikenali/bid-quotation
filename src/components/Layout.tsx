@@ -20,10 +20,10 @@ export default function Layout({ children }: Props) {
       <div className="min-h-screen bg-bg dark:bg-dark-bg">
         {/* 顶部导航 */}
         <header className="sticky top-0 z-40 bg-bg dark:bg-dark-bg border-b border-border/50">
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between md:px-8 md:py-4">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between md:px-8 md:py-4 relative">
             {/* 左侧品牌 */}
             <div
-              className="flex items-center gap-2 cursor-pointer select-none"
+              className="flex items-center gap-2 cursor-pointer select-none flex-shrink-0"
               onClick={() => { setCurrentStep(1); navigate('/algorithm'); }}
             >
               <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
@@ -38,14 +38,15 @@ export default function Layout({ children }: Props) {
               </div>
             </div>
 
-            {/* 右侧操作区 */}
-            <div className="flex items-center gap-2">
-              {!isResultPage && (
-                <div className="flex justify-center">
-                  <StepIndicator currentStep={currentStep} />
-                </div>
-              )}
+            {/* 中间步骤指示器 - 绝对居中 */}
+            {!isResultPage && (
+              <div className="absolute left-1/2 -translate-x-1/2">
+                <StepIndicator currentStep={currentStep} />
+              </div>
+            )}
 
+            {/* 右侧操作区 */}
+            <div className="flex items-center gap-2 flex-shrink-0">
               <button
                 onClick={() => setShowSettings(true)}
                 className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${
