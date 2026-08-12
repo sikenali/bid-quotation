@@ -68,8 +68,8 @@ export default function RankingTable({ result }: Props) {
                 <td className={`px-6 py-4 font-medium flex items-center gap-2 ${isDark ? 'text-[#E8E0D0]' : 'text-text'}`}>
                   {item.unit.name || '未命名'}
                   {item.rank === 1 && (
-                    <span className="ml-2 inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-[#C43A31] text-white text-[10px] font-bold border border-[#FFF] shadow-sm whitespace-nowrap">
-                      中回旋标
+                    <span className="ml-3 inline-flex items-center justify-center w-14 h-14 rounded-full border-2 border-[#C43A31] text-[#C43A31] text-[10px] font-bold leading-none text-center select-none opacity-80 shadow-sm" style={{ transform: 'rotate(-12deg)' }}>
+                      中<br/>回<br/>旋<br/>标
                     </span>
                   )}
                 </td>
