@@ -65,6 +65,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
     if (prices.length === 0) return null;
 
     const fullScore = deduction.fullScore;
+    type Row = { name: string; price: number; score: number; above?: boolean };
 
     switch (algorithm) {
       case 'low_price_priority': {
@@ -72,7 +73,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
         return {
           title: '低价优先法示例',
           basePrice,
-          rows: prices.map((price, i) => ({
+          rows: prices.map((price, i): Row => ({
             name: `投标人${String.fromCharCode(65 + i)}`,
             price,
             score: parseFloat(((basePrice / price) * fullScore).toFixed(2)),
@@ -84,7 +85,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
         return {
           title: '平均价计法示例',
           basePrice: parseFloat(avg.toFixed(2)),
-          rows: prices.map((price, i) => {
+          rows: prices.map((price, i): Row => {
             const dev = Math.abs(avg - price) / avg;
             const score = Math.max((1 - dev) * fullScore, deduction.minScore);
             return {
@@ -103,15 +104,16 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
         return {
           title: '基准价梯度法示例',
           basePrice: parseFloat(basePrice.toFixed(2)),
-          rows: prices.map((price, i) => {
+          rows: prices.map((price, i): Row => {
             const dev = Math.abs(basePrice - price) / basePrice;
             const baseScore = (1 - dev) * fullScore;
-            const score = price > basePrice ? baseScore * 0.95 : baseScore;
+            const isAbove = price > basePrice;
+            const score = isAbove ? baseScore * 0.95 : baseScore;
             return {
               name: `投标人${String.fromCharCode(65 + i)}`,
               price,
               score: parseFloat(Math.max(score, deduction.minScore).toFixed(2)),
-              above: price > basePrice,
+              above: isAbove,
             };
           }),
         };
@@ -121,7 +123,7 @@ export default function DeductionForm({ bidDocumentText = '' }: DeductionFormPro
         return {
           title: '基准价常规法示例',
           basePrice: parseFloat(avg.toFixed(2)),
-          rows: prices.map((price, i) => ({
+          rows: prices.map((price, i): Row => ({
             name: `投标人${String.fromCharCode(65 + i)}`,
             price,
             score: parseFloat(((avg / price) * fullScore).toFixed(2)),
