@@ -73,7 +73,7 @@ export const useConfigStore = create<ConfigState>()(
     (set) => ({
       algorithm: defaultConfig.algorithm,
       validRules: defaultConfig.validRules,
-      deduction: getAlgorithmDeduction(defaultConfig.algorithm),
+      deduction: getAlgorithmDeduction(defaultConfig.algorithm) as DeductionParams,
       bidUnits: [...defaultBidUnits],
       theme: 'light' as const,
       exportFormat: 'csv' as const,
