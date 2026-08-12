@@ -167,33 +167,27 @@ function RuleRow({
   const isFixedRange = rule.minCount >= 7 && rule.maxCount === 10;
   const showCappedBadge = isCapped || isFixedRange;
   return (
-    <div className={`rounded-xl border transition-all ${
+<div className={`rounded-xl border transition-all ${
       isActive
         ? isDark ? 'bg-[#252525] border-[#C43A31]/40 ring-1 ring-[#C43A31]/20' : 'bg-white border-[#C43A31]/40 ring-1 ring-[#C43A31]/10'
         : isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]/50'
     }`}>
-      <div className="flex items-center gap-4 px-4 py-3 flex-wrap md:flex-nowrap">
-        <button
-          onClick={onSelect}
-          className={`w-4 h-4 rounded-full border-2 flex-shrink-0 transition-all ${
-            isActive ? 'border-[#C43A31] bg-[#C43A31]' : isDark ? 'border-[#3D3D3D] bg-transparent' : 'border-[#D4C4A8] bg-transparent'
-          }`}
-        />
-        <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 px-4 py-3">
+        <div className="flex items-center gap-2 flex-1 flex-wrap">
           <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>投标人数量</span>
           <input
             type="number"
             value={rule.minCount}
             disabled={isLocked}
             onChange={(e) => onUpdate({ minCount: parseInt(e.target.value) || 0 })}
-            className={`input-field w-16 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
+            className={`input-field w-14 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
           />
           <span className={`text-sm ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>~</span>
           <input
             type="number"
             value={isCapped ? 10 : (rule.maxCount === -1 ? '' : rule.maxCount)}
             onChange={(e) => onUpdate({ maxCount: e.target.value ? parseInt(e.target.value) : -1 })}
-            className={`input-field w-20 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
+            className={`input-field w-14 text-center ${isDark ? 'bg-[#252525] border-[#3D3D3D] text-[#F2EDE4]' : ''} ${isLocked ? 'opacity-40 cursor-not-allowed bg-[#F5EFE0] text-text-secondary' : ''}`}
             placeholder={isCapped ? '10' : '无限'}
             disabled={isLocked}
           />
@@ -201,6 +195,15 @@ function RuleRow({
           {isLocked && index > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-[#E8DCC8] text-text-secondary">默认</span>}
           {showCappedBadge && <span className={`text-xs px-2 py-0.5 rounded-full ${isDark ? 'bg-[#C43A31]/20 text-[#C43A31]' : 'bg-[#FFF0ED] text-[#C43A31]'}`}>上限10</span>}
         </div>
+        <button
+          onClick={onRemove}
+          className={`p-2 rounded-lg transition-colors flex-shrink-0 ${isDark ? 'text-[#C0B098] hover:text-[#C43A31] hover:bg-[#2D2D2D]' : 'text-text-secondary hover:text-[#C43A31] hover:bg-[#FFF0ED]'}`}
+          aria-label="删除规则"
+        >
+          <i className="ri-close-line text-base"></i>
+        </button>
+      </div>
+    </div>
         <div className="ml-auto">
           <button
             onClick={onRemove}

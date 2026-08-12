@@ -10,10 +10,15 @@ import { useConfigStore } from './stores/configStore';
 export default function App() {
   const { theme } = useConfigStore();
   useEffect(() => {
+    const html = document.documentElement;
     if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
+      html.classList.add('dark');
+      html.style.backgroundColor = '#222222';
+      html.style.color = '#F2EDE4';
     } else {
-      document.documentElement.classList.remove('dark');
+      html.classList.remove('dark');
+      html.style.backgroundColor = '#FDF5E6';
+      html.style.color = '#3D2B1F';
     }
   }, [theme]);
   return (
