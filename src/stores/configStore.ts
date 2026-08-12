@@ -46,9 +46,22 @@ interface ConfigState extends BidConfig {
 
 const defaultConfig = createDefaultConfig();
 
+const defaultBidUnits = [
+  { id: 'default-1', name: '单位A', price: 0, isValid: true },
+  { id: 'default-2', name: '单位B', price: 0, isValid: true },
+  { id: 'default-3', name: '单位C', price: 0, isValid: true },
+  { id: 'default-4', name: '单位D', price: 0, isValid: true },
+];
+
+const defaultValidRules = [
+  { id: 'r1', minCount: 3, maxCount: 3, action: 'nth_lowest', params: { nth: 2 } },
+  { id: 'r2', minCount: 4, maxCount: 4, action: 'remove_highest_n', params: { removeN: 1 } },
+  { id: 'r3', minCount: 5, maxCount: -1, action: 'trim_percent', params: { trimPercent: 20 } },
+];
+
 export const useConfigStore = create<ConfigState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       algorithm: defaultConfig.algorithm,
       kEnabled: defaultConfig.kEnabled,
       kValue: defaultConfig.kValue,
@@ -262,6 +275,17 @@ export const useConfigStore = create<ConfigState>()(
         apiKey: s.apiKey,
         apiEndpoint: s.apiEndpoint,
       }),
+      onRehydrateStorage: () => (state: ConfigState | undefined) => {
+        if (!state) return;
+        if (state.bidUnits === null || state.bidUnits === undefined) {
+          state.bidUnits = [...defaultBidUnits];
+        } else if (state.bidUnits.length === 0) {
+          state.bidUnits = [...defaultBidUnits];
+        }
+        if (Array.isArray(state.validRules) && state.validRules.length === 4 && state.validRules.some((r: any) => r.id === 'r4')) {
+          (state as any).validRules = [...defaultValidRules];
+        }
+      },
     }
   )
 );
