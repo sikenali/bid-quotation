@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { useConfigStore } from '../stores/configStore';
 import { Algorithm, DeductionParams } from '../types';
 
@@ -7,7 +7,7 @@ const ALGORITHM_FORMULA: Record<Algorithm, { title: string; steps: string[] }> =
     title: '低价优先法',
     steps: [
       '基准价 = 满足要求且最后磋商报价最低的报价',
-      '得分 = (基准价 / 最终报价) × 满分',
+      '得分 = 满分 - 高于基准价百分比 × 每高1%扣分（低于基准价使用每低1%扣分）',
       '最低价得满分，报价越低得分越高',
     ],
   },
@@ -15,7 +15,7 @@ const ALGORITHM_FORMULA: Record<Algorithm, { title: string; steps: string[] }> =
     title: '平均价计法',
     steps: [
       '基准价 = 满足要求且最后磋商报价的平均值',
-      '得分 = ((基准价 - |基准价 - 最终报价|) / 基准价) × 满分',
+      '得分 = 满分 - 偏离基准价百分比 × 对应扣分系数',
       '偏离平均值越多，得分越低',
     ],
   },
@@ -23,15 +23,15 @@ const ALGORITHM_FORMULA: Record<Algorithm, { title: string; steps: string[] }> =
     title: '基准价梯度法',
     steps: [
       '基准价 = 技术评审得分前两名的投标单位报价的算术平均值',
-      '报价 ≤ 基准价：得分 = (1 - |报价 - 基准价| / 基准价) × 标准分',
-      '报价 > 基准价：得分 = 上述结果 × 0.95（高于基准价额外打95折）',
+      '报价 ≤ 基准价：得分 = 满分 - 低于基准价百分比 × 每低1%扣分',
+      '报价 > 基准价：得分 = (满分 - 高于基准价百分比 × 每高1%扣分) × 0.95',
     ],
   },
   conventional_method: {
     title: '基准价常规法',
     steps: [
       '基准价为满足磋商文件要求且最后磋商报价的平均值',
-      '价格评分 = (评标基准价格 / 评标价格) × 价格分',
+      '得分 = 满分 - 偏离基准价百分比 × 对应扣分系数',
       '报价越低得分越高，四舍五入保留两位小数',
     ],
   },
@@ -48,6 +48,8 @@ interface DeductionFormProps {
 export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }: DeductionFormProps) {
   const { deduction, setDeduction, algorithm, theme, bidUnits } = useConfigStore();
   const [isDragging, setIsDragging] = useState(false);
+  const [uploadedText, setUploadedText] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const isDark = theme === 'dark';
   const formula = ALGORITHM_FORMULA[algorithm];
 
@@ -57,7 +59,19 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
   const currentDeduct = deduction.deductPerHighPercent || 0;
   const currentDeductLow = deduction.deductPerLowPercent || 0;
 
-  // 示例计算数据
+  function calcScoreExample(price: number, basePrice: number, fullScore: number, deductHigh: number, deductLow: number, minScore: number, aboveMultiplier: number = 1): number {
+    if (basePrice <= 0) return 0;
+    const deviationPercent = ((price - basePrice) / basePrice) * 100;
+    let score: number;
+    if (price > basePrice) {
+      score = fullScore - deviationPercent * deductHigh;
+    } else {
+      score = fullScore - Math.abs(deviationPercent) * deductLow;
+    }
+    score = score * aboveMultiplier;
+    return parseFloat(Math.max(Math.min(score, fullScore), minScore).toFixed(2));
+  }
+
   const exampleData = useMemo(() => {
     if (!bidUnits || bidUnits.length === 0) return null;
     const sorted = [...bidUnits].sort((a, b) => a.price - b.price);
@@ -65,6 +79,9 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
     if (prices.length === 0) return null;
 
     const fullScore = deduction.fullScore;
+    const deductHigh = deduction.deductPerHighPercent || 0;
+    const deductLow = deduction.deductPerLowPercent || 0;
+    const minScore = deduction.minScore;
     type Row = { name: string; price: number; score: number; above?: boolean };
 
     switch (algorithm) {
@@ -76,7 +93,7 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
           rows: prices.map((price, i): Row => ({
             name: `投标人${String.fromCharCode(65 + i)}`,
             price,
-            score: parseFloat(((basePrice / price) * fullScore).toFixed(2)),
+            score: calcScoreExample(price, basePrice, fullScore, deductHigh, deductLow, minScore),
           })),
         };
       }
@@ -85,15 +102,11 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
         return {
           title: '平均价计法示例',
           basePrice: parseFloat(avg.toFixed(2)),
-          rows: prices.map((price, i): Row => {
-            const dev = Math.abs(avg - price) / avg;
-            const score = Math.max((1 - dev) * fullScore, deduction.minScore);
-            return {
-              name: `投标人${String.fromCharCode(65 + i)}`,
-              price,
-              score: parseFloat(score.toFixed(2)),
-            };
-          }),
+          rows: prices.map((price, i): Row => ({
+            name: `投标人${String.fromCharCode(65 + i)}`,
+            price,
+            score: calcScoreExample(price, avg, fullScore, deductHigh, deductLow, minScore),
+          })),
         };
       }
       case 'gradient_method': {
@@ -105,14 +118,13 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
           title: '基准价梯度法示例',
           basePrice: parseFloat(basePrice.toFixed(2)),
           rows: prices.map((price, i): Row => {
-            const dev = Math.abs(basePrice - price) / basePrice;
-            const baseScore = (1 - dev) * fullScore;
             const isAbove = price > basePrice;
-            const score = isAbove ? baseScore * 0.95 : baseScore;
+            const multiplier = isAbove ? 0.95 : 1;
+            const score = calcScoreExample(price, basePrice, fullScore, deductHigh, deductLow, minScore, multiplier);
             return {
               name: `投标人${String.fromCharCode(65 + i)}`,
               price,
-              score: parseFloat(Math.max(score, deduction.minScore).toFixed(2)),
+              score,
               above: isAbove,
             };
           }),
@@ -126,7 +138,7 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
           rows: prices.map((price, i): Row => ({
             name: `投标人${String.fromCharCode(65 + i)}`,
             price,
-            score: parseFloat(((avg / price) * fullScore).toFixed(2)),
+            score: calcScoreExample(price, avg, fullScore, deductHigh, deductLow, minScore),
           })),
         };
       }
@@ -135,9 +147,35 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
     }
   }, [algorithm, bidUnits, deduction]);
 
+  const handleFile = (file: File) => {
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (!ext || !['txt', 'pdf', 'doc', 'docx'].includes(ext)) {
+      alert('仅支持 .txt .pdf .doc .docx 格式');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const text = e.target?.result as string || '';
+      setUploadedText(text);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFile(file);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   return (
     <div className="space-y-6">
-      {/* 扣分参数区 */}
       <div className={`rounded-2xl p-6 space-y-5 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
         <div className="flex items-center gap-5">
           <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#C0B098]' : 'bg-[#D4C4A8]'}`} />
@@ -145,7 +183,6 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
         </div>
 
         <div className={`flex flex-col md:flex-row md:items-stretch gap-0 rounded-xl overflow-hidden border ${isDark ? 'bg-[#252525] border-[#3D3D3D]' : 'bg-white border-[#E8DCC8]'}`}>
-          {/* 满分 */}
           <div className={`flex-1 p-4 flex flex-col gap-1.5 border-b md:border-b-0 md:border-r ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
             <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>满分 (分)</label>
             <input
@@ -158,7 +195,6 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
             />
           </div>
           <div className={`w-px flex-shrink-0 hidden md:block ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
-          {/* 每高 1% 扣 */}
           <div className={`flex-1 p-4 flex flex-col gap-1.5 border-b md:border-b-0 md:border-r ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
             <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>每高 1% 扣 (分)</label>
             <input
@@ -171,7 +207,6 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
             />
           </div>
           <div className={`w-px flex-shrink-0 hidden md:block ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
-          {/* 每低 1% 扣 */}
           <div className={`flex-1 p-4 flex flex-col gap-1.5 border-b md:border-b-0 md:border-r ${isDark ? 'border-[#3D3D3D]' : 'border-[#E8DCC8]'}`}>
             <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>每低 1% 扣 (分)</label>
             <input
@@ -184,7 +219,6 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
             />
           </div>
           <div className={`w-px flex-shrink-0 hidden md:block ${isDark ? 'bg-[#3D3D3D]' : 'bg-[#D4C4A8]'}`} />
-          {/* 最低得分 */}
           <div className="flex-1 p-4 flex flex-col gap-1.5">
             <label className={`text-xs ${isDark ? 'text-[#C0B098]' : 'text-text-secondary'}`}>最低得分 (分)</label>
             <input
@@ -198,7 +232,6 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
           </div>
         </div>
 
-        {/* 算法评分步骤 + 示例 */}
         <div className={`rounded-lg px-4 py-3 text-xs space-y-1 ${isDark ? 'bg-[#252525] text-[#C0B098]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
           {formula && formula.steps.map((step, i) => (
             <p key={i} className="flex items-start gap-2">
@@ -228,7 +261,6 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
         </div>
       </div>
 
-      {/* 招标文件规则原文对照 */}
       <div className={`rounded-2xl p-6 space-y-4 border ${isDark ? 'bg-[#2D2D2D] border-[#3D3D3D]' : 'bg-[#F5EFE0] border-[#E8DCC8]'}`}>
         <div className="flex items-center gap-5">
           <div className={`w-1.5 h-4.5 rounded-[3px] flex-shrink-0 ${isDark ? 'bg-[#C8A45C]' : 'bg-[#C8A45C]'}`} />
@@ -238,10 +270,7 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
         <div
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragging(false);
-          }}
+          onDrop={handleDrop}
           className={`rounded-xl p-5 border-2 transition-colors ${
             isDragging
               ? 'border-[#C43A31] bg-[#FFF0ED]'
@@ -260,12 +289,20 @@ export default function DeductionForm({ bidDocumentText: _bidDocumentText = '' }
               <i className="ri-upload-line"></i>
               选择文件
               <input
+                ref={fileInputRef}
                 type="file"
                 accept=".txt,.pdf,.doc,.docx"
                 className="hidden"
+                onChange={handleFileChange}
               />
             </label>
           </div>
+          {uploadedText && (
+            <div className={`mt-3 p-3 rounded-lg text-xs ${isDark ? 'bg-[#2D2D2D] text-[#C0B098]' : 'bg-[#FBF7EF] text-text-secondary'}`}>
+              <p className="font-medium mb-1">已上传文件内容预览：</p>
+              <p className="line-clamp-3">{uploadedText}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -90,7 +90,7 @@ export const useConfigStore = create<ConfigState>()(
       apiEndpoint: import.meta.env.VITE_API_ENDPOINT || 'https://api.deepseek.com/v1',
 
       setCurrentStep: (step) => set({ currentStep: step }),
-      setAlgorithm: (algorithm) => set({ algorithm, showAlgorithmDesc: false, ...getAlgorithmDeduction(algorithm) }),
+      setAlgorithm: (algorithm) => set({ algorithm, showAlgorithmDesc: false, deduction: getAlgorithmDeduction(algorithm) }),
       setValidRules: (validRules) => set({ validRules }),
       addValidRule: (rule) => set((s) => ({ validRules: [...s.validRules, rule] })),
       removeValidRule: (id) => set((s) => ({ validRules: s.validRules.filter((r) => r.id !== id) })),
@@ -146,7 +146,7 @@ export const useConfigStore = create<ConfigState>()(
           .map((s) => parseFloat(s));
         const units: BidUnit[] = prices.map((price, i) => ({
           id: generateId(),
-          name: `单位${String.fromCharCode(65 + i)}`,
+          name: i < 26 ? `单位${String.fromCharCode(65 + i)}` : `单位${i + 1}`,
           price,
           isValid: true,
         }));

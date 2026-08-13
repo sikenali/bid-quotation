@@ -13,7 +13,7 @@ const ALGORITHM_DESCRIPTIONS: Record<string, string> = {
 export function AlgorithmParams() {
   const {
     algorithm, deduction, setDeduction,
-    setValidRules,
+    setValidRules, setAlgorithm,
     theme, apiKey, apiEndpoint,
     showAlgorithmDesc, setShowAlgorithmDesc,
   } = useConfigStore();
@@ -45,6 +45,9 @@ export function AlgorithmParams() {
       if (result) {
         setDeduction(result.deduction);
         setValidRules(result.validRules);
+        if (result.algorithm && result.algorithm !== 'ai_parse') {
+          setAlgorithm(result.algorithm);
+        }
         setShowAlgorithmDesc(false);
       } else {
         setParseError('解析失败，请检查 API 配置或原文格式');

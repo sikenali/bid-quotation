@@ -13,11 +13,13 @@ export function calculateResult(config: BidConfig): CalcResult | null {
   if (effectiveUnits.length === 0) return null;
 
   const fullScore = deduction.fullScore;
+  const deductHigh = deduction.deductPerHighPercent;
+  const deductLow = deduction.deductPerLowPercent;
+  const minScore = deduction.minScore;
   let basePrice = 0;
   let aPrice = 0;
   let algorithmName = getAlgorithmName(algorithm);
 
-  // 计算基准价（aValue / basePrice）
   switch (algorithm) {
     case 'low_price_priority':
       basePrice = effectiveUnits[0].price;
@@ -32,8 +34,8 @@ export function calculateResult(config: BidConfig): CalcResult | null {
     }
 
     case 'gradient_method': {
-      // 技术评审前两名报价的算术平均值
-      const top2 = effectiveUnits.slice(0, 2);
+      const byTechScore = [...effectiveUnits].sort((a, b) => (b.technicalScore ?? 0) - (a.technicalScore ?? 0));
+      const top2 = byTechScore.slice(0, 2);
       basePrice = top2.length >= 2
         ? (top2[0].price + top2[1].price) / 2
         : top2[0].price;
@@ -53,61 +55,58 @@ export function calculateResult(config: BidConfig): CalcResult | null {
       aPrice = basePrice;
   }
 
-  // 计算得分：每种算法使用各自的评分公式
-  const rankings = sortedUnits.map((unit, index) => {
-    let score = 0;
+  function calcScore(price: number, aboveMultiplier: number = 1): number {
+    if (basePrice <= 0) return 0;
+    const deviationPercent = ((price - basePrice) / basePrice) * 100;
+    let score: number;
+    if (price > basePrice) {
+      score = fullScore - deviationPercent * deductHigh;
+    } else {
+      score = fullScore - Math.abs(deviationPercent) * deductLow;
+    }
+    score = score * aboveMultiplier;
+    return parseFloat(Math.max(Math.min(score, fullScore), minScore).toFixed(2));
+  }
 
+  const unsorted = sortedUnits.map((unit) => {
+    let score = 0;
     switch (algorithm) {
       case 'low_price_priority':
-        // 低价优先法：得分=(基准价／报价)×满分
-        score = unit.price > 0 ? (basePrice / unit.price) * fullScore : 0;
+        score = calcScore(unit.price);
         break;
-
       case 'average_price':
-        // 平均价计法：得分=((基准价-|基准价-报价|)/基准价)×满分
-        if (basePrice > 0) {
-          const devAve = Math.abs(basePrice - unit.price) / basePrice;
-          score = Math.max((1 - devAve) * fullScore, deduction.minScore);
-        } else {
-          score = 0;
-        }
+        score = calcScore(unit.price);
         break;
-
-      case 'gradient_method':
-        // 基准价梯度法
-        // ≤基准价：得分=(1-|报价-基准价|/基准价)×标准分
-        // >基准价：得分=(1-|报价-基准价|/基准价)×标准分×0.95
-        if (basePrice > 0) {
-          const d = Math.abs(basePrice - unit.price) / basePrice;
-          if (unit.price <= basePrice) {
-            score = (1 - d) * fullScore;
-          } else {
-            score = (1 - d) * fullScore * 0.95;
-          }
-        } else {
-          score = 0;
-        }
+      case 'gradient_method': {
+        const aboveMultiplier = unit.price > basePrice ? 0.95 : 1;
+        score = calcScore(unit.price, aboveMultiplier);
         break;
-
+      }
       case 'conventional_method':
-        // 基准价常规法：价格评分=(基准价/评标价)×满分
-        score = unit.price > 0 ? (basePrice / unit.price) * fullScore : 0;
+        score = calcScore(unit.price);
         break;
-
       default:
         score = unit.price > 0 ? (basePrice / unit.price) * fullScore : 0;
+        score = parseFloat(Math.max(Math.min(score, fullScore), minScore).toFixed(2));
     }
 
     const deviationPercent = aPrice > 0 ? ((unit.price - aPrice) / aPrice) * 100 : 0;
 
     return {
-      rank: index + 1,
       unit,
       deviationPercent: parseFloat(deviationPercent.toFixed(2)),
-      score: parseFloat(Math.max(Math.min(score, fullScore), deduction.minScore).toFixed(2)),
+      score,
       priceDiff: parseFloat((unit.price - aPrice).toFixed(2)),
+      rank: 0,
     };
   });
+
+  unsorted.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return a.unit.price - b.unit.price;
+  });
+
+  unsorted.forEach((r, i) => { r.rank = i + 1; });
 
   return {
     basePrice: parseFloat(basePrice.toFixed(2)),
@@ -115,6 +114,6 @@ export function calculateResult(config: BidConfig): CalcResult | null {
     effectiveCount: effectiveUnits.length,
     algorithmName,
     trimmedNames,
-    rankings,
+    rankings: unsorted,
   };
 }

@@ -81,6 +81,7 @@ export default function Step4BidInput() {
     const id = setTimeout(() => {
       calculate();
       setIsCalculating(false);
+      setCurrentStep(5);
       navigate('/bids?total=1');
     }, 100);
     return () => clearTimeout(id);

@@ -1,9 +1,50 @@
 import { Algorithm, DeductionParams, ValidRule } from '../types';
 
+const VALID_ALGORITHMS: Algorithm[] = [
+  'low_price_priority', 'average_price', 'gradient_method', 'conventional_method', 'ai_parse',
+];
+
+const VALID_ACTIONS = ['direct', 'trim_percent', 'remove_highest_n', 'remove_lowest_n', 'nth_lowest'];
+
 export interface ParseResult {
   algorithm: Algorithm;
   deduction: DeductionParams;
   validRules: ValidRule[];
+}
+
+function validateParseResult(raw: any): ParseResult | null {
+  if (!raw || typeof raw !== 'object') return null;
+
+  const algorithm = raw.algorithm;
+  if (!VALID_ALGORITHMS.includes(algorithm)) return null;
+
+  const deduction = raw.deduction;
+  if (!deduction || typeof deduction !== 'object') return null;
+  const fullScore = typeof deduction.fullScore === 'number' && deduction.fullScore >= 0 ? deduction.fullScore : 20;
+  const deductPerHighPercent = typeof deduction.deductPerHighPercent === 'number' && deduction.deductPerHighPercent >= 0 ? deduction.deductPerHighPercent : 0.6;
+  const deductPerLowPercent = typeof deduction.deductPerLowPercent === 'number' && deduction.deductPerLowPercent >= 0 ? deduction.deductPerLowPercent : 0.3;
+  const minScore = typeof deduction.minScore === 'number' && deduction.minScore >= 0 ? deduction.minScore : 0;
+
+  const validRules: ValidRule[] = [];
+  if (Array.isArray(raw.validRules)) {
+    for (const r of raw.validRules) {
+      if (r && typeof r === 'object' && VALID_ACTIONS.includes(r.action)) {
+        validRules.push({
+          id: r.id || `ai-${Math.random().toString(36).slice(2, 8)}`,
+          minCount: typeof r.minCount === 'number' ? r.minCount : 2,
+          maxCount: typeof r.maxCount === 'number' ? r.maxCount : 999,
+          action: r.action,
+          params: r.params || {},
+        });
+      }
+    }
+  }
+
+  return {
+    algorithm,
+    deduction: { fullScore, deductPerHighPercent, deductPerLowPercent, minScore },
+    validRules,
+  };
 }
 
 export async function parseRuleText(text: string, apiKey: string, endpoint: string): Promise<ParseResult | null> {
@@ -42,7 +83,8 @@ export async function parseRuleText(text: string, apiKey: string, endpoint: stri
     });
 
     if (!response.ok) {
-      throw new Error(`API请求失败: ${response.status}`);
+      const errorBody = await response.text().catch(() => '');
+      throw new Error(`API请求失败: ${response.status}${errorBody ? ` - ${errorBody}` : ''}`);
     }
 
     const data = await response.json();
@@ -51,7 +93,8 @@ export async function parseRuleText(text: string, apiKey: string, endpoint: stri
     try {
       const jsonMatch = content.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
-        return JSON.parse(jsonMatch[0]) as ParseResult;
+        const parsed = JSON.parse(jsonMatch[0]);
+        return validateParseResult(parsed);
       }
     } catch {
       // 解析失败
